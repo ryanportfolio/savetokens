@@ -94,7 +94,7 @@ check_starter_drift() {
 
   # Skip inside the template repo itself: nothing to drift from.
   case "$(git remote get-url origin 2>/dev/null)" in
-    *claude-starter*) return 0 ;;
+    *claude-starter*|*AI-Firmware*) return 0 ;;
   esac
 
   local gitdir stamp
@@ -117,7 +117,7 @@ check_starter_drift() {
   else
     # No named remote (fresh clone / cloud sandbox): try a direct fetch.
     # Fails silently when the repo is unreachable or auth is unavailable.
-    git fetch --quiet https://github.com/ryanportfolio/claude-starter.git main 2>/dev/null || return 0
+    git fetch --quiet https://github.com/ryanportfolio/AI-Firmware.git main 2>/dev/null || return 0
     ref="FETCH_HEAD"
   fi
 
@@ -156,7 +156,7 @@ EOF
 check_plugin_overlap() {
   [ -d .claude/skills/sync-starter ] || return 0
   case "$(git remote get-url origin 2>/dev/null)" in
-    *claude-starter*) return 0 ;;
+    *claude-starter*|*AI-Firmware*) return 0 ;;
   esac
   if grep -hs '"claude-starter@[^"]*": *true' \
       .claude/settings.json .claude/settings.local.json \
