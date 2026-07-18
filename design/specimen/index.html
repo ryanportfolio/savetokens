@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>savetokens.tips, datasheet ST-0001</title>
+<style>
+  /* ---------- Palette, contract Section 3 ---------- */
+  :root {
+    --paper:    #F6F4EE;
+    --ink:      #16171A;
+    --graphite: #55585E;
+    --rule:     #C9C7BE;
+    --faint:    #E9E6DD;
+    --measured: #147A5C;
+
+    --font-sans: "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-cond: "IBM Plex Sans Condensed", "IBM Plex Sans", "Arial Narrow", Arial, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:    #141519;
+      --ink:      #ECEAE2;
+      --graphite: #A2A5AC;
+      --rule:     #3A3C41;
+      --faint:    #1E2025;
+      --measured: #3FB489;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:    #141519;
+    --ink:      #ECEAE2;
+    --graphite: #A2A5AC;
+    --rule:     #3A3C41;
+    --faint:    #1E2025;
+    --measured: #3FB489;
+  }
+
+  * { box-sizing: border-box; }
+  /* Root scale: 21px (raised from 16px, a 31 percent increase). All rem sizes key off this. */
+  html { font-size: 21px; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .num { font-variant-numeric: tabular-nums lining-nums; }
+
+  .sheet {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 24px 64px;
+  }
+  @media (max-width: 640px) { .sheet { padding: 16px 16px 48px; } }
+
+  a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  /* ---------- Masthead ---------- */
+  .masthead {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px 32px;
+    align-items: end;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 16px;
+  }
+  .mh-partno {
+    font-family: var(--font-mono);
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin: 0;
+  }
+  .mh-title {
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 4px 0 0;
+  }
+  .mh-sub {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--graphite);
+    margin: 8px 0 0;
+    max-width: 62ch;
+  }
+  .mh-meta {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-align: right;
+    line-height: 1.7;
+  }
+  .mh-meta dt { color: var(--graphite); display: inline; }
+  .mh-meta dd { margin: 0; display: inline; }
+  .mh-meta .row { white-space: nowrap; }
+  .mh-meta .num { font-weight: 500; }
+
+  .themebtn {
+    font-family: var(--font-cond);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--graphite);
+    background: transparent;
+    border: 1px solid var(--rule);
+    padding: 4px 8px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  .snaplabel {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--graphite);
+    border: 1px solid var(--rule);
+    background: var(--faint);
+    padding: 6px 10px;
+    margin: 16px 0 0;
+  }
+
+  /* ---------- Section header bar ---------- */
+  .section { margin-top: 48px; }
+  .sec-bar {
+    border-top: 2px solid var(--ink);
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding-top: 6px;
+    margin-bottom: 16px;
+  }
+  .sec-no {
+    font-family: var(--font-cond);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--graphite);
+  }
+  .sec-label {
+    font-family: var(--font-cond);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .prose { font-size: 0.9375rem; max-width: 72ch; }
+  .prose p { margin: 0 0 12px; }
+
+  /* ---------- Features list ---------- */
+  ul.features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-width: 72ch;
+  }
+  ul.features li {
+    font-size: 0.9375rem;
+    padding: 4px 0 4px 20px;
+    position: relative;
+  }
+  ul.features li::before {
+    content: "\2013";
+    position: absolute;
+    left: 0;
+    color: var(--graphite);
+  }
+
+  /* ---------- Number slot ---------- */
+  .fig {
+    font-family: var(--font-mono);
+    white-space: nowrap;
+  }
+  .fig .tag {
+    font-weight: 600;
+    font-size: 0.8em;
+    margin-right: 4px;
+  }
+  .fig-m .val { color: var(--measured); font-weight: 500; }
+  .fig-e .val { color: var(--graphite); font-weight: 400; }
+  .fig-s .val { color: var(--graphite); font-weight: 400; }
+  .fig-none .val { color: var(--graphite); font-weight: 400; }
+  /* The bracket tag is the grayscale channel; it prints in Ink, never the accent (contract 3.3). */
+  .fig .tag { color: var(--ink); }
+  .fig sup { font-size: 0.7em; color: var(--graphite); }
+  .nc { color: var(--graphite); }
+  .date { white-space: nowrap; }
+
+  /* provenance chip */
+  .chip {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--graphite);
+    display: inline-block;
+    margin-top: 8px;
+  }
+
+  /* ---------- Electrical Characteristics table ---------- */
+  .tablewrap { overflow-x: auto; border: 1.5px solid var(--ink); }
+  table.ec {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 900px;
+    font-size: 0.875rem;
+  }
+  table.ec thead th {
+    font-family: var(--font-cond);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1.5px solid var(--ink);
+    background: var(--faint);
+    white-space: nowrap;
+  }
+  table.ec th.n, table.ec td.n { text-align: right; }
+  /* The Typ header shares the digit right edge, which sits one sup-gutter in from the cell edge. */
+  table.ec thead th.typ { padding-right: calc(10px + 2.4em); }
+  table.ec td {
+    padding: 8px 10px;
+    border-right: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  table.ec td:last-child { border-right: none; }
+  table.ec th { border-right: 1px solid var(--rule); }
+  table.ec th:last-child { border-right: none; }
+  table.ec tbody tr { border-top: 1px solid var(--rule); }
+  table.ec tbody tr.row-m td:first-child {
+    box-shadow: inset 3px 0 0 0 var(--measured);
+  }
+  table.ec .partno, table.ec .cond, table.ec td.n {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+  table.ec .partno { font-size: 0.8125rem; }
+  table.ec .cond { font-size: 0.6875rem; color: var(--graphite); white-space: normal; min-width: 190px; }
+  table.ec tr.totals { border-top: 1.5px solid var(--ink); }
+  table.ec tr.totals td { font-weight: 500; }
+
+  /* ---------- Absolute Maximum box ---------- */
+  .absmax {
+    border: 2.5px solid var(--ink);
+    padding: 16px;
+  }
+  .absmax table { border-collapse: collapse; width: 100%; font-size: 0.875rem; }
+  .absmax th, .absmax td {
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .absmax th {
+    font-family: var(--font-cond);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--graphite);
+  }
+  .absmax td.n { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums lining-nums; }
+
+  /* ---------- Handling caution panel ---------- */
+  .caution {
+    border: 1.5px solid var(--ink);
+    background: var(--faint);
+    padding: 12px 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    max-width: 72ch;
+  }
+  .caution .glyph {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    border: 1.5px solid var(--ink);
+    width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    flex: 0 0 auto;
+  }
+  .caution p {
+    margin: 0;
+    font-size: 0.8125rem;
+    font-family: var(--font-cond);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  /* ---------- Featured figure block ---------- */
+  .feature {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 16px 24px;
+    align-items: start;
+    border: 1px solid var(--rule);
+    padding: 16px;
+    margin: 16px 0;
+  }
+  .feature .big {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums lining-nums;
+    font-size: 2.25rem;
+    line-height: 1;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .feature .big .tag { font-size: 0.9rem; vertical-align: super; margin-right: 6px; }
+  .feature .biglabel {
+    font-family: var(--font-cond);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--graphite);
+    margin-top: 6px;
+  }
+
+  /* ---------- Functional block diagram ---------- */
+  .blockdiag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    margin: 12px 0 4px;
+  }
+  .blockdiag .box {
+    border: 1px solid var(--ink);
+    padding: 8px 10px;
+    text-align: center;
+  }
+  .blockdiag .box.filt { border-width: 1.5px; }
+  .blockdiag .arrow { color: var(--graphite); }
+  .blockdiag .delta { color: var(--measured); font-weight: 500; }
+  .diagcap {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--graphite);
+    margin: 0 0 4px;
+    max-width: 72ch;
+  }
+
+  /* ---------- Ordering info ---------- */
+  table.order { border-collapse: collapse; width: 100%; font-size: 0.875rem; min-width: 700px; }
+  table.order th, table.order td { text-align: left; padding: 8px 10px; border: 1px solid var(--rule); }
+  table.order th {
+    font-family: var(--font-cond);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--graphite);
+    background: var(--faint);
+  }
+  table.order .partno { font-family: var(--font-mono); font-size: 0.8125rem; }
+  .decoder { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--graphite); margin: 8px 0 0; }
+
+  .eol {
+    display: inline-block;
+    font-family: var(--font-cond);
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--graphite);
+    border: 1px solid var(--graphite);
+    padding: 1px 5px;
+    transform: rotate(-2deg);
+  }
+
+  /* ---------- Footnotes ---------- */
+  ol.fn {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--graphite);
+    max-width: 72ch;
+    margin: 16px 0 0;
+    padding-left: 1.4em;
+  }
+  ol.fn li { margin: 3px 0; }
+  /* Unnumbered blanket caution, contract 2.6: numbered footnotes must anchor to a cell. */
+  .fn-note {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--graphite);
+    max-width: 72ch;
+    margin: 8px 0 0;
+  }
+
+  /* ---------- Revision history strip ---------- */
+  .revstrip {
+    margin-top: 48px;
+    border-top: 2px solid var(--ink);
+    padding-top: 8px;
+  }
+  table.rev { border-collapse: collapse; width: 100%; font-family: var(--font-mono); font-size: 0.6875rem; }
+  table.rev th, table.rev td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--rule); }
+  table.rev th { color: var(--graphite); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 400; }
+  table.rev td.n { font-variant-numeric: tabular-nums lining-nums; }
+
+  /* ---------- Chart (SVG) ----------
+     var() does not resolve inside SVG presentation attributes, only inside CSS
+     properties, so all chart color and font come from these class rules. */
+  .chart .axis { stroke: var(--ink); stroke-width: 1.5; }
+  .chart .grid { stroke: var(--rule); stroke-width: 0.5; }
+  .chart .grid.base { stroke-width: 1; }
+  .chart text { font-family: var(--font-mono); fill: var(--graphite); font-size: 13px; }
+  .chart text.axlabel { font-family: var(--font-cond); font-size: 15px; letter-spacing: 1px; }
+  .chart .pt-m { fill: var(--measured); }
+  .chart text.ptlbl { font-size: 12px; }
+  .chart text.lbl-short { display: none; }
+  .chart .refline { stroke: var(--graphite); stroke-width: 1.5; stroke-dasharray: 3 2; }
+
+  /* Footnote superscripts hang in a fixed-width gutter so the numeric portion
+     right-aligns digit for digit regardless of marker width (1 vs 1,3). */
+  table.ec td.n .fig sup { display: inline-block; width: 2.4em; text-align: left; }
+  /* Tag anchors left, value and marker right, so tags read as a scannable column
+     while digits and decimal points stack across rows. */
+  table.ec td.n .fig { display: flex; align-items: baseline; }
+  table.ec td.n .fig .tag { margin-right: auto; padding-right: 8px; }
+  table.ec td.n .fig sup { position: relative; top: -0.35em; }
+
+  /* ---------- Legend ---------- */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--graphite);
+    margin-top: 12px;
+  }
+  .legend .swatch-m { color: var(--measured); font-weight: 600; }
+
+  /* ---------- Mobile table reflow ---------- */
+  @media (max-width: 640px) {
+    .masthead { grid-template-columns: 1fr; }
+    .mh-meta { text-align: left; }
+    .feature { grid-template-columns: 1fr; }
+
+    /* Mono provenance text may hold long unbroken strings; wrap rather than clip
+       so no characterization detail is ever cut off at narrow widths. */
+    .snaplabel, .chip, .mh-sub, .diagcap, .decoder, ol.fn li, table.ec .cond { overflow-wrap: anywhere; }
+
+    /* Chart scales to fit the viewport so every point, tick, and the estimate
+       reference label stay visible; internal text sizes rise to compensate. */
+    .chart { min-width: 0 !important; }
+    .chart text { font-size: 22px; }
+    .chart text.axlabel { font-size: 25px; }
+    .chart .pt-m { stroke: var(--measured); stroke-width: 3px; }
+    .chart text.ptlbl { font-size: 17px; }
+    .chart text.lbl-full { display: none; }
+    .chart text.lbl-short { display: block; }
+    table.ec .cond { min-width: 0; }
+
+    /* Reflowed tables no longer overflow, so drop the frame. overflow-x stays
+       auto (from the base rule) so the wide performance chart keeps its own
+       horizontal scroll container and the page body never scrolls sideways. */
+    .tablewrap { border: none; }
+    table.ec { min-width: 0; }
+    table.ec thead { position: absolute; left: -9999px; }
+    table.ec, table.ec tbody, table.ec tr, table.ec td { display: block; width: 100%; }
+    table.ec tbody tr {
+      border: 1.5px solid var(--rule);
+      margin-bottom: 12px;
+      padding: 4px 0;
+    }
+    table.ec tbody tr.row-m { border-left: 3px solid var(--measured); }
+    table.ec tbody tr.row-m td:first-child { box-shadow: none; }
+    table.ec td {
+      border-right: none;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 42% 1fr;
+      gap: 8px;
+      text-align: left !important;
+      padding: 6px 10px;
+    }
+    table.ec td:last-child { border-bottom: none; }
+    table.ec td::before {
+      content: attr(data-label);
+      font-family: var(--font-cond);
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--graphite);
+    }
+    table.ec td.n { justify-items: start; }
+    table.order, table.order tbody, table.order tr, table.order td { display: block; width: 100%; }
+    table.order thead { position: absolute; left: -9999px; }
+    table.order { min-width: 0; }
+    table.order tr { border: 1.5px solid var(--rule); margin-bottom: 12px; }
+    table.order td { border: none; border-bottom: 1px solid var(--rule); }
+    table.order td::before {
+      content: attr(data-label) "  ";
+      font-family: var(--font-cond);
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--graphite);
+      display: block;
+    }
+  }
+</style>
+</head>
+<body>
+<main class="sheet">
+
+  <!-- ===================== MASTHEAD ===================== -->
+  <header class="masthead">
+    <div>
+      <h1 class="mh-partno">savetokens.tips</h1>
+      <p class="mh-title">Token-saving techniques for AI coding agents</p>
+      <p class="mh-sub">A characterized reference for saving tokens when working with Claude Code and Codex. Measured figures come from logged raw-versus-filtered token deltas. Estimated figures carry no counterfactual and are marked as such.</p>
+    </div>
+    <div class="mh-meta">
+      <div class="row"><dt>Doc:&nbsp;</dt><dd class="num">ST-0001</dd></div>
+      <div class="row"><dt>Rev:&nbsp;</dt><dd class="num">A</dd></div>
+      <div class="row"><dt>Snapshot:&nbsp;</dt><dd class="num">2026-07-18</dd></div>
+      <div class="row"><dt>Scope:&nbsp;</dt><dd>global</dd></div>
+      <div class="row"><dt>Characterized by:&nbsp;</dt><dd><a href="https://github.com/ryanportfolio">github.com/ryanportfolio</a></dd></div>
+      <button type="button" class="themebtn" id="themebtn" aria-label="Toggle light or dark rendering">Invert display</button>
+    </div>
+  </header>
+
+  <p class="snaplabel">Characterization data: snapshot <span class="date">2026-07-18</span>, global scope, values subject to revision. Figures are a dated sample from rtk gain. No other numbers are invented.</p>
+
+  <div class="legend" aria-hidden="false">
+    <span>[M] measured, production tested, real counterfactual</span>
+    <span>[E] estimated, guaranteed by design, no counterfactual</span>
+    <span>[S] vendor specification, not measured here, no counterfactual</span>
+    <span>&middot; not characterized</span>
+  </div>
+
+  <!-- ===================== 1 FEATURES ===================== -->
+  <section class="section" aria-labelledby="s1">
+    <div class="sec-bar"><span class="sec-no">1</span><h2 class="sec-label" id="s1">Features</h2></div>
+    <ul class="features">
+      <li>Token reduction across all proxied commands: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">83.5</span></span>% typ, n=92,695, snapshot <span class="date">2026-07-18</span>.</li>
+      <li>Per-command token deltas logged by the RTK proxy, reported raw versus filtered.</li>
+      <li>Measured and estimated figures held apart on six channels at once, readable in grayscale.</li>
+      <li>One accent color, reserved to mean production tested and nothing else.</li>
+      <li>Every figure states its source, date, scope, and sample count.</li>
+      <li>Empty cells are a legal state. A figure with no measured value shows the not-characterized mark, never a guess.</li>
+    </ul>
+  </section>
+
+  <!-- ===================== 2 ABSOLUTE MAXIMUM RATINGS ===================== -->
+  <section class="section" aria-labelledby="s2">
+    <div class="sec-bar"><span class="sec-no">2</span><h2 class="sec-label" id="s2">Absolute Maximum Ratings</h2></div>
+    <div class="absmax">
+      <table>
+        <thead>
+          <tr><th>Parameter</th><th class="n">Value</th><th>Unit</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Context window, working budget</td><td class="n"><span class="fig fig-s" data-figure data-kind="spec"><span class="tag">[S]</span><span class="val num">~200,000</span><sup>1</sup></span><br><span class="chip" data-figure data-kind="spec">S, vendor spec, no counterfactual</span></td><td>tokens</td></tr>
+          <tr><td>Single command output, before filtering</td><td class="n nc">&middot;</td><td>tokens</td></tr>
+          <tr><td>Sustained context occupancy</td><td class="n nc">&middot;</td><td>%</td></tr>
+        </tbody>
+      </table>
+      <ol class="fn">
+        <li>Vendor specification, not measured here, no counterfactual. A nominal ceiling for planning, never a characterized figure.</li>
+      </ol>
+      <p class="fn-note">Note: stresses beyond these limits cause context to be dropped, not summarized. Sustained operation near maximum reduces answer quality.</p>
+    </div>
+  </section>
+
+  <!-- ===================== 3 ELECTRICAL CHARACTERISTICS ===================== -->
+  <section class="section" aria-labelledby="s3">
+    <div class="sec-bar"><span class="sec-no">3</span><h2 class="sec-label" id="s3">Electrical Characteristics</h2></div>
+    <p class="prose"><span class="chip">Conditions unless otherwise noted: rtk gain, snapshot <span class="date">2026-07-18</span>, global scope, raw output tokens versus RTK-filtered output tokens. Min and Max are shown only where a distribution exists.</span></p>
+    <div class="tablewrap">
+      <table class="ec">
+        <thead>
+          <tr>
+            <th>Part No</th>
+            <th>Parameter</th>
+            <th class="n">Min</th>
+            <th class="n typ">Typ</th>
+            <th class="n">Max</th>
+            <th>Unit</th>
+            <th>Test conditions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-m">
+            <td class="partno" data-label="Part No">RTK-READ-01</td>
+            <td data-label="Parameter">Tokens saved, rtk read</td>
+            <td class="n nc" data-label="Min">&middot;</td>
+            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">24.9</span><sup>1</sup></span></td>
+            <td class="n nc" data-label="Max">&middot;</td>
+            <td data-label="Unit">%</td>
+            <td class="cond" data-label="Test conditions">n=571, 8.9M saved</td>
+          </tr>
+          <tr class="row-m">
+            <td class="partno" data-label="Part No">RTK-DIFF-01</td>
+            <td data-label="Parameter">Tokens saved, rtk git diff</td>
+            <td class="n nc" data-label="Min">&middot;</td>
+            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">99.2</span><sup>1,3</sup></span></td>
+            <td class="n nc" data-label="Max">&middot;</td>
+            <td data-label="Unit">%</td>
+            <td class="cond" data-label="Test conditions">n=3, 5.6M saved, one large diff</td>
+          </tr>
+          <tr class="row-m">
+            <td class="partno" data-label="Part No">RTK-LOG-01</td>
+            <td data-label="Parameter">Tokens saved, rtk git log --all -p</td>
+            <td class="n nc" data-label="Min">&middot;</td>
+            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">100.0</span><sup>1,3</sup></span></td>
+            <td class="n nc" data-label="Max">&middot;</td>
+            <td data-label="Unit">%</td>
+            <td class="cond" data-label="Test conditions">n=1, 2.0M saved, single observation</td>
+          </tr>
+          <tr class="row-m">
+            <td class="partno" data-label="Part No">RTK-GREP-01</td>
+            <td data-label="Parameter">Tokens saved, rtk grep</td>
+            <td class="n nc" data-label="Min">&middot;</td>
+            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">23.0</span><sup>1</sup></span></td>
+            <td class="n nc" data-label="Max">&middot;</td>
+            <td data-label="Unit">%</td>
+            <td class="cond" data-label="Test conditions">n=1199, 448.6K saved</td>
+          </tr>
+          <tr class="row-m">
+            <td class="partno" data-label="Part No">RTK-VITEST-01</td>
+            <td data-label="Parameter">Tokens saved, rtk vitest run</td>
+            <td class="n nc" data-label="Min">&middot;</td>
+            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">92.5</span><sup>1</sup></span></td>
+            <td class="n nc" data-label="Max">&middot;</td>
+            <td data-label="Unit">%</td>
+            <td class="cond" data-label="Test conditions">n=38, 208.4K saved</td>
+          </tr>
+          <tr class="row-m">
+            <td class="partno" data-label="Part No">RTK-PULL-01</td>
+            <td data-label="Parameter">Tokens saved, rtk git pull</td>
+            <td class="n nc" data-label="Min">&middot;</td>
+            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">92.3</span><sup>1</sup></span></td>
+            <td class="n nc" data-label="Max">&middot;</td>
+            <td data-label="Unit">%</td>
+            <td class="cond" data-label="Test conditions">n=73, 38.9K saved</td>
+          </tr>
+          <tr>
+            <td class="partno" data-label="Part No">RTK-TERSE-01</td>
+            <td data-label="Parameter">Prose reduction, terse prompting</td>
+            <td class="n nc" data-label="Min">&middot;</td>
+            <td class="n" data-label="Typ"><span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">[E]</span><span class="val num">~75</span><sup>2</sup></span></td>
+            <td class="n nc" data-label="Max">&middot;</td>
+            <td data-label="Unit">%</td>
+            <td class="cond" data-label="Test conditions">no counterfactual, design target only</td>
+          </tr>
+          <tr class="row-m totals">
+            <td class="partno" data-label="Part No">STK-TOTAL</td>
+            <td data-label="Parameter">All proxied commands</td>
+            <td class="n nc" data-label="Min">&middot;</td>
+            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">83.5</span><sup>1</sup></span></td>
+            <td class="n nc" data-label="Max">&middot;</td>
+            <td data-label="Unit">%</td>
+            <td class="cond" data-label="Test conditions">n=92,695 commands, 18.4M saved</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ol class="fn">
+      <li>Production tested. Raw output token count versus RTK-filtered output token count, logged per command by rtk gain.</li>
+      <li>Guaranteed by design, characterization only, not production tested.</li>
+      <li>Single observation, not a distribution. Treat the value as one sample, not a stable average.</li>
+    </ol>
+  </section>
+
+  <!-- ===================== 4 TYPICAL PERFORMANCE CHARACTERISTICS ===================== -->
+  <section class="section" aria-labelledby="s4">
+    <div class="sec-bar"><span class="sec-no">4</span><h2 class="sec-label" id="s4">Typical Performance Characteristics</h2></div>
+    <p class="prose">Saved percent plotted against command frequency, from the <span class="date">2026-07-18</span> snapshot. Measured points carry the accent and a solid mark whose size grows with sample count. The estimate renders as a dashed reference line and never carries the accent.</p>
+    <div class="tablewrap" style="border:1px solid var(--rule);">
+      <svg class="chart" viewBox="0 0 720 300" width="100%" style="min-width:600px;display:block" role="img" aria-label="Scatter of saved percent versus command count, measured points solid, estimated point hollow">
+        <!-- axes -->
+        <line class="axis" x1="70" y1="20" x2="70" y2="250"/>
+        <line class="axis" x1="70" y1="250" x2="690" y2="250"/>
+        <!-- y gridlines and scale at 0,25,50,75,100 -->
+        <line class="grid base" x1="70" y1="250" x2="690" y2="250"/>
+        <line class="grid" x1="70" y1="192" x2="690" y2="192"/>
+        <line class="grid" x1="70" y1="135" x2="690" y2="135"/>
+        <line class="grid" x1="70" y1="77"  x2="690" y2="77"/>
+        <line class="grid" x1="70" y1="20"  x2="690" y2="20"/>
+        <text x="62" y="253" text-anchor="end">0</text>
+        <text x="62" y="195" text-anchor="end">25</text>
+        <text x="62" y="138" text-anchor="end">50</text>
+        <text x="62" y="80"  text-anchor="end">75</text>
+        <text x="62" y="23"  text-anchor="end">100</text>
+        <!-- x tick marks and labels, log10 scale: x = 110 + 172 * log10(n) -->
+        <line class="axis" x1="110" y1="250" x2="110" y2="255"/>
+        <line class="axis" x1="282" y1="250" x2="282" y2="255"/>
+        <line class="axis" x1="454" y1="250" x2="454" y2="255"/>
+        <line class="axis" x1="626" y1="250" x2="626" y2="255"/>
+        <text x="110" y="266" text-anchor="middle">1</text>
+        <text x="282" y="266" text-anchor="middle">10</text>
+        <text x="454" y="266" text-anchor="middle">100</text>
+        <text x="626" y="266" text-anchor="middle">1000</text>
+        <!-- axis labels -->
+        <text class="axlabel" x="380" y="292" text-anchor="middle">COMMAND COUNT, LOG SCALE (n)</text>
+        <text class="axlabel" x="20" y="135" text-anchor="middle" transform="rotate(-90 20 135)">SAVED PERCENT</text>
+        <!-- measured points: x = 110 + 172 * log10(n), y by saved percent.
+             Marker area encodes sample confidence: r = 2.5 + 1.5 * log10(n), so the
+             flattering n=1 and n=3 points read as the least supported.
+             read n=571 r=6.6, diff n=3 r=3.2, log n=1 r=2.5, grep n=1199 r=7.1,
+             vitest n=38 r=4.9, pull n=73 r=5.3. -->
+        <circle class="pt-m" cx="584" cy="192" r="6.6"/><!-- read 24.9% n=571 -->
+        <text class="ptlbl" x="576" y="186" text-anchor="end">read, n=571</text>
+        <circle class="pt-m" cx="192" cy="22"  r="3.2"/><!-- diff 99.2% n=3 -->
+        <text class="ptlbl" x="200" y="34" text-anchor="start">diff, n=3</text>
+        <circle class="pt-m" cx="110" cy="20"  r="2.5"/><!-- log 100% n=1 -->
+        <text class="ptlbl" x="118" y="20" text-anchor="start" dominant-baseline="middle">log, n=1</text>
+        <circle class="pt-m" cx="639" cy="197" r="7.1"/><!-- grep 23.0% n=1199 -->
+        <text class="ptlbl" x="631" y="215" text-anchor="end">grep, n=1199</text>
+        <circle class="pt-m" cx="382" cy="42"  r="4.9"/><!-- vitest 92.5% n=38 -->
+        <text class="ptlbl" x="376" y="30" text-anchor="end">vitest, n=38</text>
+        <circle class="pt-m" cx="430" cy="42"  r="5.3"/><!-- pull 92.3% n=73 -->
+        <text class="ptlbl" x="440" y="34" text-anchor="start">pull, n=73</text>
+        <!-- estimated reference: terse prompting ~75%, no measured frequency, so a
+             horizontal dashed line that claims no x position rather than a point. -->
+        <line class="refline" x1="70" y1="77" x2="690" y2="77"/>
+        <text class="lbl-full" x="680" y="66" text-anchor="end">[E] ~75, design target, no measured frequency</text>
+        <text class="lbl-short" x="680" y="66" text-anchor="end">[E] ~75, design target</text>
+      </svg>
+    </div>
+    <div class="legend">
+      <span><span class="swatch-m">&#9679;</span> [M] measured point, production tested; marker size grows with sample count n</span>
+      <span>- - [E] estimated reference line, design target, holds no command-count position</span>
+    </div>
+  </section>
+
+  <!-- ===================== 5 APPLICATION INFORMATION ===================== -->
+  <section class="section" aria-labelledby="s5">
+    <div class="sec-bar"><span class="sec-no">5</span><h2 class="sec-label" id="s5">Application Information</h2></div>
+
+    <div data-tip-entry>
+      <p class="prose"><strong>5.1 RTK-DIFF-01, route git diff through the RTK proxy</strong></p>
+      <p class="diagcap">Functional block diagram of one proxied command. Raw diff enters, RTK filters it, a compact diff summary leaves. The delta is the characterized parameter.</p>
+      <div class="blockdiag" aria-hidden="false">
+        <span class="box">git diff<br>raw output</span>
+        <span class="arrow">&#8594;</span>
+        <span class="box filt">rtk git diff<br>filter</span>
+        <span class="arrow">&#8594;</span>
+        <span class="box">filtered<br>summary</span>
+        <span class="arrow">&nbsp;delta&nbsp;</span>
+        <span class="delta num"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">99.2%</span><sup>1,2</sup> saved</span></span>
+      </div>
+
+      <div class="feature">
+        <div>
+          <div class="big fig-m"><span class="tag">[M]</span><span class="val num">99.2</span>%<sup style="font-size:0.9rem;color:var(--graphite)">1,2</sup></div>
+          <div class="biglabel">Tokens saved, one large diff</div>
+          <div class="big fig-m" style="font-size:1.5rem;margin-top:10px"><span class="tag" style="font-size:0.75rem">[M]</span><span class="val num">5.6M</span><sup style="font-size:0.75rem;color:var(--graphite)">1,2</sup></div>
+          <div class="biglabel">Absolute tokens saved</div>
+          <span class="chip" data-figure data-kind="measured">M, rtk gain, <span class="date">2026-07-18</span>, global, n=3</span>
+        </div>
+        <div class="prose">
+          <p>A full git diff of a large change can send millions of characters to the model, most of which the agent never reads line by line. Routing the command through RTK returns a filtered summary that preserves the decision content: which files changed, the shape of the change, and the parts that need review.</p>
+          <p>In one measured large diff the filtered output used 99.2 percent fewer tokens than the raw diff, a saving of 5.6 million tokens. The delta is pooled across three runs and treated as one sample, not a stable average, so read it as a strong signal rather than a guaranteed rate. Use rtk git diff whenever a diff is large enough that you would scroll past most of it anyway.</p>
+        </div>
+      </div>
+
+      <div class="caution" role="note">
+        <span class="glyph" aria-hidden="true">!</span>
+        <p>Handle estimates with care. Values marked [E] are design targets, not measured, and are not guaranteed across sessions.</p>
+      </div>
+    </div>
+    <ol class="fn">
+      <li>Production tested. Raw output token count versus RTK-filtered output token count, logged per command by rtk gain.</li>
+      <li>Single observation, not a distribution. Treat the value as one sample, not a stable average.</li>
+    </ol>
+    <p class="decoder">One application note is characterized in full above. The remaining characterized parts follow the same note structure.</p>
+  </section>
+
+  <!-- ===================== 6 ORDERING INFORMATION ===================== -->
+  <section class="section" aria-labelledby="s6">
+    <div class="sec-bar"><span class="sec-no">6</span><h2 class="sec-label" id="s6">Ordering Information</h2></div>
+    <div class="tablewrap">
+      <table class="order">
+        <thead>
+          <tr><th>Part No</th><th>Technique</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="partno" data-label="Part No">RTK-DIFF-01</td>
+            <td data-label="Technique">Route git diff through the RTK proxy</td>
+            <td data-label="Status">Active</td>
+          </tr>
+          <tr>
+            <td class="partno" data-label="Part No">RTK-READ-01</td>
+            <td data-label="Technique">Route file reads through the RTK proxy</td>
+            <td data-label="Status">Active</td>
+          </tr>
+          <tr>
+            <td class="partno" data-label="Part No">RTK-TERSE-01</td>
+            <td data-label="Technique">Terse prompting prose style</td>
+            <td data-label="Status">Active, estimated only</td>
+          </tr>
+          <tr>
+            <td class="partno" data-label="Part No">STK-CATFULL-00</td>
+            <td data-label="Technique">Paste whole files into the prompt by hand</td>
+            <td data-label="Status"><span class="eol">Not recommended for new designs</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="decoder">Part-number decoder: RTK-DIFF-01 reads as tool RTK, characterized command git diff, revision 01. STK-prefixed parts are site-level techniques not bound to one command. All listed techniques apply to both Claude Code and Codex. The table shows a subset of ordered parts; STK-CATFULL-00 appears for status only and is not characterized in Section 3.</p>
+  </section>
+
+  <!-- ===================== REVISION HISTORY ===================== -->
+  <section class="revstrip" aria-labelledby="srev">
+    <div class="sec-bar" style="border-top:none;padding-top:0"><span class="sec-no">&#167;</span><h2 class="sec-label" id="srev">Revision History</h2></div>
+    <table class="rev">
+      <thead>
+        <tr><th>Rev</th><th>Date</th><th>Change</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="n">A</td><td class="n">2026-07-18</td><td>First characterization run from rtk gain, global scope. Values subject to revision as sample counts grow.</td></tr>
+        <tr><td class="n nc">&middot;</td><td class="n nc">&middot;</td><td class="nc">Reserved. The next characterization run appends here when the live rtk gain feed lands.</td></tr>
+      </tbody>
+    </table>
+    <p class="fn-note">Note: characterization ages. Every figure is a dated snapshot; re-measure as sample counts grow, and prefer a newer revision over a stale one.</p>
+  </section>
+
+</main>
+
+<script>
+  // Manual light/dark override, stamps data-theme on the root and wins in both directions.
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('themebtn');
+    function current() {
+      var attr = root.getAttribute('data-theme');
+      if (attr) return attr;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    btn.addEventListener('click', function () {
+      root.setAttribute('data-theme', current() === 'dark' ? 'light' : 'dark');
+    });
+  })();
+</script>
+</body>
+</html>
