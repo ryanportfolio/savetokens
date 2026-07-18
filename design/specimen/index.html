@@ -38,13 +38,14 @@
   }
 
   * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
+  /* Root scale: 21px (raised from 16px, a 31 percent increase). All rem sizes key off this. */
+  html { font-size: 21px; -webkit-text-size-adjust: 100%; }
   body {
     margin: 0;
     background: var(--paper);
     color: var(--ink);
     font-family: var(--font-sans);
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
@@ -191,6 +192,7 @@
   .fig .tag { color: var(--ink); }
   .fig sup { font-size: 0.7em; color: var(--graphite); }
   .nc { color: var(--graphite); }
+  .date { white-space: nowrap; }
 
   /* provenance chip */
   .chip {
@@ -206,7 +208,7 @@
   table.ec {
     border-collapse: collapse;
     width: 100%;
-    min-width: 720px;
+    min-width: 900px;
     font-size: 0.875rem;
   }
   table.ec thead th {
@@ -347,7 +349,7 @@
   }
 
   /* ---------- Ordering info ---------- */
-  table.order { border-collapse: collapse; width: 100%; font-size: 0.875rem; min-width: 620px; }
+  table.order { border-collapse: collapse; width: 100%; font-size: 0.875rem; min-width: 700px; }
   table.order th, table.order td { text-align: left; padding: 8px 10px; border: 1px solid var(--rule); }
   table.order th {
     font-family: var(--font-cond);
@@ -408,10 +410,10 @@
   .chart .axis { stroke: var(--ink); stroke-width: 1.5; }
   .chart .grid { stroke: var(--rule); stroke-width: 0.5; }
   .chart .grid.base { stroke-width: 1; }
-  .chart text { font-family: var(--font-mono); fill: var(--graphite); font-size: 10px; }
-  .chart text.axlabel { font-family: var(--font-cond); font-size: 11px; letter-spacing: 1px; }
+  .chart text { font-family: var(--font-mono); fill: var(--graphite); font-size: 13px; }
+  .chart text.axlabel { font-family: var(--font-cond); font-size: 15px; letter-spacing: 1px; }
   .chart .pt-m { fill: var(--measured); }
-  .chart text.ptlbl { font-size: 9px; }
+  .chart text.ptlbl { font-size: 12px; }
   .chart text.lbl-short { display: none; }
   .chart .refline { stroke: var(--graphite); stroke-width: 1.5; stroke-dasharray: 3 2; }
 
@@ -449,10 +451,10 @@
     /* Chart scales to fit the viewport so every point, tick, and the estimate
        reference label stay visible; internal text sizes rise to compensate. */
     .chart { min-width: 0 !important; }
-    .chart text { font-size: 17px; }
-    .chart text.axlabel { font-size: 19px; }
+    .chart text { font-size: 22px; }
+    .chart text.axlabel { font-size: 25px; }
     .chart .pt-m { stroke: var(--measured); stroke-width: 3px; }
-    .chart text.ptlbl { font-size: 13px; }
+    .chart text.ptlbl { font-size: 17px; }
     .chart text.lbl-full { display: none; }
     .chart text.lbl-short { display: block; }
     table.ec .cond { min-width: 0; }
@@ -527,7 +529,7 @@
     </div>
   </header>
 
-  <p class="snaplabel">Characterization data: snapshot 2026-07-18, global scope, values subject to revision. Figures are a dated sample from rtk gain. No other numbers are invented.</p>
+  <p class="snaplabel">Characterization data: snapshot <span class="date">2026-07-18</span>, global scope, values subject to revision. Figures are a dated sample from rtk gain. No other numbers are invented.</p>
 
   <div class="legend" aria-hidden="false">
     <span>[M] measured, production tested, real counterfactual</span>
@@ -540,7 +542,7 @@
   <section class="section" aria-labelledby="s1">
     <div class="sec-bar"><span class="sec-no">1</span><h2 class="sec-label" id="s1">Features</h2></div>
     <ul class="features">
-      <li>Token reduction across all proxied commands: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">83.5</span></span>% typ, n=92,695, snapshot 2026-07-18.</li>
+      <li>Token reduction across all proxied commands: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">83.5</span></span>% typ, n=92,695, snapshot <span class="date">2026-07-18</span>.</li>
       <li>Per-command token deltas logged by the RTK proxy, reported raw versus filtered.</li>
       <li>Measured and estimated figures held apart on six channels at once, readable in grayscale.</li>
       <li>One accent color, reserved to mean production tested and nothing else.</li>
@@ -573,7 +575,7 @@
   <!-- ===================== 3 ELECTRICAL CHARACTERISTICS ===================== -->
   <section class="section" aria-labelledby="s3">
     <div class="sec-bar"><span class="sec-no">3</span><h2 class="sec-label" id="s3">Electrical Characteristics</h2></div>
-    <p class="prose"><span class="chip">Conditions unless otherwise noted: rtk gain, snapshot 2026-07-18, global scope, raw output tokens versus RTK-filtered output tokens. Min and Max are shown only where a distribution exists.</span></p>
+    <p class="prose"><span class="chip">Conditions unless otherwise noted: rtk gain, snapshot <span class="date">2026-07-18</span>, global scope, raw output tokens versus RTK-filtered output tokens. Min and Max are shown only where a distribution exists.</span></p>
     <div class="tablewrap">
       <table class="ec">
         <thead>
@@ -673,7 +675,7 @@
   <!-- ===================== 4 TYPICAL PERFORMANCE CHARACTERISTICS ===================== -->
   <section class="section" aria-labelledby="s4">
     <div class="sec-bar"><span class="sec-no">4</span><h2 class="sec-label" id="s4">Typical Performance Characteristics</h2></div>
-    <p class="prose">Saved percent plotted against command frequency, from the 2026-07-18 snapshot. Measured points carry the accent and a solid mark whose size grows with sample count. The estimate renders as a dashed reference line and never carries the accent.</p>
+    <p class="prose">Saved percent plotted against command frequency, from the <span class="date">2026-07-18</span> snapshot. Measured points carry the accent and a solid mark whose size grows with sample count. The estimate renders as a dashed reference line and never carries the accent.</p>
     <div class="tablewrap" style="border:1px solid var(--rule);">
       <svg class="chart" viewBox="0 0 720 300" width="100%" style="min-width:600px;display:block" role="img" aria-label="Scatter of saved percent versus command count, measured points solid, estimated point hollow">
         <!-- axes -->
@@ -755,7 +757,7 @@
           <div class="biglabel">Tokens saved, one large diff</div>
           <div class="big fig-m" style="font-size:1.5rem;margin-top:10px"><span class="tag" style="font-size:0.75rem">[M]</span><span class="val num">5.6M</span><sup style="font-size:0.75rem;color:var(--graphite)">1,2</sup></div>
           <div class="biglabel">Absolute tokens saved</div>
-          <span class="chip" data-figure data-kind="measured">M, rtk gain, 2026-07-18, global, n=3</span>
+          <span class="chip" data-figure data-kind="measured">M, rtk gain, <span class="date">2026-07-18</span>, global, n=3</span>
         </div>
         <div class="prose">
           <p>A full git diff of a large change can send millions of characters to the model, most of which the agent never reads line by line. Routing the command through RTK returns a filtered summary that preserves the decision content: which files changed, the shape of the change, and the parts that need review.</p>

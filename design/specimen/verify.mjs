@@ -37,7 +37,10 @@ if (visible.includes(EM_DASH)) {
 }
 
 // ---------- 2. Snapshot label present ----------
-if (!html.includes(SNAPSHOT_LABEL)) {
+// Check visible text (tags stripped, whitespace collapsed) so inline markup
+// like a no-break span around the date does not defeat the check.
+const visibleFlat = visible.replace(/\s+/g, " ");
+if (!visibleFlat.includes(SNAPSHOT_LABEL)) {
   errors.push(`Snapshot label "${SNAPSHOT_LABEL}" not found. Sample numbers must carry the dated snapshot label.`);
 } else {
   notes.push(`Snapshot label "${SNAPSHOT_LABEL}" present.`);

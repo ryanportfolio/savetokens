@@ -83,7 +83,7 @@ One family group, three roles, one numeric rule. Concrete choices below self-hos
 
 4.3 Tabular figures are mandatory for every number that sits in a column. Mono is fixed width by nature; where Sans shows figures in a column, apply `font-variant-numeric: tabular-nums lining-nums`. Percent columns and token-count columns must align digit for digit.
 
-4.4 Type scale (concrete, rem at a 16px root). The direction document may add intermediate steps but not change these anchors.
+4.4 Type scale (concrete, rem at a 21px root). The direction document may add intermediate steps but not change these anchors.
 - Masthead part number: Mono, 1.75rem, weight 600.
 - Section title: Sans, 1.125rem, weight 600.
 - Section header bar label: Sans Condensed, 0.8125rem, weight 600, uppercase, letter-spacing 0.08em.
