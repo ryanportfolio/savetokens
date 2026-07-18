@@ -5,7 +5,7 @@ description: Use when the user asks to reduce per-turn context or token load, tr
 
 # optimize-context — cut per-turn context cost, propagate to the starter
 
-The dominant token cost in long sessions is **input that reloads every turn**, not output prose. This skill is the playbook for finding and cutting it, plus porting the generic wins to `ryanportfolio/claude-starter` so every future repo inherits them.
+The dominant token cost in long sessions is **input that reloads every turn**, not output prose. This skill is the playbook for finding and cutting it, plus porting the generic wins to `ryanportfolio/AI-Firmware` (formerly `claude-starter`) so every future repo inherits them.
 
 **First principle:** compression is **lossless when you relocate, not delete.** Always-loaded files become thin hooks; full detail moves to a subfile (`.claude/reference/`, a MEMORY subfile) read on demand. Accuracy/rules never trade against brevity — only fluff and duplication die.
 
@@ -46,7 +46,7 @@ The harness injects every visible skill's name + description every turn. Hide un
 - **Don't trust an agent's schema claim un-verified** — confirm enum values / property names against the real schema (`schemastore.org/claude-code-settings.json`) or the running config.
 
 ## Propagation to claude-starter
-Only the **generic, portable** wins go up — run them through `sync-starter` Direction B (it owns the genericize + apply-at-`~/code/claude-starter` + PR mechanics):
+Only the **generic, portable** wins go up — run them through `sync-starter` Direction B (it owns the genericize + apply-at-`~/code/AI-Firmware` + PR mechanics):
 - **Portable:** `skillOverrides` disabling broadly-unused bundled skills (lean default; a project that needs `docx`/`pdf` re-enables it), CLAUDE.md structural conventions (caveman default, thin-hooks, don't-restate-injected-content), a leaner skill file (e.g. the trimmed `caveman`).
 - **NOT portable:** account-level MCP connector disconnects (per-account, not a repo file), project-specific reference/memory content, anything named after the current project.
 - Genericize first: strip project names/paths/URLs. If it can't be genericized, it stays local.
