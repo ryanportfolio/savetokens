@@ -29,15 +29,29 @@
       "url": "https://savetokens.tips/guide",
       "datePublished": "2026-07-19",
       "dateModified": "2026-07-19",
-      "author": { "@id": "https://savetokens.tips/#author" },
-      "publisher": { "@id": "https://savetokens.tips/#org" }
+      "author": {
+        "@id": "https://savetokens.tips/#author"
+      },
+      "publisher": {
+        "@id": "https://savetokens.tips/#org"
+      }
     },
     {
       "@type": "BreadcrumbList",
       "@id": "https://savetokens.tips/guide#breadcrumb",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "savetokens.tips", "item": "https://savetokens.tips/" },
-        { "@type": "ListItem", "position": 2, "name": "Token-saving guide", "item": "https://savetokens.tips/guide" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "savetokens.tips",
+          "item": "https://savetokens.tips/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Token-saving guide",
+          "item": "https://savetokens.tips/guide"
+        }
       ]
     },
     {
@@ -65,7 +79,7 @@
           "name": "How much does caveman mode save?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The target is roughly 75 percent of reply prose, and it is an estimate: nobody has logged a before-and-after yet, so this site prints it gray with a leading tilde, never in the green reserved for measured numbers. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly."
+            "text": "The target is roughly 50 percent of reply prose, deliberately lowballed, and it is an estimate: the logged caveman replies total 64.6 million tokens across 612 sessions, and the assumed 2x plain-prose baseline puts the saving at roughly 65 million tokens. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly."
           }
         },
         {
@@ -473,6 +487,7 @@
     <nav class="toc" aria-label="Guide sections">
       <a href="#why">Why</a>
       <a href="#basics">Basics</a>
+      <a href="#cache">Cache window</a>
       <a href="#caveman">Caveman mode</a>
       <a href="#copy">Copy blocks</a>
       <a href="#advanced">Advanced</a>
@@ -490,18 +505,22 @@
     <p class="lede">Tokens are metered and billed, and <strong>every word in your session gets reread on every turn</strong>. This guide collects the habits that cut the bill, starting with the two-second ones. Green numbers are measured; gray numbers with a tilde are estimates.</p>
 
     <div class="stats">
+      <!-- LIVE:guide-hero-measured -->
       <div class="stat">
         <span class="badge">Measured</span>
-        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">83.5</span><span class="unit">%</span></span>
+        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">82.1</span><span class="unit">%</span></span>
         <p class="what">of output tokens removed by filtering command output before the agent reads it.</p>
-        <p class="src">rtk gain, snapshot 2026-07-18, 92,695 commands, 18.4M tokens saved</p>
+        <p class="src">rtk gain, snapshot 2026-07-19, 93,611 commands, 19.1M tokens saved</p>
       </div>
+<!-- END:guide-hero-measured -->
+      <!-- LIVE:guide-hero-caveman -->
       <div class="stat">
         <span class="badge">Estimate</span>
-        <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~75</span><span class="unit">%</span></span>
-        <p class="what">shorter replies with caveman mode. A target, not a measurement.</p>
-        <p class="src">no before-and-after log exists yet</p>
+        <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~50</span><span class="unit">%</span></span>
+        <p class="what">shorter replies with caveman mode. A deliberately lowballed target, not a measurement.</p>
+        <p class="src">assumed 2x prose baseline, est ~65M saved, no before-and-after log</p>
       </div>
+<!-- END:guide-hero-caveman -->
       <div class="stat">
         <span class="badge">Vendor spec</span>
         <span class="fig fig-s" data-figure data-kind="spec"><span class="tag">spec</span><span class="val num">~1M</span></span>
@@ -564,12 +583,29 @@
     </div>
   </section>
 
+  <!-- ===================== CACHE WINDOW ===================== -->
+  <section class="section" id="cache">
+    <h2>The five-minute cache window</h2>
+    <div class="prose">
+      <p>Prompt caching is the reason the reread on every turn does not bill at full price. The provider keeps the already-processed conversation in a cache: the first turn writes it at about 1.25x the normal input price, and every later turn reads it back at roughly a tenth of the normal price. Those figures are <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching">Anthropic's published caching rates</a>, not measured here.</p>
+      <p>The catch is timing. The cache lives for about five minutes, and the clock resets every time it is used. Reply within the window and each turn's reread stays at the cheap rate. Walk away longer than that and the cache expires: the next message rewrites the entire transcript at the premium rate, as if the whole conversation were being sent for the first time. For the same tokens, that cold rewrite costs roughly twelve times a cached reread, so on a long transcript one idle gap can out-bill several active turns.</p>
+      <ul>
+        <li><strong>Work in bursts.</strong> While a session is hot, keep replies coming inside the five-minute window. Every turn that lands in the window pays a tenth of the price for the history it carries.</li>
+        <li><strong>A long break is a decision point.</strong> Stepping away from a big transcript for more than a few minutes? That is the natural moment to <code>/compact</code> or <code>/clear</code>. Coming back cold pays the full rewrite either way, so come back to a small transcript instead of a large one.</li>
+        <li><strong>Short transcripts make cold starts cheap.</strong> Every habit on this page that keeps the conversation small also shrinks the penalty when the cache does expire. The two compound.</li>
+      </ul>
+      <p>Agent tools set the cache markers themselves; there is nothing to configure. Timing and transcript size are the levers you actually hold. Some setups use a one-hour cache at a higher write price, and the same logic applies with a longer clock.</p>
+    </div>
+  </section>
+
   <!-- ===================== CAVEMAN ===================== -->
   <section class="section" id="caveman">
     <h2>Caveman mode: shorter replies, same facts</h2>
     <div class="prose">
       <p>Caveman mode is a standing instruction that makes the agent's replies drastically shorter without losing technical content. The agent drops articles, filler, pleasantries, and hedging, speaks in fragments, and uses arrows for causality. Code, commits, file contents, function names, and error strings are never touched.</p>
-      <p>The target is <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~75</span></span>% less reply prose. It is an estimate: nobody has logged a before-and-after yet, so it prints gray with a tilde instead of green.</p>
+      <!-- LIVE:guide-caveman-target -->
+      <p>The target is <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~50</span></span>% less reply prose, deliberately lowballed. The spent side is logged: caveman replies total 64.6 million tokens across 612 sessions. The plain-prose baseline is assumed at 2x, which puts the estimated saving at roughly 65 million tokens; the baseline is an assumption, so the number prints gray with a tilde instead of green.</p>
+<!-- END:guide-caveman-target -->
     </div>
 
     <div class="tablewrap">
@@ -716,7 +752,9 @@ Off switch: "stop caveman" / "normal mode".</pre>
       <p>The same economics extend to multi-agent workflows that fan a big job, an audit, a migration, a broad review, across many agents in parallel. Total spend goes up, main-session context stays small, and wall-clock time drops. Reach for workflows when the job cannot fit one context, not to hurry a small one.</p>
 
       <h3>Filter command output before the agent reads it</h3>
-      <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering it is the one technique on this site with full before-and-after logs: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">83.5</span></span>% of output tokens removed across 92,695 commands (snapshot 2026-07-18). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>
+      <!-- LIVE:guide-rtk-inline -->
+      <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering it is the one technique on this site with full before-and-after logs: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">82.1</span></span>% of output tokens removed across 93,611 commands (snapshot 2026-07-19). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>
+<!-- END:guide-rtk-inline -->
     </div>
   </section>
 
@@ -729,14 +767,18 @@ Off switch: "stop caveman" / "normal mode".</pre>
       <h3>When should I use /clear, /compact, or a new session?</h3>
       <p>Use <code>/clear</code> when the next task shares nothing with the current conversation: it wipes context and costs the least. Use <code>/compact</code> at a natural checkpoint, after a fix lands and before a new area, when you need the conclusions but not the transcript. Start a new session when the task changes entirely; carrying an old transcript into new work makes every future turn pay for it.</p>
       <h3>How much does caveman mode save?</h3>
-      <p>The target is roughly 75 percent of reply prose, and it is an estimate: nobody has logged a before-and-after yet, so this site prints it gray with a leading tilde, never in the green reserved for measured numbers. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.</p>
+      <!-- LIVE:guide-faq-caveman -->
+      <p>The target is roughly 50 percent of reply prose, deliberately lowballed, and it is an estimate: the logged caveman replies total 64.6 million tokens across 612 sessions, and the assumed 2x plain-prose baseline puts the saving at roughly 65 million tokens. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.</p>
+<!-- END:guide-faq-caveman -->
       <h3>Do subagents and workflows save tokens?</h3>
       <p>Not by default. A subagent starts with fresh context, rereads the files your session already read, then spends more tokens reporting back, so total spend usually rises. What subagents buy is a short main transcript: a summary instead of thousands of lines of search output. Dispatch them for big, genuinely independent jobs, and do direct reads for small lookups.</p>
     </div>
   </section>
 
   <footer class="footer">
-    <p>Updated 2026-07-19. Measured figures come from per-command before-and-after logs, snapshot 2026-07-18; estimates are labeled and printed with a tilde. No number here is invented.</p>
+    <!-- LIVE:guide-footer-note -->
+    <p>Updated 2026-07-19. Measured figures come from per-command before-and-after logs, snapshot 2026-07-19; estimates are labeled and printed with a tilde. No number here is invented.</p>
+<!-- END:guide-footer-note -->
     <p><a href="/">Full measurements</a> · <a href="/about">About this site</a> · <a href="https://github.com/ryanportfolio">Contact Ryan on GitHub</a></p>
   </footer>
 
