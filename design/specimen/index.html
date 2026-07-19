@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Token-saving techniques for AI coding agents | savetokens.tips</title>
-<meta name="description" content="Token-saving techniques for AI coding agents, characterized like a component datasheet: 83.5% typical token reduction measured across 92,695 proxied commands.">
+<meta name="description" content="Token-saving techniques for AI coding agents, characterized like a component datasheet: 82.5% typical token reduction measured across 93,501 proxied commands.">
 <meta name="author" content="Ryan">
 <link rel="canonical" href="https://savetokens.tips/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23F6F4EE'/%3E%3Ctext x='8' y='12' font-family='monospace' font-size='9' font-weight='600' text-anchor='middle' fill='%2316171A'%3EST%3C/text%3E%3C/svg%3E">
 <meta property="og:title" content="Token-saving techniques for AI coding agents | savetokens.tips">
-<meta property="og:description" content="Token-saving techniques for AI coding agents, characterized like a component datasheet: 83.5% typical token reduction measured across 92,695 proxied commands.">
+<meta property="og:description" content="Token-saving techniques for AI coding agents, characterized like a component datasheet: 82.5% typical token reduction measured across 93,501 proxied commands.">
 <meta property="og:image" content="https://savetokens.tips/renders/desktop-1440.png">
 <meta property="og:image:width" content="1440">
 <meta property="og:image:height" content="900">
@@ -27,7 +27,9 @@
       "name": "savetokens.tips",
       "url": "https://savetokens.tips/",
       "logo": "https://savetokens.tips/renders/desktop-1440.png",
-      "sameAs": ["https://github.com/ryanportfolio"]
+      "sameAs": [
+        "https://github.com/ryanportfolio"
+      ]
     },
     {
       "@type": "Person",
@@ -40,12 +42,16 @@
       "@type": "TechArticle",
       "@id": "https://savetokens.tips/#article",
       "headline": "Token-saving techniques for AI coding agents",
-      "description": "Token-saving techniques for AI coding agents, characterized like a component datasheet. Measured figures come from logged raw-versus-filtered token deltas via the RTK proxy: 83.5% typical reduction across 92,695 proxied commands, snapshot 2026-07-18.",
+      "description": "Token-saving techniques for AI coding agents, characterized like a component datasheet. Measured figures come from logged raw-versus-filtered token deltas via the RTK proxy: 82.5% typical reduction across 93,501 proxied commands, snapshot 2026-07-19.",
       "url": "https://savetokens.tips/",
       "datePublished": "2026-07-18",
-      "dateModified": "2026-07-18",
-      "author": { "@id": "https://savetokens.tips/#author" },
-      "publisher": { "@id": "https://savetokens.tips/#org" }
+      "dateModified": "2026-07-19",
+      "author": {
+        "@id": "https://savetokens.tips/#author"
+      },
+      "publisher": {
+        "@id": "https://savetokens.tips/#org"
+      }
     },
     {
       "@type": "BreadcrumbList",
@@ -68,7 +74,7 @@
           "name": "How much does routing commands through RTK reduce token usage?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Measured across 92,695 proxied commands in the snapshot dated 2026-07-18, the RTK proxy techniques documented on savetokens.tips reduced output tokens by 83.5 percent overall, 18.4 million tokens saved. Per-command savings range from 23.0 percent for rtk grep to 99.2 percent for one large rtk git diff."
+            "text": "Measured across 93,501 proxied commands in the snapshot dated 2026-07-19, the RTK proxy techniques documented on savetokens.tips reduced output tokens by 82.5 percent overall, 19.1 million tokens saved. Per-command savings range from 22.5 percent for rtk grep to 99.2 percent for one large rtk git diff."
           }
         },
         {
@@ -84,7 +90,7 @@
           "name": "Which commands save the most tokens?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Commands with large raw output filter best: rtk git diff saved 99.2 percent (n=3), rtk vitest run 92.5 percent (n=38), rtk git pull 92.3 percent (n=73). High-frequency commands save a lower percentage but large absolute totals: rtk read saved 24.9 percent, 8.9 million tokens, across 571 runs."
+            "text": "Commands with large raw output filter best: rtk git diff saved 99.2 percent (n=3), rtk vitest run saved 92.0 percent (n=42), rtk ls -la saved 53.8 percent (n=19). High-frequency commands save a lower percentage but large absolute totals: rtk read saved 24.5 percent, 9.5 million tokens, across 626 runs."
           }
         },
         {
@@ -641,15 +647,15 @@
     </div>
     <div class="mh-meta">
       <div class="row"><dt>Doc:&nbsp;</dt><dd class="num">ST-0001</dd></div>
-      <div class="row"><dt>Rev:&nbsp;</dt><dd class="num">A</dd></div>
-      <div class="row"><dt>Snapshot:&nbsp;</dt><dd class="num">2026-07-18</dd></div>
+      <div class="row"><dt>Rev:&nbsp;</dt><dd class="num">B, live</dd></div>
+      <div class="row"><dt>Snapshot:&nbsp;</dt><dd class="num">2026-07-19</dd></div>
       <div class="row"><dt>Scope:&nbsp;</dt><dd>global</dd></div>
       <div class="row"><dt>By:&nbsp;</dt><dd class="author">Ryan · <a href="https://github.com/ryanportfolio">github.com/ryanportfolio</a></dd></div>
       <button type="button" class="themebtn" id="themebtn" aria-label="Toggle light or dark rendering">Invert display</button>
     </div>
   </header>
 
-  <p class="snaplabel">Characterization data: snapshot <span class="date">2026-07-18</span>, global scope, values subject to revision. Figures are a dated sample from rtk gain. No other numbers are invented.</p>
+  <p class="snaplabel">Characterization data: snapshot <span class="date">2026-07-19</span>, global scope, values subject to revision. Figures are a dated sample from rtk gain. No other numbers are invented.</p>
 
   <div class="legend" aria-hidden="false">
     <span>[M] measured, production tested, real counterfactual</span>
@@ -662,7 +668,9 @@
   <section class="section" aria-labelledby="s1">
     <div class="sec-bar"><span class="sec-no">1</span><h2 class="sec-label" id="s1">Features</h2></div>
     <ul class="features">
-      <li>Token reduction across all proxied commands: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">83.5</span></span>% typ, n=92,695, snapshot <span class="date">2026-07-18</span>.</li>
+      <!-- LIVE:features-li -->
+      <li>Token reduction across all proxied commands: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">82.5</span></span>% typ, n=93,501, snapshot <span class="date">2026-07-19</span>.</li>
+<!-- END:features-li -->
       <li>Per-command token deltas logged by the RTK proxy, reported raw versus filtered.</li>
       <li>Measured and estimated figures held apart on six channels at once, readable in grayscale.</li>
       <li>One accent color, reserved to mean production tested and nothing else.</li>
@@ -695,7 +703,7 @@
   <!-- ===================== 3 ELECTRICAL CHARACTERISTICS ===================== -->
   <section class="section" aria-labelledby="s3">
     <div class="sec-bar"><span class="sec-no">3</span><h2 class="sec-label" id="s3">Electrical Characteristics</h2></div>
-    <p class="prose"><span class="chip">Conditions unless otherwise noted: rtk gain, snapshot <span class="date">2026-07-18</span>, global scope, raw output tokens versus RTK-filtered output tokens. Min and Max are shown only where a distribution exists.</span></p>
+    <p class="prose"><span class="chip">Conditions unless otherwise noted: rtk gain, snapshot <span class="date">2026-07-19</span>, global scope, raw output tokens versus RTK-filtered output tokens. Min and Max are shown only where a distribution exists.</span></p>
     <div class="tablewrap">
       <table class="ec">
         <thead>
@@ -710,14 +718,15 @@
           </tr>
         </thead>
         <tbody>
+          <!-- LIVE:ec-rows -->
           <tr class="row-m">
             <td class="partno" data-label="Part No">RTK-READ-01</td>
             <td data-label="Parameter">Tokens saved, rtk read</td>
             <td class="n nc" data-label="Min">&middot;</td>
-            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">24.9</span><sup>1</sup></span></td>
+            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">24.5</span><sup>1</sup></span></td>
             <td class="n nc" data-label="Max">&middot;</td>
             <td data-label="Unit">%</td>
-            <td class="cond" data-label="Test conditions">n=571, 8.9M saved</td>
+            <td class="cond" data-label="Test conditions">n=626, 9.5M saved</td>
           </tr>
           <tr class="row-m">
             <td class="partno" data-label="Part No">RTK-DIFF-01</td>
@@ -741,28 +750,28 @@
             <td class="partno" data-label="Part No">RTK-GREP-01</td>
             <td data-label="Parameter">Tokens saved, rtk grep</td>
             <td class="n nc" data-label="Min">&middot;</td>
-            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">23.0</span><sup>1</sup></span></td>
+            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">22.5</span><sup>1</sup></span></td>
             <td class="n nc" data-label="Max">&middot;</td>
             <td data-label="Unit">%</td>
-            <td class="cond" data-label="Test conditions">n=1199, 448.6K saved</td>
+            <td class="cond" data-label="Test conditions">n=1,272, 459.0K saved</td>
+          </tr>
+          <tr class="row-m">
+            <td class="partno" data-label="Part No">RTK-LS-01</td>
+            <td data-label="Parameter">Tokens saved, rtk ls -la</td>
+            <td class="n nc" data-label="Min">&middot;</td>
+            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">53.8</span><sup>1</sup></span></td>
+            <td class="n nc" data-label="Max">&middot;</td>
+            <td data-label="Unit">%</td>
+            <td class="cond" data-label="Test conditions">n=19, 300.4K saved</td>
           </tr>
           <tr class="row-m">
             <td class="partno" data-label="Part No">RTK-VITEST-01</td>
             <td data-label="Parameter">Tokens saved, rtk vitest run</td>
             <td class="n nc" data-label="Min">&middot;</td>
-            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">92.5</span><sup>1</sup></span></td>
+            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">92.0</span><sup>1</sup></span></td>
             <td class="n nc" data-label="Max">&middot;</td>
             <td data-label="Unit">%</td>
-            <td class="cond" data-label="Test conditions">n=38, 208.4K saved</td>
-          </tr>
-          <tr class="row-m">
-            <td class="partno" data-label="Part No">RTK-PULL-01</td>
-            <td data-label="Parameter">Tokens saved, rtk git pull</td>
-            <td class="n nc" data-label="Min">&middot;</td>
-            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">92.3</span><sup>1</sup></span></td>
-            <td class="n nc" data-label="Max">&middot;</td>
-            <td data-label="Unit">%</td>
-            <td class="cond" data-label="Test conditions">n=73, 38.9K saved</td>
+            <td class="cond" data-label="Test conditions">n=42, 217.8K saved</td>
           </tr>
           <tr>
             <td class="partno" data-label="Part No">RTK-TERSE-01</td>
@@ -777,11 +786,12 @@
             <td class="partno" data-label="Part No">STK-TOTAL</td>
             <td data-label="Parameter">All proxied commands</td>
             <td class="n nc" data-label="Min">&middot;</td>
-            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">83.5</span><sup>1</sup></span></td>
+            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">82.5</span><sup>1</sup></span></td>
             <td class="n nc" data-label="Max">&middot;</td>
             <td data-label="Unit">%</td>
-            <td class="cond" data-label="Test conditions">n=92,695 commands, 18.4M saved</td>
+            <td class="cond" data-label="Test conditions">n=93,501 commands, 19.1M saved</td>
           </tr>
+<!-- END:ec-rows -->
         </tbody>
       </table>
     </div>
@@ -795,7 +805,7 @@
   <!-- ===================== 4 TYPICAL PERFORMANCE CHARACTERISTICS ===================== -->
   <section class="section" aria-labelledby="s4">
     <div class="sec-bar"><span class="sec-no">4</span><h2 class="sec-label" id="s4">Typical Performance Characteristics</h2></div>
-    <p class="prose">Saved percent plotted against command frequency, from the <span class="date">2026-07-18</span> snapshot. Measured points carry the accent and a solid mark whose size grows with sample count. The estimate renders as a dashed reference line and never carries the accent.</p>
+    <p class="prose">Saved percent plotted against command frequency, from the <span class="date">2026-07-19</span> snapshot. Measured points carry the accent and a solid mark whose size grows with sample count. The estimate renders as a dashed reference line and never carries the accent.</p>
     <div class="tablewrap" style="border:1px solid var(--rule);">
       <svg class="chart" viewBox="0 0 720 300" width="100%" style="min-width:600px;display:block" role="img" aria-label="Scatter of saved percent versus command count, measured points solid, estimated point hollow">
         <!-- axes -->
@@ -824,23 +834,23 @@
         <!-- axis labels -->
         <text class="axlabel" x="380" y="292" text-anchor="middle">COMMAND COUNT, LOG SCALE (n)</text>
         <text class="axlabel" x="20" y="135" text-anchor="middle" transform="rotate(-90 20 135)">SAVED PERCENT</text>
-        <!-- measured points: x = 110 + 172 * log10(n), y by saved percent.
-             Marker area encodes sample confidence: r = 2.5 + 1.5 * log10(n), so the
-             flattering n=1 and n=3 points read as the least supported.
-             read n=571 r=6.6, diff n=3 r=3.2, log n=1 r=2.5, grep n=1199 r=7.1,
-             vitest n=38 r=4.9, pull n=73 r=5.3. -->
-        <circle class="pt-m" cx="584" cy="192" r="6.6"/><!-- read 24.9% n=571 -->
-        <text class="ptlbl" x="576" y="186" text-anchor="end">read, n=571</text>
-        <circle class="pt-m" cx="192" cy="22"  r="3.2"/><!-- diff 99.2% n=3 -->
-        <text class="ptlbl" x="200" y="34" text-anchor="start">diff, n=3</text>
-        <circle class="pt-m" cx="110" cy="20"  r="2.5"/><!-- log 100% n=1 -->
-        <text class="ptlbl" x="118" y="20" text-anchor="start" dominant-baseline="middle">log, n=1</text>
-        <circle class="pt-m" cx="639" cy="197" r="7.1"/><!-- grep 23.0% n=1199 -->
-        <text class="ptlbl" x="631" y="215" text-anchor="end">grep, n=1199</text>
-        <circle class="pt-m" cx="382" cy="42"  r="4.9"/><!-- vitest 92.5% n=38 -->
-        <text class="ptlbl" x="376" y="30" text-anchor="end">vitest, n=38</text>
-        <circle class="pt-m" cx="430" cy="42"  r="5.3"/><!-- pull 92.3% n=73 -->
-        <text class="ptlbl" x="440" y="34" text-anchor="start">pull, n=73</text>
+        <!-- LIVE:chart-points -->
+        <!-- measured points: x = 110 + 172 * log10(n), y = 250 - 2.3 * pct.
+             Marker area encodes sample confidence: r = 2.5 + 1.5 * log10(n).
+             Generated from data/snapshot.json, snapshot 2026-07-19. -->
+        <circle class="pt-m" cx="591" cy="194" r="6.7"/><!-- read 24.5% n=626 -->
+        <text class="ptlbl" x="583" y="186" text-anchor="end">read, n=626</text>
+        <circle class="pt-m" cx="192" cy="22" r="3.2"/><!-- diff 99.2% n=3 -->
+        <text class="ptlbl" x="200" y="36" text-anchor="start">diff, n=3</text>
+        <circle class="pt-m" cx="110" cy="20" r="2.5"/><!-- log 100.0% n=1 -->
+        <text class="ptlbl" x="118" y="34" text-anchor="start">log, n=1</text>
+        <circle class="pt-m" cx="644" cy="198" r="7.2"/><!-- grep 22.5% n=1272 -->
+        <text class="ptlbl" x="636" y="200" text-anchor="end">grep, n=1,272</text>
+        <circle class="pt-m" cx="330" cy="126" r="4.4"/><!-- ls 53.8% n=19 -->
+        <text class="ptlbl" x="338" y="118" text-anchor="start">ls, n=19</text>
+        <circle class="pt-m" cx="389" cy="38" r="4.9"/><!-- vitest 92.0% n=42 -->
+        <text class="ptlbl" x="397" y="52" text-anchor="start">vitest, n=42</text>
+<!-- END:chart-points -->
         <!-- estimated reference: terse prompting ~75%, no measured frequency, so a
              horizontal dashed line that claims no x position rather than a point. -->
         <line class="refline" x1="70" y1="77" x2="690" y2="77"/>
@@ -868,20 +878,26 @@
         <span class="arrow">&#8594;</span>
         <span class="box">filtered<br>summary</span>
         <span class="arrow">&nbsp;delta&nbsp;</span>
+        <!-- LIVE:tip-delta -->
         <span class="delta num"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">99.2%</span><sup>1,2</sup> saved</span></span>
+<!-- END:tip-delta -->
       </div>
 
       <div class="feature">
+        <!-- LIVE:tip-feature -->
         <div>
           <div class="big fig-m"><span class="tag">[M]</span><span class="val num">99.2</span>%<sup style="font-size:0.9rem;color:var(--graphite)">1,2</sup></div>
           <div class="biglabel">Tokens saved, one large diff</div>
           <div class="big fig-m" style="font-size:1.5rem;margin-top:10px"><span class="tag" style="font-size:0.75rem">[M]</span><span class="val num">5.6M</span><sup style="font-size:0.75rem;color:var(--graphite)">1,2</sup></div>
           <div class="biglabel">Absolute tokens saved</div>
-          <span class="chip" data-figure data-kind="measured">M, rtk gain, <span class="date">2026-07-18</span>, global, n=3</span>
+          <span class="chip" data-figure data-kind="measured">M, rtk gain, <span class="date">2026-07-19</span>, global, n=3</span>
         </div>
+<!-- END:tip-feature -->
         <div class="prose">
           <p>A full git diff of a large change can send millions of characters to the model, most of which the agent never reads line by line. Routing the command through RTK returns a filtered summary that preserves the decision content: which files changed, the shape of the change, and the parts that need review.</p>
+          <!-- LIVE:tip-prose -->
           <p>In one measured large diff the filtered output used 99.2 percent fewer tokens than the raw diff, a saving of 5.6 million tokens. The delta is pooled across three runs and treated as one sample, not a stable average, so read it as a strong signal rather than a guaranteed rate. Use rtk git diff whenever a diff is large enough that you would scroll past most of it anyway.</p>
+<!-- END:tip-prose -->
         </div>
       </div>
 
@@ -937,11 +953,15 @@
     <div class="sec-bar"><span class="sec-no">7</span><h2 class="sec-label" id="s7">Frequently Asked Questions</h2></div>
     <div class="faq prose">
       <h3>How much does routing commands through RTK reduce token usage?</h3>
-      <p>Measured across 92,695 proxied commands in the snapshot dated <span class="date">2026-07-18</span>, the RTK proxy techniques documented on savetokens.tips reduced output tokens by 83.5 percent overall, 18.4 million tokens saved. Per-command savings range from 23.0 percent for rtk grep to 99.2 percent for one large rtk git diff. Every figure is characterized in Section 3 with sample counts and test conditions.</p>
+      <!-- LIVE:faq-q1 -->
+      <p>Measured across 93,501 proxied commands in the snapshot dated <span class="date">2026-07-19</span>, the RTK proxy techniques documented on savetokens.tips reduced output tokens by 82.5 percent overall, 19.1 million tokens saved. Per-command savings range from 22.5 percent for rtk grep to 99.2 percent for one large rtk git diff. Every figure is characterized in Section 3 with sample counts and test conditions.</p>
+<!-- END:faq-q1 -->
       <h3>What is the difference between a measured and an estimated figure?</h3>
       <p>A measured figure, tagged [M], has a real counterfactual: raw output tokens versus RTK-filtered output tokens, logged per command. An estimated figure, tagged [E], is a design target with no counterfactual, prints coarse with a leading tilde, and never carries the accent color. The two kinds are held apart on six channels at once, readable in grayscale.</p>
       <h3>Which commands save the most tokens?</h3>
-      <p>Commands with large raw output filter best: rtk git diff saved 99.2 percent (n=3), rtk vitest run 92.5 percent (n=38), rtk git pull 92.3 percent (n=73). High-frequency commands save a lower percentage but large absolute totals: rtk read saved 24.9 percent, 8.9 million tokens, across 571 runs.</p>
+      <!-- LIVE:faq-q3 -->
+      <p>Commands with large raw output filter best: rtk git diff saved 99.2 percent (n=3), rtk vitest run saved 92.0 percent (n=42), rtk ls -la saved 53.8 percent (n=19). High-frequency commands save a lower percentage but large absolute totals: rtk read saved 24.5 percent, 9.5 million tokens, across 626 runs.</p>
+<!-- END:faq-q3 -->
       <h3>Does savetokens.tips apply to both Claude Code and Codex?</h3>
       <p>Yes. Every technique listed in Ordering Information applies to both <a href="https://code.claude.com/docs/en/overview">Claude Code</a> and Codex. The RTK proxy sits between the agent and the shell, so the token filtering is agent-agnostic.</p>
     </div>
@@ -979,7 +999,9 @@
       </thead>
       <tbody>
         <tr><td class="n">A</td><td class="n">2026-07-18</td><td>First characterization run from rtk gain, global scope. Values subject to revision as sample counts grow.</td></tr>
-        <tr><td class="n nc">&middot;</td><td class="n nc">&middot;</td><td class="nc">Reserved. The next characterization run appends here when the live rtk gain feed lands.</td></tr>
+        <!-- LIVE:rev-live -->
+        <tr><td class="n">B</td><td class="n">2026-07-19</td><td>Live daily characterization refresh from rtk gain, global scope. This row updates with each snapshot; figures above reflect the latest run.</td></tr>
+<!-- END:rev-live -->
       </tbody>
     </table>
     <p class="fn-note">Note: characterization ages. Every figure is a dated snapshot; re-measure as sample counts grow, and prefer a newer revision over a stale one.</p>

@@ -517,7 +517,7 @@
     </div>
   </header>
 
-  <p class="snaplabel">Measured figures on this note are cited from datasheet ST-0001, characterization data: snapshot <span class="date">2026-07-18</span>, global scope, values subject to revision. This note introduces no new measured numbers.</p>
+  <p class="snaplabel">Measured figures on this note are cited from datasheet ST-0001, characterization data: snapshot <span class="date">2026-07-19</span>, global scope, values subject to revision. This note introduces no new measured numbers.</p>
 
   <div class="legend" aria-hidden="false">
     <span>[M] measured, production tested, real counterfactual</span>
@@ -723,7 +723,9 @@ Off switch: "stop caveman" / "normal mode".</pre>
       <p><strong>STK-ROUTE-01, model and effort routing.</strong> Not every step needs the largest model at the highest reasoning effort. Route hard design and debugging to the strong tier, and mechanical bulk work, renames, sweeps, and formatting, to a cheaper tier at reduced effort. The route is per task, not per session, so one session can mix tiers through subagent dispatch.</p>
       <p><strong>STK-SUBAGENT-01, subagent dispatch discipline.</strong> A subagent is not a discount: it starts with fresh context, rereads files your session already read, then pays a summarize-back tax to report. What it buys is a thin main transcript, a short summary in place of thousands of lines of search output that every later turn would otherwise reread. Dispatch for large, genuinely independent scopes; for a two-file lookup, a direct read is cheaper.</p>
       <p><strong>Workflow orchestration.</strong> The same economics extend to multi-agent workflows that fan a big job, an audit, a migration, a broad review, across many agents in parallel. Total spend goes up, main-session context stays small, and wall-clock time drops. Reach for orchestration when the job cannot fit one context, not to speed up a small task.</p>
-      <p><strong>RTK proxy, measured baseline.</strong> Shell output filtering is the one technique on this site with a full counterfactual: across all proxied commands the reduction is <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">83.5</span><sup>1</sup></span>% typ. <span class="chip" data-figure data-kind="measured">M, rtk gain, <span class="date">2026-07-18</span>, global, n=92,695</span></p>
+      <!-- LIVE:guide-baseline -->
+      <p><strong>RTK proxy, measured baseline.</strong> Shell output filtering is the one technique on this site with a full counterfactual: across all proxied commands the reduction is <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">82.5</span><sup>1</sup></span>% typ. <span class="chip" data-figure data-kind="measured">M, rtk gain, <span class="date">2026-07-19</span>, global, n=93,501</span></p>
+<!-- END:guide-baseline -->
       <p>Session hygiene and output filtering compound: hygiene keeps the transcript short, filtering keeps each turn's tool output small. Per-command characterization lives on <a href="/">datasheet ST-0001</a>, Section 3.</p>
     </div>
     <ol class="fn">

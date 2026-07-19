@@ -17,7 +17,10 @@ const OG_IMAGE_FILE = join(HERE, "renders", "desktop-1440.png");
 const EXPECTED_TIP_ENTRIES = 1; // one complete tip entry in Application Information
 const EXPECTED_FIG_SLOTS = 11; // 8 EC table slots + 1 AbsMax spec slot + 1 block-diagram delta + 1 Features headline
 const EXPECTED_DATA_FIGURES = 13; // the 11 number slots + 2 provenance chips (5.1 measured, AbsMax spec)
-const SNAPSHOT_LABEL = "snapshot 2026-07-18";
+// The dated label is bound to the committed snapshot, so a stale apply run
+// (HTML not regenerated after a new export) fails this gate.
+const SNAPSHOT_LABEL =
+  "snapshot " + JSON.parse(readFileSync(join(HERE, "data", "snapshot.json"), "utf8")).snapshotDate;
 
 const EM_DASH = "—";
 
