@@ -1,7 +1,7 @@
 // apply-snapshot.mjs - inject data/snapshot.json into the site files.
 // Rewrites every measured figure on index.html, guide.html, and llms.txt from
 // the snapshot, using <!-- LIVE:key --> ... <!-- END:key --> region markers for
-// HTML blocks, JSON parsing for the JSON-LD graph, and attribute rewrites for
+// HTML blocks, JSON parsing for the JSON-LD graphs, and attribute rewrites for
 // meta tags. Idempotent: running twice produces identical output. verify.mjs
 // remains the release gate and must pass after this script runs.
 
@@ -34,22 +34,26 @@ const cavePct = Math.round(cave.assumedReduction * 100);
 const caveMult = (1 / (1 - cave.assumedReduction)).toFixed(0); // 0.5 -> "2"
 
 // ---------- derived selections ----------
+const plainName = (r) => {
+  const p = r.display.replace(/^rtk /, "");
+  return p === "read" ? "file reads" : p;
+};
 const byPct = [...rows].sort((a, b) => b.typPct - a.typPct);
 const minRow = byPct[byPct.length - 1];
 const maxRow = byPct.find((r) => r.n >= 2) ?? byPct[0];
 const top3 = byPct.filter((r) => r.n >= 2).slice(0, 3);
 const topAbs = [...rows].sort((a, b) => b.savedTokens - a.savedTokens)[0];
-
-const qualified = (r) =>
-  r.n === 1 ? `a single ${r.display} run` : r.n <= 3 ? `one large ${r.display}` : r.display;
+const mostFrequent = [...rows].sort((a, b) => b.n - a.n)[0];
 
 // ---------- shared copy ----------
-const metaDescription = `Token-saving techniques for AI coding agents, characterized like a component datasheet: ${pct1(S.savedPct)}% typical token reduction measured across ${cnt(S.commands)} proxied commands.`;
-const articleDescription = `Token-saving techniques for AI coding agents, characterized like a component datasheet. Measured figures come from logged raw-versus-filtered token deltas via the RTK proxy: ${pct1(S.savedPct)}% typical reduction across ${cnt(S.commands)} proxied commands, snapshot ${DATE}.`;
-const faq1Core = `Measured across ${cnt(S.commands)} proxied commands in the snapshot dated ${DATE}, the RTK proxy techniques documented on savetokens.tips reduced output tokens by ${pct1(S.savedPct)} percent overall, ${tokProse(S.savedTokens)} tokens saved. Per-command savings range from ${pct1(minRow.typPct)} percent for ${minRow.display} to ${pct1(maxRow.typPct)} percent for ${qualified(maxRow)}.`;
+const metaDescription = `Token-saving techniques for AI coding agents: ${pct1(S.savedPct)}% token reduction measured across ${cnt(S.commands)} real commands. Measured numbers in green, estimates marked with a tilde.`;
+const articleDescription = `Token-saving techniques for AI coding agents, with measured figures from logged raw-versus-filtered token deltas: ${pct1(S.savedPct)}% typical reduction across ${cnt(S.commands)} real commands, snapshot ${DATE}. Estimates carry no before-and-after log and are marked with a tilde.`;
+const faq1Core = (where) =>
+  `Measured across ${cnt(S.commands)} real commands in the snapshot dated ${DATE}, routing shell commands through the RTK filter reduced output tokens by ${pct1(S.savedPct)} percent overall, ${tokProse(S.savedTokens)} tokens saved. Per-command savings range from ${pct1(minRow.typPct)} percent for ${plainName(minRow)} to ${pct1(maxRow.typPct)} percent for one large ${plainName(maxRow)}. Every number's sample count and source is in the table ${where}.`;
 const faq3Core = `Commands with large raw output filter best: ${top3
-  .map((r) => `${r.display} saved ${pct1(r.typPct)} percent (n=${r.n})`)
-  .join(", ")}. High-frequency commands save a lower percentage but large absolute totals: ${topAbs.display} saved ${pct1(topAbs.typPct)} percent, ${tokProse(topAbs.savedTokens)} tokens, across ${cnt(topAbs.n)} runs.`;
+  .map((r) => `${plainName(r)} saved ${pct1(r.typPct)} percent (n=${r.n})`)
+  .join(", ")}. High-frequency commands save a lower percentage but large absolute totals: ${plainName(topAbs)} saved ${pct1(topAbs.typPct)} percent, ${tokProse(topAbs.savedTokens)} tokens, across ${cnt(topAbs.n)} runs.`;
+const caveFaq = `The target is roughly ${cavePct} percent of reply prose, deliberately lowballed, and it is an estimate: the logged caveman replies total ${tokProse(cave.outputTokens)} tokens across ${cnt(cave.sessions)} sessions, and the assumed ${caveMult}x plain-prose baseline puts the saving at ${estProse(cave.estSavedTokens)} tokens. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.`;
 
 // Written files are normalized to LF so repeated runs are byte-identical
 // regardless of the checkout's autocrlf state.
@@ -83,7 +87,7 @@ index = index.replace(
       }
       if (type === "faqpage") {
         for (const q of node.mainEntity) {
-          if (q.name.startsWith("How much")) q.acceptedAnswer.text = faq1Core;
+          if (q.name.startsWith("How much does filtering")) q.acceptedAnswer.text = faq1Core("on this page");
           if (q.name.startsWith("Which commands")) q.acceptedAnswer.text = faq3Core;
         }
       }
@@ -92,74 +96,76 @@ index = index.replace(
   }
 );
 
-// Masthead revision and snapshot date.
-index = index
-  .replace(/(<dt>Rev:&nbsp;<\/dt><dd class="num">)[^<]*(<\/dd>)/, `$1B, live$2`)
-  .replace(/(<dt>Snapshot:&nbsp;<\/dt><dd class="num">)[^<]*(<\/dd>)/, `$1${DATE}$2`);
-
-// Every dated snapshot span.
-index = index.replace(/(<span class="date">)\d{4}-\d{2}-\d{2}(<\/span>)/g, `$1${DATE}$2`);
-
-// Features headline figure.
+// Hero stats: two measured + one static vendor spec.
 index = replaceBlock(
   index,
-  "features-li",
-  `      <li>Token reduction across all proxied commands: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">${pct1(S.savedPct)}</span></span>% typ, n=${cnt(S.commands)}, snapshot <span class="date">${DATE}</span>.</li>`,
+  "hero-stats",
+  `      <div class="stat">
+        <span class="badge">Measured</span>
+        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">${pct1(S.savedPct)}</span><span class="unit">%</span></span>
+        <p class="what">of output tokens removed across every command routed through the filter.</p>
+        <p class="src">rtk gain, snapshot ${DATE}, ${cnt(S.commands)} commands</p>
+      </div>
+      <div class="stat">
+        <span class="badge">Measured</span>
+        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">${tok(S.savedTokens)}</span></span>
+        <p class="what">tokens saved in total by filtering command output before the agent reads it.</p>
+        <p class="src">rtk gain, snapshot ${DATE}, global scope</p>
+      </div>
+      <div class="stat">
+        <span class="badge">Vendor spec</span>
+        <span class="fig fig-s" data-figure data-kind="spec"><span class="tag">spec</span><span class="val num">~200,000</span></span>
+        <p class="what">tokens in the context window. Your whole working budget per session.</p>
+        <p class="src"><a href="https://platform.claude.com/docs/en/docs/build-with-claude/context-windows">Anthropic's number</a>, not measured here</p>
+      </div>`,
   "index.html"
 );
 
-// Electrical Characteristics rows.
-const slug = (r) => r.family.split(" ").pop().toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
-const used = new Map();
-const partNo = (r) => {
-  const s = slug(r);
-  const k = (used.get(s) ?? 0) + 1;
-  used.set(s, k);
-  return `RTK-${s}-${String(k).padStart(2, "0")}`;
+// Numbers section intro (carries the dated snapshot label).
+index = replaceBlock(
+  index,
+  "numbers-intro",
+  `      <p>Every percentage below is measured in production: raw output tokens versus filtered output tokens, logged per command, snapshot <span class="num">${DATE}</span>. The one estimate has no before-and-after log, so it prints gray with a tilde. Empty cells mean nothing was measured, never a guess.</p>`,
+  "index.html"
+);
+
+// Measurements table rows.
+const noteFor = (r) => {
+  if (r.n === 1) return "Single observation";
+  if (r.n <= 3) return "Small sample dominated by one run; read as a single sample, not an average";
+  if (r === topAbs) return "Biggest total saver in the log";
+  if (r === mostFrequent) return "The most frequent command in the log";
+  return "&nbsp;";
 };
-const condFor = (r) => {
-  const base = `n=${cnt(r.n)}, ${tok(r.savedTokens)} saved`;
-  if (r.n === 1) return `${base}, single observation`;
-  if (r.n <= 3 && r.family === "git diff") return `${base}, one large diff`;
-  if (r.n <= 3) return `${base}, small sample`;
-  return base;
-};
-const supFor = (r) => (r.n <= 3 ? "1,3" : "1");
-const ecRow = (r) => `          <tr class="row-m">
-            <td class="partno" data-label="Part No">${partNo(r)}</td>
-            <td data-label="Parameter">Tokens saved, ${r.display}</td>
-            <td class="n nc" data-label="Min">&middot;</td>
-            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">${pct1(r.typPct)}</span><sup>${supFor(r)}</sup></span></td>
-            <td class="n nc" data-label="Max">&middot;</td>
-            <td data-label="Unit">%</td>
-            <td class="cond" data-label="Test conditions">${condFor(r)}</td>
+const tableRow = (r) => `          <tr class="row-m">
+            <td class="cmd" data-label="Command">${r.display}</td>
+            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">${pct1(r.typPct)}</span></span>%</td>
+            <td class="n" data-label="Total saved">${tok(r.savedTokens)}</td>
+            <td class="n" data-label="Sample">n=${cnt(r.n)}</td>
+            <td class="note" data-label="Notes">${noteFor(r)}</td>
           </tr>`;
 index = replaceBlock(
   index,
-  "ec-rows",
-  rows.map(ecRow).join("\n") +
+  "table-rows",
+  rows.map(tableRow).join("\n") +
     `\n          <tr>
-            <td class="partno" data-label="Part No">RTK-TERSE-01</td>
-            <td data-label="Parameter">Prose reduction, terse prompting</td>
-            <td class="n nc" data-label="Min">&middot;</td>
-            <td class="n" data-label="Typ"><span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">[E]</span><span class="val num">~${cavePct}</span><sup>2</sup></span></td>
-            <td class="n nc" data-label="Max">&middot;</td>
-            <td data-label="Unit">%</td>
-            <td class="cond" data-label="Test conditions">assumed ${caveMult}x prose baseline, est ${estTok(cave.estSavedTokens)} saved, no counterfactual</td>
+            <td class="cmd" data-label="Command">caveman replies (terse prompting)</td>
+            <td class="n" data-label="Output tokens saved"><span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~${cavePct}</span></span>%</td>
+            <td class="n" data-label="Total saved">${estTok(cave.estSavedTokens)}</td>
+            <td class="n" data-label="Sample">${cnt(cave.sessions)} sessions</td>
+            <td class="note" data-label="Notes">Estimate: assumed ${caveMult}x prose baseline, no before-and-after log. See <a href="/guide#caveman">caveman mode</a></td>
           </tr>
           <tr class="row-m totals">
-            <td class="partno" data-label="Part No">STK-TOTAL</td>
-            <td data-label="Parameter">All proxied commands</td>
-            <td class="n nc" data-label="Min">&middot;</td>
-            <td class="n" data-label="Typ"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">${pct1(S.savedPct)}</span><sup>1</sup></span></td>
-            <td class="n nc" data-label="Max">&middot;</td>
-            <td data-label="Unit">%</td>
-            <td class="cond" data-label="Test conditions">n=${cnt(S.commands)} commands, ${tok(S.savedTokens)} saved</td>
+            <td class="cmd" data-label="Command">All commands</td>
+            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">${pct1(S.savedPct)}</span></span>%</td>
+            <td class="n" data-label="Total saved">${tok(S.savedTokens)}</td>
+            <td class="n" data-label="Sample">n=${cnt(S.commands)}</td>
+            <td class="note" data-label="Notes">Everything routed through the filter</td>
           </tr>`,
   "index.html"
 );
 
-// Section 4 scatter: measured points and labels, x = 110 + 172*log10(n),
+// Scatter: measured points and labels, x = 110 + 172*log10(n),
 // y = 250 - 2.3*pct, r = 2.5 + 1.5*log10(n).
 const pts = rows.map((r) => {
   const cx = Math.min(690, Math.round(110 + 172 * Math.log10(Math.max(1, r.n))));
@@ -203,48 +209,37 @@ index = replaceBlock(
       .join("\n"),
   "index.html"
 );
-
-// Section 4 estimated reference line, y = 250 - 2.3 * pct.
 const refY = Math.round(250 - 2.3 * cavePct);
 index = replaceBlock(
   index,
   "chart-refline",
-  `        <!-- estimated reference: terse prompting ~${cavePct}%, no measured frequency, so a
-             horizontal dashed line that claims no x position rather than a point. -->
+  `        <!-- estimate: caveman replies ~${cavePct}%, no measured frequency, so a horizontal
+             dashed line that claims no x position rather than a point. -->
         <line class="refline" x1="70" y1="${refY}" x2="690" y2="${refY}"/>
-        <text class="lbl-full" x="680" y="${refY - 11}" text-anchor="end">[E] ~${cavePct}, design target, no measured frequency</text>
-        <text class="lbl-short" x="680" y="${refY - 11}" text-anchor="end">[E] ~${cavePct}, design target</text>`,
+        <text class="lbl-full" x="680" y="${refY - 11}" text-anchor="end">estimate ~${cavePct}, no measured frequency</text>
+        <text class="lbl-short" x="680" y="${refY - 11}" text-anchor="end">estimate ~${cavePct}</text>`,
   "index.html"
 );
 
-// Section 5 featured note: top git diff group.
-const dSup = diff.n === 1 ? "1,2" : diff.n <= 3 ? "1,2" : "1";
-index = replaceBlock(
-  index,
-  "tip-delta",
-  `        <span class="delta num"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">${pct1(diff.typPct)}%</span><sup>${dSup}</sup> saved</span></span>`,
-  "index.html"
-);
-index = replaceBlock(
-  index,
-  "tip-feature",
-  `        <div>
-          <div class="big fig-m"><span class="tag">[M]</span><span class="val num">${pct1(diff.typPct)}</span>%<sup style="font-size:0.9rem;color:var(--graphite)">${dSup}</sup></div>
-          <div class="biglabel">Tokens saved, one large diff</div>
-          <div class="big fig-m" style="font-size:1.5rem;margin-top:10px"><span class="tag" style="font-size:0.75rem">[M]</span><span class="val num">${tok(diff.savedTokens)}</span><sup style="font-size:0.75rem;color:var(--graphite)">${dSup}</sup></div>
-          <div class="biglabel">Absolute tokens saved</div>
-          <span class="chip" data-figure data-kind="measured">M, rtk gain, <span class="date">${DATE}</span>, global, n=${diff.n}</span>
-        </div>`,
-  "index.html"
-);
-const diffRuns =
+// How-it-works feature: top git diff group.
+const diffPools =
   diff.n === 1
-    ? "The delta comes from a single run and is treated as one sample, not a stable average"
-    : `The delta is pooled across ${diff.n === 2 ? "two" : diff.n === 3 ? "three" : diff.n} runs and treated as one sample, not a stable average`;
+    ? "That figure comes from a single run"
+    : `That figure pools ${diff.n === 2 ? "two" : diff.n === 3 ? "three" : diff.n} runs dominated by one huge diff`;
 index = replaceBlock(
   index,
-  "tip-prose",
-  `          <p>In one measured large diff the filtered output used ${pct1(diff.typPct)} percent fewer tokens than the raw diff, a saving of ${tokProse(diff.savedTokens)} tokens. ${diffRuns}, so read it as a strong signal rather than a guaranteed rate. Use rtk git diff whenever a diff is large enough that you would scroll past most of it anyway.</p>`,
+  "feature",
+  `      <div>
+        <div class="big fig-m"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">${pct1(diff.typPct)}</span></span>%</div>
+        <div class="biglabel">Tokens saved on one large diff</div>
+        <div class="big fig-m" style="font-size:1.5rem;margin-top:10px"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">${tok(diff.savedTokens)}</span></span></div>
+        <div class="biglabel">Absolute tokens saved</div>
+        <p class="src">rtk gain, snapshot ${DATE}, n=${diff.n}</p>
+      </div>
+      <div class="prose">
+        <p>A full git diff of a large change can send millions of characters to the model, most of which the agent never reads line by line. Filtered, the same diff came back ${pct1(diff.typPct)} percent smaller: ${tokProse(diff.savedTokens)} tokens the agent never had to read.</p>
+        <p>${diffPools}, so read it as a strong signal, not a guaranteed rate. The habit it argues for: route any diff you would scroll past through the filter.</p>
+      </div>`,
   "index.html"
 );
 
@@ -252,16 +247,16 @@ index = replaceBlock(
 index = replaceBlock(
   index,
   "faq-q1",
-  `      <p>${faq1Core.replace(`dated ${DATE}`, `dated <span class="date">${DATE}</span>`)} Every figure is characterized in Section 3 with sample counts and test conditions.</p>`,
+  `      <p>${faq1Core("above").replace(`dated ${DATE}`, `dated <span class="num">${DATE}</span>`)}</p>`,
   "index.html"
 );
 index = replaceBlock(index, "faq-q3", `      <p>${faq3Core}</p>`, "index.html");
 
-// Revision history live row.
+// Footer (carries the dated snapshot label).
 index = replaceBlock(
   index,
-  "rev-live",
-  `        <tr><td class="n">B</td><td class="n">${DATE}</td><td>Live daily characterization refresh from rtk gain, global scope. This row updates with each snapshot; figures above reflect the latest run.</td></tr>`,
+  "footer-note",
+  `    <p>Updated ${DATE}. All measured figures are a dated sample: snapshot ${DATE} from rtk gain logs, global scope, values revise as samples grow. Estimates are labeled and printed with a tilde. No number here is invented.</p>`,
   "index.html"
 );
 
@@ -269,55 +264,84 @@ writeFileSync(join(ROOT, "index.html"), lf(index));
 
 // ---------- guide.html ----------
 let guide = readFileSync(join(ROOT, "guide.html"), "utf8");
-guide = guide.replace(/(<span class="date">)\d{4}-\d{2}-\d{2}(<\/span>)/g, `$1${DATE}$2`);
-guide = replaceBlock(
-  guide,
-  "guide-baseline",
-  `      <p><strong>RTK proxy, measured baseline.</strong> Shell output filtering is the one technique on this site with a full counterfactual: across all proxied commands the reduction is <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">${pct1(S.savedPct)}</span><sup>1</sup></span>% typ. <span class="chip" data-figure data-kind="measured">M, rtk gain, <span class="date">${DATE}</span>, global, n=${cnt(S.commands)}</span></p>`,
-  "guide.html"
-);
-// Caveman feature block: one [E] slot (guide expects exactly 3 slots total),
-// derivation and absolute estimate carried in prose, not in a new slot.
-const caveDerivation = `The target is deliberately lowballed at ${cavePct} percent. Caveman replies logged across ${cnt(cave.sessions)} sessions total ${tokProse(cave.outputTokens)} output tokens; assuming plain prose would have run ${caveMult}x as long, the estimated saving is ${estProse(cave.estSavedTokens)} tokens. The spent side is logged, the baseline is assumed, so the figure stays estimated.`;
-guide = replaceBlock(
-  guide,
-  "guide-caveman",
-  `      <div>
-        <div class="big fig-e"><span class="tag">[E]</span><span class="val num">~${cavePct}</span>%<sup style="font-size:0.9rem;color:var(--graphite)">1</sup></div>
-        <div class="biglabel">Reply prose reduction, design target</div>
-        <span class="chip" data-figure data-kind="estimated">E, lowballed by design, no counterfactual</span>
-      </div>
-      <div class="prose">
-        <p>Caveman is a standing instruction that compresses the agent's reply prose while leaving every technical fact intact. The agent drops articles, filler, pleasantries, and hedging, speaks in fragments, and uses arrows for causality. Code, commits, file contents, function names, and error strings are never touched.</p>
-        <p>The rule that makes it safe is accuracy first, brevity second. The style compresses wording, not meaning: a fact, caveat, or qualifier is never dropped to save tokens, and the agent returns to plain prose for security warnings, irreversible-action confirmations, and any sequence where compression would risk a misread.</p>
-        <p>${caveDerivation}</p>
-      </div>`,
-  "guide.html"
-);
-const caveFaq = (site) =>
-  `The design target is deliberately lowballed at roughly ${cavePct} percent of reply prose, and it is an estimate: no logged counterfactual exists, so ${site} prints it as [E] ~${cavePct} with a leading tilde and never in the measured accent color. Scaling the logged caveman reply tokens by the assumed ${caveMult}x baseline puts the saving at ${estProse(cave.estSavedTokens)} tokens across ${cnt(cave.sessions)} sessions, an estimate, not a measurement. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.`;
-guide = replaceBlock(guide, "guide-faq-caveman", `      <p>${caveFaq("this site")}</p>`, "guide.html");
+
+// JSON-LD: caveman answer and dateModified.
 guide = guide.replace(
   /(<script type="application\/ld\+json">)([\s\S]*?)(<\/script>)/,
   (_, open, body, close) => {
     const data = JSON.parse(body);
     for (const node of data["@graph"]) {
-      if (String(node["@type"]).toLowerCase() !== "faqpage") continue;
-      for (const q of node.mainEntity) {
-        if (q.name.startsWith("How much does the caveman")) q.acceptedAnswer.text = caveFaq("savetokens.tips");
+      const type = String(node["@type"]).toLowerCase();
+      if (type === "techarticle") node.dateModified = DATE;
+      if (type === "faqpage") {
+        for (const q of node.mainEntity) {
+          if (q.name.startsWith("How much does caveman")) q.acceptedAnswer.text = caveFaq;
+        }
       }
     }
     return open + "\n" + JSON.stringify(data, null, 2) + "\n" + close;
   }
 );
+
+// Hero stats: measured RTK total + lowballed caveman estimate.
+guide = replaceBlock(
+  guide,
+  "guide-hero-measured",
+  `      <div class="stat">
+        <span class="badge">Measured</span>
+        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">${pct1(S.savedPct)}</span><span class="unit">%</span></span>
+        <p class="what">of output tokens removed by filtering command output before the agent reads it.</p>
+        <p class="src">rtk gain, snapshot ${DATE}, ${cnt(S.commands)} commands, ${tok(S.savedTokens)} tokens saved</p>
+      </div>`,
+  "guide.html"
+);
+guide = replaceBlock(
+  guide,
+  "guide-hero-caveman",
+  `      <div class="stat">
+        <span class="badge">Estimate</span>
+        <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~${cavePct}</span><span class="unit">%</span></span>
+        <p class="what">shorter replies with caveman mode. A deliberately lowballed target, not a measurement.</p>
+        <p class="src">assumed ${caveMult}x prose baseline, est ${estTok(cave.estSavedTokens)} saved, no before-and-after log</p>
+      </div>`,
+  "guide.html"
+);
+
+// Caveman section: target figure plus the derivation.
+guide = replaceBlock(
+  guide,
+  "guide-caveman-target",
+  `      <p>The target is <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~${cavePct}</span></span>% less reply prose, deliberately lowballed. The spent side is logged: caveman replies total ${tokProse(cave.outputTokens)} tokens across ${cnt(cave.sessions)} sessions. The plain-prose baseline is assumed at ${caveMult}x, which puts the estimated saving at ${estProse(cave.estSavedTokens)} tokens; the baseline is an assumption, so the number prints gray with a tilde instead of green.</p>`,
+  "guide.html"
+);
+
+// Advanced section: inline measured RTK total.
+guide = replaceBlock(
+  guide,
+  "guide-rtk-inline",
+  `      <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering it is the one technique on this site with full before-and-after logs: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">${pct1(S.savedPct)}</span></span>% of output tokens removed across ${cnt(S.commands)} commands (snapshot ${DATE}). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>`,
+  "guide.html"
+);
+
+// FAQ, visible copy.
+guide = replaceBlock(guide, "guide-faq-caveman", `      <p>${caveFaq}</p>`, "guide.html");
+
+// Footer (carries the dated snapshot label).
+guide = replaceBlock(
+  guide,
+  "guide-footer-note",
+  `    <p>Updated ${DATE}. Measured figures come from per-command before-and-after logs, snapshot ${DATE}; estimates are labeled and printed with a tilde. No number here is invented.</p>`,
+  "guide.html"
+);
+
 writeFileSync(join(ROOT, "guide.html"), lf(guide));
 
 // ---------- llms.txt ----------
 let llms = readFileSync(join(ROOT, "llms.txt"), "utf8");
 llms = llms.replace(
   /^> .*$/m,
-  `> Token-saving techniques for AI coding agents (Claude Code, Codex), characterized like a component datasheet. Measured figures come from per-command raw-versus-filtered token deltas logged by the RTK proxy: ${pct1(S.savedPct)}% typical reduction across ${cnt(S.commands)} proxied commands, snapshot ${DATE}. Estimated figures carry no counterfactual and are marked as such.`
+  `> Token-saving techniques for AI coding agents (Claude Code, Codex). Measured figures come from per-command raw-versus-filtered token deltas logged by the RTK proxy: ${pct1(S.savedPct)}% typical reduction across ${cnt(S.commands)} real commands, snapshot ${DATE}. Estimates carry no before-and-after log and are marked with a tilde.`
 );
 writeFileSync(join(ROOT, "llms.txt"), lf(llms));
 
-console.log(`applied snapshot ${DATE}: total ${pct1(S.savedPct)}%, ${rows.length} command rows`);
+console.log(`applied snapshot ${DATE}: total ${pct1(S.savedPct)}%, ${rows.length} command rows, caveman est ${estTok(cave.estSavedTokens)}`);
