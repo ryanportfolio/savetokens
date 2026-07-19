@@ -3,13 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>savetokens.tips, datasheet ST-0001: token-saving techniques for AI coding agents</title>
+<title>Token-saving techniques for AI coding agents | savetokens.tips</title>
 <meta name="description" content="Token-saving techniques for AI coding agents, characterized like a component datasheet: 83.5% typical token reduction measured across 92,695 proxied commands.">
-<meta name="author" content="ryanportfolio">
+<meta name="author" content="Ryan">
 <link rel="canonical" href="https://savetokens.tips/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23F6F4EE'/%3E%3Ctext x='8' y='12' font-family='monospace' font-size='9' font-weight='600' text-anchor='middle' fill='%2316171A'%3EST%3C/text%3E%3C/svg%3E">
-<meta property="og:title" content="savetokens.tips, datasheet ST-0001">
+<meta property="og:title" content="Token-saving techniques for AI coding agents | savetokens.tips">
 <meta property="og:description" content="Token-saving techniques for AI coding agents, characterized like a component datasheet: 83.5% typical token reduction measured across 92,695 proxied commands.">
+<meta property="og:image" content="https://savetokens.tips/renders/desktop-1440.png">
+<meta property="og:image:width" content="1440">
+<meta property="og:image:height" content="900">
+<meta property="og:image:alt" content="savetokens.tips token-saving techniques datasheet">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://savetokens.tips/">
 <meta property="og:site_name" content="savetokens.tips">
@@ -22,22 +26,38 @@
       "@id": "https://savetokens.tips/#org",
       "name": "savetokens.tips",
       "url": "https://savetokens.tips/",
+      "logo": "https://savetokens.tips/renders/desktop-1440.png",
       "sameAs": ["https://github.com/ryanportfolio"]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://savetokens.tips/#author",
+      "name": "Ryan",
+      "alternateName": "ryanportfolio",
+      "url": "https://github.com/ryanportfolio"
     },
     {
       "@type": "TechArticle",
       "@id": "https://savetokens.tips/#article",
-      "headline": "savetokens.tips, datasheet ST-0001: token-saving techniques for AI coding agents",
+      "headline": "Token-saving techniques for AI coding agents",
       "description": "Token-saving techniques for AI coding agents, characterized like a component datasheet. Measured figures come from logged raw-versus-filtered token deltas via the RTK proxy: 83.5% typical reduction across 92,695 proxied commands, snapshot 2026-07-18.",
       "url": "https://savetokens.tips/",
       "datePublished": "2026-07-18",
       "dateModified": "2026-07-18",
-      "author": {
-        "@type": "Person",
-        "name": "ryanportfolio",
-        "url": "https://github.com/ryanportfolio"
-      },
+      "author": { "@id": "https://savetokens.tips/#author" },
       "publisher": { "@id": "https://savetokens.tips/#org" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://savetokens.tips/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "savetokens.tips",
+          "item": "https://savetokens.tips/"
+        }
+      ]
     },
     {
       "@type": "FAQPage",
@@ -478,6 +498,21 @@
   }
   .faq h3:first-child { margin-top: 0; }
 
+  /* ---------- Sources ---------- */
+  .sources blockquote {
+    max-width: 72ch;
+    margin: 16px 0;
+    padding: 12px 16px;
+    border-left: 3px solid var(--ink);
+    background: var(--faint);
+  }
+  .sources blockquote p { margin: 0 0 6px; }
+  .sources blockquote footer {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--graphite);
+  }
+
   /* ---------- Revision history strip ---------- */
   .revstrip {
     margin-top: 48px;
@@ -600,16 +635,16 @@
   <!-- ===================== MASTHEAD ===================== -->
   <header class="masthead">
     <div>
-      <h1 class="mh-partno">savetokens.tips</h1>
-      <p class="mh-title">Token-saving techniques for AI coding agents</p>
-      <p class="mh-sub">A characterized reference for saving tokens when working with Claude Code and Codex. Measured figures come from logged raw-versus-filtered token deltas. Estimated figures carry no counterfactual and are marked as such.</p>
+      <h1 class="mh-partno">Token-saving techniques for AI coding agents</h1>
+      <p class="mh-title">savetokens.tips · datasheet ST-0001</p>
+      <p class="mh-sub">Token-saving techniques for AI coding agents are methods that reduce shell-output context while preserving decision-relevant information. These token-saving techniques apply to Claude Code, Codex, and other terminal-based coding agents. Measured figures come from logged raw-versus-filtered token deltas; estimated figures carry no counterfactual.</p>
     </div>
     <div class="mh-meta">
       <div class="row"><dt>Doc:&nbsp;</dt><dd class="num">ST-0001</dd></div>
       <div class="row"><dt>Rev:&nbsp;</dt><dd class="num">A</dd></div>
       <div class="row"><dt>Snapshot:&nbsp;</dt><dd class="num">2026-07-18</dd></div>
       <div class="row"><dt>Scope:&nbsp;</dt><dd>global</dd></div>
-      <div class="row"><dd><a href="https://github.com/ryanportfolio">github.com/ryanportfolio</a></dd></div>
+      <div class="row"><dt>By:&nbsp;</dt><dd class="author">Ryan · <a href="https://github.com/ryanportfolio">github.com/ryanportfolio</a></dd></div>
       <button type="button" class="themebtn" id="themebtn" aria-label="Toggle light or dark rendering">Invert display</button>
     </div>
   </header>
@@ -912,6 +947,29 @@
     </div>
   </section>
 
+  <!-- ===================== 8 SOURCES ===================== -->
+  <section class="section sources" aria-labelledby="s8">
+    <div class="sec-bar"><span class="sec-no">8</span><h2 class="sec-label" id="s8">What sources support these token-saving techniques?</h2></div>
+    <p class="prose">The local percentages and command counts on this datasheet come only from the dated <code>rtk gain</code> snapshot described above. The primary sources below establish how RTK works and the AI coding agents it serves; they do not replace or inflate the local measurements.</p>
+
+    <blockquote cite="https://github.com/rtk-ai/rtk">
+      <p>“rtk filters and compresses command outputs before they reach your LLM context.”</p>
+      <footer><a href="https://github.com/rtk-ai/rtk">RTK project README</a>, mechanism summary.</footer>
+    </blockquote>
+
+    <blockquote cite="https://code.claude.com/docs/en/overview">
+      <p>“Claude Code is an agentic coding tool that reads your codebase, edits files, runs commands, and integrates with your development tools.”</p>
+      <footer><a href="https://code.claude.com/docs/en/overview">Anthropic, Claude Code overview</a>.</footer>
+    </blockquote>
+
+    <blockquote cite="https://openai.com/codex/">
+      <p>“Use Codex across ChatGPT, your editor, and the terminal, all connected by your ChatGPT account.”</p>
+      <footer><a href="https://openai.com/codex/">OpenAI, Codex product page</a>.</footer>
+    </blockquote>
+
+    <p class="prose">Page structure follows the evidence-oriented GEO methods introduced by <a href="https://arxiv.org/abs/2311.09735">Aggarwal et al., <cite>GEO: Generative Engine Optimization</cite></a>. The more recent controlled study by <a href="https://arxiv.org/abs/2605.25517">Vishwakarma et al., <cite>What Gets Cited</cite></a> is included to preserve the important caveat that topical relevance and retrieval position dominate formatting-only changes.</p>
+  </section>
+
   <!-- ===================== REVISION HISTORY ===================== -->
   <section class="revstrip" aria-labelledby="srev">
     <div class="sec-bar" style="border-top:none;padding-top:0"><span class="sec-no">&#167;</span><h2 class="sec-label" id="srev">Revision History</h2></div>
@@ -925,7 +983,7 @@
       </tbody>
     </table>
     <p class="fn-note">Note: characterization ages. Every figure is a dated snapshot; re-measure as sample counts grow, and prefer a newer revision over a stale one.</p>
-    <p class="fn-note"><a href="/about">About this datasheet</a></p>
+    <p class="fn-note"><a href="/about">About this datasheet</a> · <a href="https://github.com/ryanportfolio">Contact Ryan on GitHub</a></p>
   </section>
 
 </main>
