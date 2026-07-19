@@ -79,7 +79,7 @@
           "name": "How much does caveman mode save?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The target is roughly 50 percent of reply prose, deliberately lowballed, and it is an estimate: the logged caveman replies total 64.6 million tokens across 614 sessions, and the assumed 2x plain-prose baseline puts the saving at roughly 65 million tokens. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly."
+            "text": "The target is roughly 50 percent of reply prose, deliberately lowballed, and it is an estimate: the logged caveman replies total 64.7 million tokens across 615 sessions, and the assumed 2x plain-prose baseline puts the saving at roughly 65 million tokens. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly."
           }
         },
         {
@@ -517,9 +517,9 @@
       <!-- LIVE:guide-hero-measured -->
       <div class="stat">
         <span class="badge">Measured</span>
-        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">82.1</span><span class="unit">%</span></span>
+        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">81.8</span><span class="unit">%</span></span>
         <p class="what">of output tokens removed by filtering command output before the agent reads it.</p>
-        <p class="src">rtk gain, snapshot 2026-07-19, 93,646 commands, 19.1M tokens saved</p>
+        <p class="src">rtk gain, snapshot 2026-07-19, 93,690 commands, 19.1M tokens saved</p>
       </div>
 <!-- END:guide-hero-measured -->
       <!-- LIVE:guide-hero-caveman -->
@@ -613,7 +613,7 @@
     <div class="prose">
       <p>Caveman mode is a standing instruction that makes the agent's replies drastically shorter without losing technical content. The agent drops articles, filler, pleasantries, and hedging, speaks in fragments, and uses arrows for causality. Code, commits, file contents, function names, and error strings are never touched.</p>
       <!-- LIVE:guide-caveman-target -->
-      <p>The target is <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~50</span></span>% less reply prose, deliberately lowballed. The spent side is logged: caveman replies total 64.6 million tokens across 614 sessions. The plain-prose baseline is assumed at 2x, which puts the estimated saving at roughly 65 million tokens; the baseline is an assumption, so the number prints gray with a tilde instead of green.</p>
+      <p>The target is <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~50</span></span>% less reply prose, deliberately lowballed. The spent side is logged: caveman replies total 64.7 million tokens across 615 sessions. The plain-prose baseline is assumed at 2x, which puts the estimated saving at roughly 65 million tokens; the baseline is an assumption, so the number prints gray with a tilde instead of green.</p>
 <!-- END:guide-caveman-target -->
     </div>
 
@@ -771,7 +771,7 @@ Off switch: "stop caveman" / "normal mode".</pre>
 
       <h3>Filter command output before the agent reads it</h3>
       <!-- LIVE:guide-rtk-inline -->
-      <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering it is the one technique on this site with full before-and-after logs: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">82.1</span></span>% of output tokens removed across 93,646 commands (snapshot 2026-07-19). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>
+      <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering it is the one technique on this site with full before-and-after logs: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">81.8</span></span>% of output tokens removed across 93,690 commands (snapshot 2026-07-19). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>
 <!-- END:guide-rtk-inline -->
       <p>The tool behind those numbers is <a href="https://github.com/rtk-ai/rtk">RTK</a>, an open-source proxy that condenses command output before the agent reads it.</p>
     </div>
@@ -787,7 +787,7 @@ Off switch: "stop caveman" / "normal mode".</pre>
       <p>Use <code>/clear</code> when the next task shares nothing with the current conversation: it wipes context and costs the least. Use <code>/compact</code> at a natural checkpoint, after a fix lands and before a new area, when you need the conclusions but not the transcript. Start a new session when the task changes entirely; carrying an old transcript into new work makes every future turn pay for it.</p>
       <h3>How much does caveman mode save?</h3>
       <!-- LIVE:guide-faq-caveman -->
-      <p>The target is roughly 50 percent of reply prose, deliberately lowballed, and it is an estimate: the logged caveman replies total 64.6 million tokens across 614 sessions, and the assumed 2x plain-prose baseline puts the saving at roughly 65 million tokens. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.</p>
+      <p>The target is roughly 50 percent of reply prose, deliberately lowballed, and it is an estimate: the logged caveman replies total 64.7 million tokens across 615 sessions, and the assumed 2x plain-prose baseline puts the saving at roughly 65 million tokens. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.</p>
 <!-- END:guide-faq-caveman -->
       <h3>Do subagents and workflows save tokens?</h3>
       <p>Not by default. A subagent starts with fresh context, rereads the files your session already read, then spends more tokens reporting back, so total spend usually rises. What subagents buy is a short main transcript: a summary instead of thousands of lines of search output. Dispatch them for big, genuinely independent jobs, and do direct reads for small lookups.</p>
