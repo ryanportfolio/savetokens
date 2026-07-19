@@ -37,12 +37,18 @@
     --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   }
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
       --paper:    #141519;
       --ink:      #ECEAE2;
       --graphite: #A2A5AC;
       --rule:     #3A3C41;
     }
+  }
+  :root[data-theme="dark"] {
+    --paper:    #141519;
+    --ink:      #ECEAE2;
+    --graphite: #A2A5AC;
+    --rule:     #3A3C41;
   }
   * { box-sizing: border-box; }
   html { font-size: 21px; -webkit-text-size-adjust: 100%; }
@@ -69,6 +75,16 @@
   a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 2px; }
   .meta { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--graphite); }
 </style>
+<script>
+  // Apply the manual theme stored by the Invert button on the other pages,
+  // before first paint. System preference still rules when nothing is stored.
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 <main class="sheet">

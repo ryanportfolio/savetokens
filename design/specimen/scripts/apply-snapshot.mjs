@@ -1,6 +1,6 @@
 // apply-snapshot.mjs - inject data/snapshot.json into the site files.
-// Rewrites every measured figure on index.html, guide.html, and llms.txt from
-// the snapshot, using <!-- LIVE:key --> ... <!-- END:key --> region markers for
+// Rewrites every measured figure on index.html, guide.html, llms.txt, and the
+// repo-root README.md from the snapshot, using <!-- LIVE:key --> ... <!-- END:key --> region markers for
 // HTML blocks, JSON parsing for the JSON-LD graphs, and attribute rewrites for
 // meta tags. Idempotent: running twice produces identical output. verify.mjs
 // remains the release gate and must pass after this script runs.
@@ -343,5 +343,21 @@ llms = llms.replace(
   `> Token-saving techniques for AI coding agents (Claude Code, Codex). Measured figures come from per-command raw-versus-filtered token deltas logged by the RTK proxy: ${pct1(S.savedPct)}% typical reduction across ${cnt(S.commands)} real commands, snapshot ${DATE}. Estimates carry no before-and-after log and are marked with a tilde.`
 );
 writeFileSync(join(ROOT, "llms.txt"), lf(llms));
+
+// ---------- README.md (repo root) ----------
+const readmePath = join(ROOT, "..", "..", "README.md");
+let readme = readFileSync(readmePath, "utf8");
+readme = replaceBlock(
+  readme,
+  "readme-figures",
+  `> **Current characterization** (snapshot ${DATE}, global scope)
+>
+> | | |
+> |---|---|
+> | **[M] ${pct1(S.savedPct)}%** | of output tokens removed by filtering command output before the agent reads it. rtk gain, ${cnt(S.commands)} commands, ${tok(S.savedTokens)} tokens saved |
+> | **[E] ~${cavePct}%** | shorter replies with caveman mode. Deliberately lowballed target, est ${estTok(cave.estSavedTokens)} tokens, no before-and-after log |`,
+  "README.md"
+);
+writeFileSync(readmePath, lf(readme));
 
 console.log(`applied snapshot ${DATE}: total ${pct1(S.savedPct)}%, ${rows.length} command rows, caveman est ${estTok(cave.estSavedTokens)}`);

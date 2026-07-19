@@ -494,6 +494,16 @@
   }
   .footer a { color: var(--ink); }
 </style>
+<script>
+  // Apply the stored manual theme before first paint so reloads and page
+  // changes keep the choice. System preference still rules when nothing is stored.
+  (function () {
+    try {
+      var t = localStorage.getItem('theme');
+      if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 
@@ -828,7 +838,9 @@
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
     btn.addEventListener('click', function () {
-      root.setAttribute('data-theme', current() === 'dark' ? 'light' : 'dark');
+      var next = current() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
     });
   })();
 
