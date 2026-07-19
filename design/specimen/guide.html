@@ -49,7 +49,7 @@
           "name": "Why do long agent sessions cost more tokens?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The model holds no memory between turns, so the whole conversation is resent and reprocessed on every request. A token written on turn one is read again on every later turn, which makes the cost of a long session grow multiplicatively, not linearly. Prompt caching can cut the billed price of that reread, but the tokens still occupy the context window and still dilute attention."
+            "text": "The model holds no memory between turns, so the whole conversation is resent and reprocessed on every request. A token written on turn one is read again on every later turn, so the cost of a long session compounds. Prompt caching can cut the billed price of that reread, but the tokens still occupy the context window and still dilute attention."
           }
         },
         {
@@ -65,7 +65,7 @@
           "name": "How much does caveman mode save?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The design target is roughly 75 percent of reply prose, and it is an estimate: no logged before-and-after measurement exists, so this site prints it with a leading tilde and never in the green used for measured numbers. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly."
+            "text": "The target is roughly 75 percent of reply prose, and it is an estimate: nobody has logged a before-and-after yet, so this site prints it gray with a leading tilde, never in the green reserved for measured numbers. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly."
           }
         },
         {
@@ -73,7 +73,7 @@
           "name": "Do subagents and workflows save tokens?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Not by default. A subagent starts with fresh context, rereads the files your session already read, then pays a summarize-back tax to report its findings, so total spend usually rises. What subagents buy is a thin main context: the transcript keeps a short summary instead of thousands of lines of search output. Dispatch them for large, genuinely independent scopes, and do direct reads for small lookups."
+            "text": "Not by default. A subagent starts with fresh context, rereads the files your session already read, then spends more tokens reporting back, so total spend usually rises. What subagents buy is a short main transcript: a summary instead of thousands of lines of search output. Dispatch them for big, genuinely independent jobs, and do direct reads for small lookups."
           }
         }
       ]
@@ -487,7 +487,7 @@
   <!-- ===================== HERO ===================== -->
   <section class="hero">
     <h1>Save tokens in Claude Code and Codex</h1>
-    <p class="lede">Tokens are metered and billed, and <strong>every word in your session gets reread on every turn</strong>. This guide covers the habits that cut the bill, from two-second fixes to advanced setups. Green numbers are measured; gray numbers with a tilde are estimates.</p>
+    <p class="lede">Tokens are metered and billed, and <strong>every word in your session gets reread on every turn</strong>. This guide collects the habits that cut the bill, starting with the two-second ones. Green numbers are measured; gray numbers with a tilde are estimates.</p>
 
     <div class="stats">
       <div class="stat">
@@ -499,7 +499,7 @@
       <div class="stat">
         <span class="badge">Estimate</span>
         <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~75</span><span class="unit">%</span></span>
-        <p class="what">less reply prose with caveman mode. A design target, not a measurement.</p>
+        <p class="what">shorter replies with caveman mode. A target, not a measurement.</p>
         <p class="src">no before-and-after log exists yet</p>
       </div>
       <div class="stat">
@@ -514,7 +514,7 @@
       <h2>If you only do three things</h2>
       <ol>
         <li><strong>Keep sessions short and single-purpose.</strong> One task per session; start fresh when the task changes.</li>
-        <li><strong>Run <code>/clear</code> between unrelated tasks.</strong> Old context taxes every new turn.</li>
+        <li><strong>Run <code>/clear</code> between unrelated tasks.</strong> Anything left over gets reread on every turn that follows.</li>
         <li><strong>Shrink what the agent reads and writes.</strong> Name file paths instead of pasting files, and turn on caveman mode for shorter replies.</li>
       </ol>
     </div>
@@ -525,7 +525,7 @@
     <h2>Why long sessions get expensive</h2>
     <div class="prose">
       <p>The model has no memory between turns. Every time you send a message, the whole conversation goes with it: your prompts, the agent's replies, and every line of tool output. A token written on turn one is read again on every later turn.</p>
-      <p>That makes session length multiplicative, not additive. Ten more turns on a bloated transcript cost far more than ten turns on a fresh one, because each turn pays for everything that came before it. Prompt caching can cut the billed price of the reread, but the tokens still fill the window and still dilute the model's attention.</p>
+      <p>So the cost of a session compounds as it grows. Ten turns on a bloated transcript cost far more than ten on a fresh one, because each turn pays again for everything before it. Prompt caching can cut the billed price of the reread, but the tokens still fill the window and still dilute the model's attention.</p>
       <p>The budget is finite too: roughly 200,000 tokens of context, per the vendor spec above. Push close to the limit and older context gets dropped, not summarized, and answer quality falls before you hit the wall.</p>
     </div>
   </section>
@@ -559,7 +559,7 @@
       <p>Alongside those, two habits shrink what enters the context in the first place:</p>
       <ul>
         <li><strong>Never paste whole files.</strong> Name the path and let the agent read the ranges it needs. The agent reads once; a pasted file gets reread every turn.</li>
-        <li><strong>Ask precisely.</strong> "Fix the expiry check in auth middleware" beats "look at the auth system" by several thousand tokens of exploration.</li>
+        <li><strong>Ask precisely.</strong> "Fix the expiry check in auth middleware" sends the agent straight to one file; "look at the auth system" buys a tour of all of them.</li>
       </ul>
     </div>
   </section>
@@ -569,7 +569,7 @@
     <h2>Caveman mode: shorter replies, same facts</h2>
     <div class="prose">
       <p>Caveman mode is a standing instruction that makes the agent's replies drastically shorter without losing technical content. The agent drops articles, filler, pleasantries, and hedging, speaks in fragments, and uses arrows for causality. Code, commits, file contents, function names, and error strings are never touched.</p>
-      <p>The design target is <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~75</span></span>% less reply prose. That number is an estimate, not a measurement: no before-and-after log exists yet, which is why it prints gray with a tilde instead of green.</p>
+      <p>The target is <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~75</span></span>% less reply prose. It is an estimate: nobody has logged a before-and-after yet, so it prints gray with a tilde instead of green.</p>
     </div>
 
     <div class="tablewrap">
@@ -672,11 +672,11 @@ Off switch: "stop caveman" / "normal mode".</pre>
       <h3>Match the model to the task</h3>
       <p>Not every step needs the largest model at the highest reasoning effort. Send hard design and debugging to the strong tier, and mechanical bulk work, renames, sweeps, and formatting, to a cheaper tier at reduced effort. Route per task, not per session: one session can mix tiers by handing the mechanical parts to subagents on the cheaper model.</p>
 
-      <h3>Subagents are not a discount</h3>
-      <p>A subagent starts with fresh context, rereads files your session already read, then pays a summarize-back tax to report. Total spend usually goes up. What you buy is a thin main transcript: a short summary instead of thousands of lines of search output that every later turn would otherwise reread. Dispatch subagents for large, genuinely independent scopes; for a two-file lookup, a direct read is cheaper.</p>
+      <h3>What a subagent really costs</h3>
+      <p>A subagent starts with fresh context, rereads files your session already read, then spends more tokens reporting what it found back to you. Total spend usually goes up. What you buy is a short main transcript: a summary in place of thousands of lines of search output that every later turn would otherwise reread. Dispatch subagents for big, genuinely independent jobs; for a two-file lookup, a direct read is cheaper.</p>
 
       <h3>Workflows, for jobs that outgrow one context</h3>
-      <p>The same economics extend to multi-agent workflows that fan a big job, an audit, a migration, a broad review, across many agents in parallel. Total spend goes up, main-session context stays small, and wall-clock time drops. Reach for orchestration when the job cannot fit one context, not to speed up a small task.</p>
+      <p>The same economics extend to multi-agent workflows that fan a big job, an audit, a migration, a broad review, across many agents in parallel. Total spend goes up, main-session context stays small, and wall-clock time drops. Reach for workflows when the job cannot fit one context, not to hurry a small one.</p>
 
       <h3>Filter command output before the agent reads it</h3>
       <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering it is the one technique on this site with full before-and-after logs: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">83.5</span></span>% of output tokens removed across 92,695 commands (snapshot 2026-07-18). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>
@@ -688,13 +688,13 @@ Off switch: "stop caveman" / "normal mode".</pre>
     <h2>Frequently asked questions</h2>
     <div class="prose">
       <h3>Why do long agent sessions cost more tokens?</h3>
-      <p>The model holds no memory between turns, so the whole conversation is resent and reprocessed on every request. A token written on turn one is read again on every later turn, which makes the cost of a long session grow multiplicatively, not linearly. Prompt caching can cut the billed price of that reread, but the tokens still occupy the context window and still dilute attention.</p>
+      <p>The model holds no memory between turns, so the whole conversation is resent and reprocessed on every request. A token written on turn one is read again on every later turn, so the cost of a long session compounds. Prompt caching can cut the billed price of that reread, but the tokens still occupy the context window and still dilute attention.</p>
       <h3>When should I use /clear, /compact, or a new session?</h3>
       <p>Use <code>/clear</code> when the next task shares nothing with the current conversation: it wipes context and costs the least. Use <code>/compact</code> at a natural checkpoint, after a fix lands and before a new area, when you need the conclusions but not the transcript. Start a new session when the task changes entirely; carrying an old transcript into new work makes every future turn pay for it.</p>
       <h3>How much does caveman mode save?</h3>
-      <p>The design target is roughly 75 percent of reply prose, and it is an estimate: no before-and-after measurement exists yet, so this site prints it gray with a leading tilde, never in the green reserved for measured numbers. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.</p>
+      <p>The target is roughly 75 percent of reply prose, and it is an estimate: nobody has logged a before-and-after yet, so this site prints it gray with a leading tilde, never in the green reserved for measured numbers. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.</p>
       <h3>Do subagents and workflows save tokens?</h3>
-      <p>Not by default. A subagent starts with fresh context, rereads the files your session already read, then pays a summarize-back tax to report its findings, so total spend usually rises. What subagents buy is a thin main context: the transcript keeps a short summary instead of thousands of lines of search output. Dispatch them for large, genuinely independent scopes, and do direct reads for small lookups.</p>
+      <p>Not by default. A subagent starts with fresh context, rereads the files your session already read, then spends more tokens reporting back, so total spend usually rises. What subagents buy is a short main transcript: a summary instead of thousands of lines of search output. Dispatch them for big, genuinely independent jobs, and do direct reads for small lookups.</p>
     </div>
   </section>
 
