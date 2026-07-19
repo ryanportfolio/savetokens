@@ -53,7 +53,7 @@ const faq1Core = (where) =>
 const faq3Core = `Commands with large raw output filter best: ${top3
   .map((r) => `${plainName(r)} saved ${pct1(r.typPct)} percent (n=${r.n})`)
   .join(", ")}. High-frequency commands save a lower percentage but large absolute totals: ${plainName(topAbs)} saved ${pct1(topAbs.typPct)} percent, ${tokProse(topAbs.savedTokens)} tokens, across ${cnt(topAbs.n)} runs.`;
-const caveFaq = `The target is roughly ${cavePct} percent of reply prose, deliberately lowballed, and it is an estimate: the logged caveman replies total ${tokProse(cave.outputTokens)} tokens across ${cnt(cave.sessions)} sessions, and the assumed ${caveMult}x plain-prose baseline puts the saving at ${estProse(cave.estSavedTokens)} tokens. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.`;
+const caveFaq = `The target is roughly ${cavePct} percent of reply prose, deliberately lowballed: the logged caveman replies total ${tokProse(cave.outputTokens)} tokens across ${cnt(cave.sessions)} sessions, and the assumed ${caveMult}x plain-prose baseline puts the saving at ${estProse(cave.estSavedTokens)} tokens. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.`;
 
 // Written files are normalized to LF so repeated runs are byte-identical
 // regardless of the checkout's autocrlf state.
@@ -311,7 +311,7 @@ guide = replaceBlock(
 guide = replaceBlock(
   guide,
   "guide-caveman-target",
-  `      <p>The target is <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~${cavePct}</span></span>% less reply prose, deliberately lowballed. The spent side is logged: caveman replies total ${tokProse(cave.outputTokens)} tokens across ${cnt(cave.sessions)} sessions. The plain-prose baseline is assumed at ${caveMult}x, which puts the estimated saving at ${estProse(cave.estSavedTokens)} tokens; the baseline is an assumption, so the number prints gray with a tilde instead of green.</p>`,
+  `      <p>The target is <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~${cavePct}</span></span>% less reply prose, deliberately lowballed. The spent side is logged: caveman replies total ${tokProse(cave.outputTokens)} tokens across ${cnt(cave.sessions)} sessions. The plain-prose baseline is assumed at ${caveMult}x, which puts the estimated saving at ${estProse(cave.estSavedTokens)} tokens.</p>`,
   "guide.html"
 );
 
