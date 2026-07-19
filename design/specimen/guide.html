@@ -487,6 +487,7 @@
     <nav class="toc" aria-label="Guide sections">
       <a href="#why">Why</a>
       <a href="#basics">Basics</a>
+      <a href="#cache">Cache window</a>
       <a href="#caveman">Caveman mode</a>
       <a href="#copy">Copy blocks</a>
       <a href="#advanced">Advanced</a>
@@ -579,6 +580,21 @@
         <li><strong>Never paste whole files.</strong> Name the path and let the agent read the ranges it needs. The agent reads once; a pasted file gets reread every turn.</li>
         <li><strong>Ask precisely.</strong> "Fix the expiry check in auth middleware" sends the agent straight to one file; "look at the auth system" buys a tour of all of them.</li>
       </ul>
+    </div>
+  </section>
+
+  <!-- ===================== CACHE WINDOW ===================== -->
+  <section class="section" id="cache">
+    <h2>The five-minute cache window</h2>
+    <div class="prose">
+      <p>Prompt caching is the reason the reread on every turn does not bill at full price. The provider keeps the already-processed conversation in a cache: the first turn writes it at about 1.25x the normal input price, and every later turn reads it back at roughly a tenth of the normal price. Those figures are <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching">Anthropic's published caching rates</a>, not measured here.</p>
+      <p>The catch is timing. The cache lives for about five minutes, and the clock resets every time it is used. Reply within the window and each turn's reread stays at the cheap rate. Walk away longer than that and the cache expires: the next message rewrites the entire transcript at the premium rate, as if the whole conversation were being sent for the first time. For the same tokens, that cold rewrite costs roughly twelve times a cached reread, so on a long transcript one idle gap can out-bill several active turns.</p>
+      <ul>
+        <li><strong>Work in bursts.</strong> While a session is hot, keep replies coming inside the five-minute window. Every turn that lands in the window pays a tenth of the price for the history it carries.</li>
+        <li><strong>A long break is a decision point.</strong> Stepping away from a big transcript for more than a few minutes? That is the natural moment to <code>/compact</code> or <code>/clear</code>. Coming back cold pays the full rewrite either way, so come back to a small transcript instead of a large one.</li>
+        <li><strong>Short transcripts make cold starts cheap.</strong> Every habit on this page that keeps the conversation small also shrinks the penalty when the cache does expire. The two compound.</li>
+      </ul>
+      <p>Agent tools set the cache markers themselves; there is nothing to configure. Timing and transcript size are the levers you actually hold. Some setups use a one-hour cache at a higher write price, and the same logic applies with a longer clock.</p>
     </div>
   </section>
 
