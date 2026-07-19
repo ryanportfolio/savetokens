@@ -97,6 +97,14 @@
             "@type": "Answer",
             "text": "Audit before changing anything. Run /context to see what fills the window at session start, connected tools and instruction files are common surprises, and /usage to see plan spend. Then apply the fix that matches what you find: prune preloaded context if the session starts heavy, shorten and split sessions if the transcript is the weight, filter output if shell dumps dominate."
           }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need every skill I have installed?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. A skill's frontmatter description is loaded into context every session so the agent can tell when the skill applies, whether or not it ever runs; only the body waits until the skill is used. So each installed skill you rarely reach for is a small standing cost on every turn. Remove the ones a project does not use, sharpen the descriptions on the ones you keep, and split any oversized skill into a thin file that points at detail loaded on demand."
+          }
         }
       ]
     }
@@ -856,7 +864,12 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
       <p>For a ready-made version of this layout, <a href="https://github.com/ryanportfolio/AI-Firmware">AI-Firmware</a> is a project template built around it: a short rule-only kernel, a <code>.claude/reference/</code> index for topical detail, committed memory added with <code>/recall save</code>, and an <code>AGENTS.md</code> mirror so the same setup works in Codex. It is open source under MIT, free to clone as a starting point.</p>
 
       <h3>Prune connectors and tools you are not using</h3>
-      <p>The same thin-kernel rule applies to tooling. Every MCP server you connect ships its tool definitions into the context at session start, whether or not you ever call them, and an eagerly loaded skill costs the same way. Disconnect servers the current project does not use, and prefer skills that load on demand over rules pasted into the instruction file. Newer agent versions defer some tool schemas until they are needed, which softens the cost, but a leaner set of connectors still wins: <code>/context</code> will show you exactly what each one costs.</p>
+      <p>The same thin-kernel rule applies to tooling. Every MCP server you connect ships its tool definitions into the context at session start, whether or not you ever call them. Disconnect servers the current project does not use. Newer agent versions defer some tool schemas until they are needed, which softens the cost, but a leaner set of connectors still wins: <code>/context</code> will show you exactly what each one costs.</p>
+
+      <h3>Trim your skills, and drop the ones you never use</h3>
+      <p>A skill costs tokens in two places, and only one of them is optional. The one-line description in its frontmatter, the summary the agent reads to decide whether the skill applies, is loaded every session whether or not the skill ever runs; the body loads only when it does. So a shelf of installed skills is a standing tax: every description is reread on every turn, including the skills you reach for once a month. Remove the ones a project does not use, and that per-turn weight leaves with them.</p>
+      <p>For the skills you keep, trim them to your own work. The description is the line that pays rent constantly, so sharpen it first: keep the trigger words that decide when the skill should fire and cut the rest. Then trim the body. Skills you install from elsewhere tend to ship with setup notes, examples, and options that do not apply to your repo, so cutting what does not apply leaves fewer tokens per run and less irrelevant instruction competing for the agent's attention. You can compress the wording itself the same way caveman mode compresses replies, applied to the skill file instead of the reply.</p>
+      <p>When a skill's body is genuinely large, split it the way a thin instruction file is split: a short <code>SKILL.md</code> that states the rule and points at detail files, with the detail loaded only on the runs that need it. The skill then costs its description every session, a small hook when it fires, and the heavy detail only when a task actually reaches for it, the same layout that keeps a kernel instruction file cheap.</p>
 
       <h3>Match the model to the task</h3>
       <p>Not every step needs the largest model at the highest reasoning effort. Send hard design and debugging to the strong tier, and mechanical bulk work, renames, sweeps, and formatting, to a cheaper tier at reduced effort. Route per task, not per session: one session can mix tiers by handing the mechanical parts to subagents on the cheaper model.</p>
@@ -941,6 +954,16 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
             <li>The transcript is the weight: shorten and split sessions.</li>
             <li>Shell dumps dominate: filter command output.</li>
           </ul>
+        </div>
+      </div>
+      <div class="qa" id="faq-skills">
+        <div class="qa-q">
+          <a class="qnum num" href="#faq-skills">Q6</a>
+          <h3>Do I need every skill I have installed?</h3>
+        </div>
+        <div class="qa-a">
+          <p>No. A skill's frontmatter description is loaded into context every session so the agent can tell when the skill applies, whether or not it ever runs; only the body waits until the skill is used. So each installed skill you rarely reach for is a small standing cost on every turn.</p>
+          <p>Remove the ones a project does not use, sharpen the descriptions on the ones you keep, and split any oversized skill into a thin file that points at detail loaded on demand.</p>
         </div>
       </div>
     </div>
