@@ -4,6 +4,6 @@
 
 ## Pages
 
-- [Datasheet ST-0001](https://savetokens.tips/): all characterized techniques, measured versus estimated figures, per-command savings, FAQ
+- [Measurements](https://savetokens.tips/): all techniques with measured versus estimated figures, per-command savings, FAQ
 - [Token-saving guide](https://savetokens.tips/guide): practical guide, /clear versus /compact versus new session, caveman mode, agent copy blocks, model routing, subagent economics
 - [About](https://savetokens.tips/about): who characterizes the data and how the figures are measured
