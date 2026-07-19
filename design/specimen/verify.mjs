@@ -14,9 +14,9 @@ const DEPLOY_IGNORE_FILE = join(HERE, ".vercelignore");
 const OG_IMAGE_FILE = join(HERE, "renders", "desktop-1440.png");
 
 // ---- Expected counts, encoded as constants (contract-derived) ----
-const EXPECTED_TIP_ENTRIES = 1; // one complete tip entry in Application Information
-const EXPECTED_FIG_SLOTS = 11; // 8 EC table slots + 1 AbsMax spec slot + 1 block-diagram delta + 1 Features headline
-const EXPECTED_DATA_FIGURES = 13; // the 11 number slots + 2 provenance chips (5.1 measured, AbsMax spec)
+const EXPECTED_TIP_ENTRIES = 1; // one complete how-it-works entry
+const EXPECTED_FIG_SLOTS = 13; // hero 3 (2 measured + 1 spec) + table 8 (7 measured incl totals + 1 estimate) + feature 2 measured
+const EXPECTED_DATA_FIGURES = 13; // every figure slot declares data-figure + data-kind
 const SNAPSHOT_LABEL = "snapshot 2026-07-18";
 
 const EM_DASH = "—";
@@ -59,22 +59,22 @@ if (tipEntries !== EXPECTED_TIP_ENTRIES) {
 }
 
 // ---------- 4. Number-slot components carry a kind marker ----------
-// A number slot is <span class="fig fig-m|fig-e|fig-s" ...> holding a tag span and
-// a val span. Match on that fixed head so nested spans and optional superscripts
-// cannot truncate the capture. Tag letter must agree with the class, and the
-// tilde rule holds: forbidden on measured, mandatory on estimated and spec.
+// A number slot is <span class="fig fig-m|fig-e|fig-s" ...> holding a tag span
+// (a plain word naming the kind, the screen-reader and grayscale channel) and a
+// val span. The tag word must agree with the class, and the tilde rule holds:
+// forbidden on measured, mandatory on estimate and spec.
+const TAG_FOR = { "fig-m": "measured", "fig-e": "estimate", "fig-s": "spec" };
 const slotOpen = [
   ...html.matchAll(
-    /<span class="fig (fig-m|fig-e|fig-s)"[^>]*><span class="tag">\[([MES])\]<\/span><span class="val num">([^<]*)<\/span>/g
+    /<span class="fig (fig-m|fig-e|fig-s)"[^>]*><span class="tag">([a-z ]+)<\/span><span class="val num">([^<]*)<\/span>/g
   ),
 ];
 let slotCount = 0;
-const TAG_FOR = { "fig-m": "M", "fig-e": "E", "fig-s": "S" };
 for (const m of slotOpen) {
   slotCount++;
-  const [, kindClass, tagLetter, val] = m;
-  if (TAG_FOR[kindClass] !== tagLetter) {
-    errors.push(`Slot #${slotCount}: class ${kindClass} carries [${tagLetter}], expected [${TAG_FOR[kindClass]}].`);
+  const [, kindClass, tagWord, val] = m;
+  if (TAG_FOR[kindClass] !== tagWord) {
+    errors.push(`Slot #${slotCount}: class ${kindClass} carries tag "${tagWord}", expected "${TAG_FOR[kindClass]}".`);
   }
   if (kindClass === "fig-m" && val.includes("~")) {
     errors.push(`Measured slot #${slotCount} carries a tilde. Tilde is forbidden on measured figures (contract 6.3).`);
@@ -106,11 +106,12 @@ if (dataFigCount !== EXPECTED_DATA_FIGURES) {
   notes.push(`data-figure elements: ${dataFigCount} (expected ${EXPECTED_DATA_FIGURES}), all declare a kind.`);
 }
 
-// ---------- 6. Reserved footnote resolutions present ----------
-if (!html.includes("Production tested")) errors.push('Reserved footnote "Production tested" resolution missing.');
-if (!html.includes("Guaranteed by design")) errors.push('Reserved footnote "Guaranteed by design" resolution missing.');
-if (!html.includes("Vendor specification, not measured here")) errors.push('Reserved footnote "Vendor specification, not measured here" resolution missing.');
-if (!errors.some((e) => e.includes("footnote"))) notes.push("Both reserved footnote resolutions present.");
+// ---------- 6. Provenance statements present (plain-language successors of the
+// reserved footnote resolutions: measured, estimate, vendor spec) ----------
+if (!html.includes("measured in production")) errors.push('Provenance statement "measured in production" missing.');
+if (!html.includes("no before-and-after log")) errors.push('Provenance statement "no before-and-after log" missing.');
+if (!html.includes("not measured here")) errors.push('Provenance statement "not measured here" missing.');
+if (!errors.some((e) => e.includes("Provenance statement"))) notes.push("All three provenance statements present.");
 
 // ---------- 7. Deterministic GEO 100/100 release contract ----------
 // These thresholds mirror geo-audit v1.3.0, the engine behind willaicite.com.
