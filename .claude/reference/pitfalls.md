@@ -46,3 +46,25 @@ Prevention protocol (run every time before trusting a preview):
    the edited sources.
 4. Staleness persists after 1–2 → hard reload, unregister service workers, or
    use a fresh browser profile.
+
+## curl TLS failure on this machine: schannel revocation check (2026-07-19)
+
+Symptom: every `curl https://…` returns exit 35, `000` status, even for sites
+that are demonstrably up. Verbose output shows:
+
+```
+schannel: next InitializeSecurityContext failed: CRYPT_E_REVOCATION_OFFLINE (0x80092013)
+```
+
+Cause: Windows curl uses schannel and hard-fails when the certificate
+revocation server is unreachable. It is a local-network condition, not a site
+outage — do not conclude a deploy failed from this.
+
+Fix: add `--ssl-no-revoke` to curl calls used for status checks. Any
+poll/monitor loop built on plain curl will spin forever silently.
+
+## Merging to main does not deploy savetokens.tips (2026-07-19)
+
+The Vercel project has no git integration; production deploys are manual CLI
+runs (see `deployment.md`). After merging a PR, run the publish flow or the
+live site silently stays on the previous deploy.
