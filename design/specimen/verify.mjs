@@ -235,12 +235,12 @@ if (!existsSync(OG_IMAGE_FILE)) errors.push("GEO entity metadata: local og:image
 const deployIgnore = readFileSync(DEPLOY_IGNORE_FILE, "utf8");
 if (/^renders\/$/m.test(deployIgnore)) errors.push("GEO entity metadata: renders/ is excluded from the deployment package.");
 
-// ---------- 8. Guide page (application note AN-0001) ----------
-// Contract Section 1.1 binds all pages. Run the statically checkable copy and
-// number-slot gates against guide.html: no em dash in visible text (copy blocks
-// included, they are user-visible strings), snapshot label on cited figures,
-// kind tags agreeing with slot classes, and the tilde rule.
-const EXPECTED_GUIDE_FIG_SLOTS = 3; // 1 [S] context window + 1 [E] caveman + 1 [M] RTK total
+// ---------- 8. Guide page (plain-language guide at /guide) ----------
+// The guide drops the datasheet costume but keeps the honesty core: measured
+// versus estimated stays impossible to confuse. Checks: no em dash in visible
+// text (copy blocks included, they are user-visible strings), snapshot label on
+// cited figures, word tags agreeing with slot classes, and the tilde rule.
+const EXPECTED_GUIDE_FIG_SLOTS = 5; // hero stats: 1 measured + 1 estimate + 1 spec; inline: 1 estimate (caveman) + 1 measured (RTK total)
 if (!existsSync(GUIDE_FILE)) {
   errors.push("guide.html missing. Application note AN-0001 is linked from the datasheet.");
 } else {
@@ -262,19 +262,21 @@ if (!existsSync(GUIDE_FILE)) {
   } else {
     notes.push(`guide.html: snapshot label "${SNAPSHOT_LABEL}" present.`);
   }
-  // Guide slots appear both inline (span.fig) and as the featured display figure
-  // (div.big), so the match accepts either head while keeping tag and val fixed.
+  // Guide slots use plain-word tags instead of bracket letters: the tag span
+  // still names the kind for screen readers and grayscale, the class still
+  // gates the color, and the tilde rule still splits estimate from measured.
+  const GUIDE_TAG_FOR = { "fig-m": "measured", "fig-e": "estimate", "fig-s": "spec" };
   const guideSlots = [
     ...guideHtml.matchAll(
-      /<(?:span class="fig|div class="big) (fig-m|fig-e|fig-s)"[^>]*><span class="tag">\[([MES])\]<\/span><span class="val num">([^<]*)<\/span>/g
+      /<span class="fig (fig-m|fig-e|fig-s)"[^>]*><span class="tag">([a-z ]+)<\/span><span class="val num">([^<]*)<\/span>/g
     ),
   ];
   let guideSlotCount = 0;
   for (const m of guideSlots) {
     guideSlotCount++;
-    const [, kindClass, tagLetter, val] = m;
-    if (TAG_FOR[kindClass] !== tagLetter) {
-      errors.push(`guide.html slot #${guideSlotCount}: class ${kindClass} carries [${tagLetter}], expected [${TAG_FOR[kindClass]}].`);
+    const [, kindClass, tagWord, val] = m;
+    if (GUIDE_TAG_FOR[kindClass] !== tagWord) {
+      errors.push(`guide.html slot #${guideSlotCount}: class ${kindClass} carries tag "${tagWord}", expected "${GUIDE_TAG_FOR[kindClass]}".`);
     }
     if (kindClass === "fig-m" && val.includes("~")) {
       errors.push(`guide.html measured slot #${guideSlotCount} carries a tilde. Tilde is forbidden on measured figures (contract 6.3).`);
@@ -288,9 +290,6 @@ if (!existsSync(GUIDE_FILE)) {
   } else {
     notes.push(`guide.html: number slots: ${guideSlotCount} (expected ${EXPECTED_GUIDE_FIG_SLOTS}), each tag agrees with its class and tilde rule.`);
   }
-  if (!guideHtml.includes("Production tested")) errors.push('guide.html: reserved footnote "Production tested" resolution missing.');
-  if (!guideHtml.includes("Guaranteed by design")) errors.push('guide.html: reserved footnote "Guaranteed by design" resolution missing.');
-  if (!guideHtml.includes("Vendor specification, not measured here")) errors.push('guide.html: reserved footnote "Vendor specification, not measured here" resolution missing.');
 }
 
 // ---------- Report ----------
