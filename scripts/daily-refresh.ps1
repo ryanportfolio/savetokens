@@ -4,7 +4,7 @@
 # touches your working checkout or whatever branch you have open. Pipeline:
 #   1. clone (first run) or fast-forward main in the dedicated clone
 #   2. export data/snapshot.json from %LOCALAPPDATA%\rtk\history.db
-#   3. apply the snapshot to index.html / guide.html / llms.txt
+#   3. apply the snapshot to index.html / guide.html / llms.txt / README.md
 #   4. run verify.mjs (release gate; no commit on failure)
 #   5. commit and push to main only if figures changed (Vercel deploys from main)
 #
@@ -60,7 +60,7 @@ try {
     if ($LASTEXITCODE -ne 0) { Fail "verify.mjs failed; figures NOT published: $out" }
     Log "verify: $out"
 
-    cmd /c "git add design/specimen 2>&1" | Out-Null
+    cmd /c "git add design/specimen README.md 2>&1" | Out-Null
     cmd /c "git diff --cached --quiet 2>&1" | Out-Null
     if ($LASTEXITCODE -eq 0) {
         Log "no figure changes; nothing to publish"

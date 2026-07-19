@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="230" viewBox="0 0 1200 230" role="img" aria-label="savetokens.tips, token-saving techniques for AI coding agents, document STK-001">
+  <style>
+    .mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace; }
+    .ink { fill: #e6e9ed; }
+    .dim { fill: #9aa2af; }
+    .acc { fill: #34d399; }
+  </style>
+  <!-- top heavy rule -->
+  <rect x="24" y="16" width="1152" height="4" fill="#e6e9ed"/>
+  <!-- identity block -->
+  <text class="mono ink" x="24" y="96" font-size="52" font-weight="700" letter-spacing="1">SAVETOKENS<tspan class="dim" font-weight="400">.TIPS</tspan></text>
+  <text class="mono dim" x="24" y="132" font-size="17">Token-saving techniques for AI coding agents · Claude Code · Codex</text>
+  <text class="mono dim" x="24" y="162" font-size="15"><tspan class="acc" font-weight="700">[M]</tspan> measured, from per-command before-and-after logs&#160;&#160;&#160;<tspan class="ink">[E]</tspan> estimate, printed with a tilde</text>
+  <!-- doc block, right -->
+  <g class="mono">
+    <rect x="872" y="44" width="304" height="126" fill="none" stroke="#3a4048" stroke-width="1"/>
+    <line x1="872" y1="86" x2="1176" y2="86" stroke="#3a4048" stroke-width="1"/>
+    <line x1="872" y1="128" x2="1176" y2="128" stroke="#3a4048" stroke-width="1"/>
+    <text class="dim" x="888" y="70" font-size="13">DOC. NO.</text>
+    <text class="ink" x="1160" y="70" font-size="13" text-anchor="end" font-weight="600">STK-001</text>
+    <text class="dim" x="888" y="112" font-size="13">CHARACTERIZATION</text>
+    <text class="ink" x="1160" y="112" font-size="13" text-anchor="end" font-weight="600">rtk gain logs</text>
+    <text class="dim" x="888" y="154" font-size="13">REVISED</text>
+    <text class="ink" x="1160" y="154" font-size="13" text-anchor="end" font-weight="600">daily</text>
+  </g>
+  <!-- foot hairline -->
+  <rect x="24" y="206" width="1152" height="1" fill="#3a4048"/>
+</svg>
