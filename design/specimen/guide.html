@@ -707,6 +707,7 @@ Off switch: "stop caveman" / "normal mode".</pre>
 
       <h3>Match the model to the task</h3>
       <p>Not every step needs the largest model at the highest reasoning effort. Send hard design and debugging to the strong tier, and mechanical bulk work, renames, sweeps, and formatting, to a cheaper tier at reduced effort. Route per task, not per session: one session can mix tiers by handing the mechanical parts to subagents on the cheaper model.</p>
+      <p>The reasoning-effort dial works the same way: the default (high) is the sweet spot for most work. Save xhigh for the hardest coding and agentic tasks, and skip max almost always: past a point, extra thinking buys diminishing returns or outright overthinking while the token bill keeps climbing.</p>
 
       <h3>What a subagent really costs</h3>
       <p>A subagent starts with fresh context, rereads files your session already read, then spends more tokens reporting what it found back to you. Total spend usually goes up. What you buy is a short main transcript: a summary in place of thousands of lines of search output that every later turn would otherwise reread. Dispatch subagents for big, genuinely independent jobs; for a two-file lookup, a direct read is cheaper.</p>
