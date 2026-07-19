@@ -184,6 +184,9 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     flex: 1;
+    /* overflow-x:auto forces overflow-y to auto too; this padding keeps the
+       bordered .active / .guide-link pills from being clipped top and bottom. */
+    padding-block: 3px;
   }
   nav.toc::-webkit-scrollbar { display: none; }
   nav.toc a {
@@ -814,6 +817,8 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
 
       <h3>Keep your instruction file thin</h3>
       <p>Your <code>CLAUDE.md</code> or <code>AGENTS.md</code> is reloaded into context every single session, so every line in it is a recurring cost. Keep it to cross-cutting rules, and move topical detail into reference files the agent reads only when needed. A fat instruction file taxes every session; a thin one with an index taxes only the sessions that use the detail.</p>
+      <p>The same rule covers memory. When you want the agent to remember something for later, write it to a committed reference file through a recall command, not into the instruction file. An index that points at short wiki-style notes lets a session pull in only the note it needs; a running memory list pasted into <code>CLAUDE.md</code> grows without limit and gets reread in full every session.</p>
+      <p>For a ready-made version of this layout, <a href="https://github.com/ryanportfolio/AI-Firmware">AI-Firmware</a> is a project template built around it: a short rule-only kernel, a <code>.claude/reference/</code> index for topical detail, committed memory added with <code>/recall save</code>, and an <code>AGENTS.md</code> mirror so the same setup works in Codex. It is open source under MIT, free to clone as a starting point.</p>
 
       <h3>Prune connectors and tools you are not using</h3>
       <p>The same thin-kernel rule applies to tooling. Every MCP server you connect ships its tool definitions into the context at session start, whether or not you ever call them, and an eagerly loaded skill costs the same way. Disconnect servers the current project does not use, and prefer skills that load on demand over rules pasted into the instruction file. Newer agent versions defer some tool schemas until they are needed, which softens the cost, but a leaner set of connectors still wins: <code>/context</code> will show you exactly what each one costs.</p>
