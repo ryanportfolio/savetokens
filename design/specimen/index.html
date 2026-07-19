@@ -188,8 +188,9 @@
     scrollbar-width: none;
     flex: 1;
     /* overflow-x:auto forces overflow-y to auto too; this padding keeps the
-       bordered .active / .guide-link pills from being clipped top and bottom. */
-    padding-block: 3px;
+       bordered .active / .guide-link pills clear of the scroll clip box on
+       every side. */
+    padding: 3px;
   }
   nav.toc::-webkit-scrollbar { display: none; }
   nav.toc a {
