@@ -3,10 +3,10 @@
   "source": "rtk gain history.db",
   "scope": "global",
   "summary": {
-    "commands": 93637,
-    "inputTokens": 23267683,
-    "outputTokens": 4170038,
-    "savedTokens": 19105297,
+    "commands": 93646,
+    "inputTokens": 23267963,
+    "outputTokens": 4170156,
+    "savedTokens": 19105483,
     "savedPct": 82.11
   },
   "rows": [
@@ -67,10 +67,10 @@
   },
   "caveman": {
     "sessions": 614,
-    "replies": 52849,
-    "outputTokens": 64627227,
+    "replies": 52862,
+    "outputTokens": 64632618,
     "assumedReduction": 0.5,
-    "estSavedTokens": 64627227
+    "estSavedTokens": 64632618
   },
   "daily": [
     {
@@ -195,11 +195,11 @@
     },
     {
       "date": "2026-07-19",
-      "commands": 583,
-      "inputTokens": 510521,
-      "outputTokens": 454513,
-      "savedTokens": 56296,
-      "savedPct": 11.03
+      "commands": 592,
+      "inputTokens": 510801,
+      "outputTokens": 454631,
+      "savedTokens": 56482,
+      "savedPct": 11.06
     }
   ]
 }

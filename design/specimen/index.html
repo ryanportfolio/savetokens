@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Token-saving techniques for AI coding agents | savetokens.tips</title>
-<meta name="description" content="Token-saving techniques for AI coding agents: 82.1% token reduction measured across 93,637 real commands. Measured numbers in green, estimates marked with a tilde.">
+<meta name="description" content="Token-saving techniques for AI coding agents: 82.1% token reduction measured across 93,646 real commands. Measured numbers in green, estimates marked with a tilde.">
 <meta name="author" content="Ryan">
 <link rel="canonical" href="https://savetokens.tips/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23F6F4EE'/%3E%3Ctext x='8' y='12' font-family='monospace' font-size='9' font-weight='600' text-anchor='middle' fill='%2316171A'%3EST%3C/text%3E%3C/svg%3E">
 <meta property="og:title" content="Token-saving techniques for AI coding agents | savetokens.tips">
-<meta property="og:description" content="Token-saving techniques for AI coding agents: 82.1% token reduction measured across 93,637 real commands. Measured numbers in green, estimates marked with a tilde.">
+<meta property="og:description" content="Token-saving techniques for AI coding agents: 82.1% token reduction measured across 93,646 real commands. Measured numbers in green, estimates marked with a tilde.">
 <meta property="og:image" content="https://savetokens.tips/renders/desktop-1440.png">
 <meta property="og:image:width" content="1440">
 <meta property="og:image:height" content="900">
@@ -42,7 +42,7 @@
       "@type": "TechArticle",
       "@id": "https://savetokens.tips/#article",
       "headline": "Token-saving techniques for AI coding agents",
-      "description": "Token-saving techniques for AI coding agents, with measured figures from logged raw-versus-filtered token deltas: 82.1% typical reduction across 93,637 real commands, snapshot 2026-07-19. Estimates carry no before-and-after log and are marked with a tilde.",
+      "description": "Token-saving techniques for AI coding agents, with measured figures from logged raw-versus-filtered token deltas: 82.1% typical reduction across 93,646 real commands, snapshot 2026-07-19. Estimates carry no before-and-after log and are marked with a tilde.",
       "url": "https://savetokens.tips/",
       "datePublished": "2026-07-18",
       "dateModified": "2026-07-19",
@@ -74,7 +74,7 @@
           "name": "How much does filtering command output reduce token usage?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Measured across 93,637 real commands in the snapshot dated 2026-07-19, routing shell commands through the RTK filter reduced output tokens by 82.1 percent overall, 19.1 million tokens saved. Per-command savings range from 22.4 percent for grep to 99.2 percent for one large git diff. Every number's sample count and source is in the table on this page."
+            "text": "Measured across 93,646 real commands in the snapshot dated 2026-07-19, routing shell commands through the RTK filter reduced output tokens by 82.1 percent overall, 19.1 million tokens saved. Per-command savings range from 22.4 percent for grep to 99.2 percent for one large git diff. Every number's sample count and source is in the table on this page."
           }
         },
         {
@@ -524,7 +524,7 @@
         <span class="badge">Measured</span>
         <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">82.1</span><span class="unit">%</span></span>
         <p class="what">of output tokens removed across every command routed through the filter.</p>
-        <p class="src">rtk gain, snapshot 2026-07-19, 93,637 commands</p>
+        <p class="src">rtk gain, snapshot 2026-07-19, 93,646 commands</p>
       </div>
       <div class="stat">
         <span class="badge">Measured</span>
@@ -614,7 +614,7 @@
             <td class="cmd" data-label="Command">All commands</td>
             <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">82.1</span></span>%</td>
             <td class="n" data-label="Total saved">19.1M</td>
-            <td class="n" data-label="Sample">n=93,637</td>
+            <td class="n" data-label="Sample">n=93,646</td>
             <td class="note" data-label="Notes">Everything routed through the filter</td>
           </tr>
 <!-- END:table-rows -->
@@ -768,7 +768,7 @@
     <div class="prose">
       <h3>How much does filtering command output reduce token usage?</h3>
       <!-- LIVE:faq-q1 -->
-      <p>Measured across 93,637 real commands in the snapshot dated <span class="num">2026-07-19</span>, routing shell commands through the RTK filter reduced output tokens by 82.1 percent overall, 19.1 million tokens saved. Per-command savings range from 22.4 percent for grep to 99.2 percent for one large git diff. Every number's sample count and source is in the table above.</p>
+      <p>Measured across 93,646 real commands in the snapshot dated <span class="num">2026-07-19</span>, routing shell commands through the RTK filter reduced output tokens by 82.1 percent overall, 19.1 million tokens saved. Per-command savings range from 22.4 percent for grep to 99.2 percent for one large git diff. Every number's sample count and source is in the table above.</p>
 <!-- END:faq-q1 -->
       <h3>What is the difference between a measured number and an estimate?</h3>
       <p>A measured number has a real before-and-after: raw output tokens versus filtered output tokens, logged per command. An estimate has no such log, so it prints gray, deliberately coarse, with a leading tilde, and never in the green reserved for measured numbers.</p>
