@@ -100,10 +100,10 @@
         },
         {
           "@type": "Question",
-          "name": "Do I need every skill I have installed?",
+          "name": "Do unused skills still cost tokens?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. A skill's frontmatter description is loaded into context every session so the agent can tell when the skill applies, whether or not it ever runs; only the body waits until the skill is used. So each installed skill you rarely reach for is a small standing cost on every turn. Remove the ones a project does not use, sharpen the descriptions on the ones you keep, and split any oversized skill into a thin file that points at detail loaded on demand."
+            "text": "Yes, but only a little each. A skill's frontmatter description is loaded every session so the agent can tell when the skill applies; the body loads only when the skill actually runs. So a skill you never trigger still costs its one-line description on every turn, and nothing more. Whether that is worth acting on depends on how many skills you carry and how many you use: if /context shows the descriptions taking real space, drop the ones a project does not need and sharpen the descriptions on the ones you keep."
           }
         }
       ]
@@ -959,11 +959,11 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
       <div class="qa" id="faq-skills">
         <div class="qa-q">
           <a class="qnum num" href="#faq-skills">Q6</a>
-          <h3>Do I need every skill I have installed?</h3>
+          <h3>Do unused skills still cost tokens?</h3>
         </div>
         <div class="qa-a">
-          <p>No. A skill's frontmatter description is loaded into context every session so the agent can tell when the skill applies, whether or not it ever runs; only the body waits until the skill is used. So each installed skill you rarely reach for is a small standing cost on every turn.</p>
-          <p>Remove the ones a project does not use, sharpen the descriptions on the ones you keep, and split any oversized skill into a thin file that points at detail loaded on demand.</p>
+          <p>Yes, but only a little each. A skill's frontmatter description is loaded every session so the agent can tell when the skill applies; the body loads only when the skill actually runs. So a skill you never trigger still costs its one-line description on every turn, and nothing more.</p>
+          <p>Whether that is worth acting on depends on how many skills you carry and how many you use. If <code>/context</code> shows the descriptions taking real space, drop the ones a project does not need and sharpen the descriptions on the ones you keep; if not, leave them be.</p>
         </div>
       </div>
     </div>
