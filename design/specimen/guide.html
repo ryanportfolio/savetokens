@@ -504,9 +504,9 @@
       </div>
       <div class="stat">
         <span class="badge">Vendor spec</span>
-        <span class="fig fig-s" data-figure data-kind="spec"><span class="tag">spec</span><span class="val num">~200,000</span></span>
-        <p class="what">tokens in the context window. Your whole working budget per session.</p>
-        <p class="src"><a href="https://platform.claude.com/docs/en/docs/build-with-claude/context-windows">Anthropic documentation</a>, not measured here</p>
+        <span class="fig fig-s" data-figure data-kind="spec"><span class="tag">spec</span><span class="val num">~1M</span></span>
+        <p class="what">tokens in the context window on current Opus and Sonnet models; smaller models still run ~200,000.</p>
+        <p class="src"><a href="https://platform.claude.com/docs/en/build-with-claude/context-windows">Anthropic documentation</a>, not measured here</p>
       </div>
     </div>
 
@@ -526,7 +526,7 @@
     <div class="prose">
       <p>The model has no memory between turns. Every time you send a message, the whole conversation goes with it: your prompts, the agent's replies, and every line of tool output. A token written on turn one is read again on every later turn.</p>
       <p>So the cost of a session compounds as it grows. Ten turns on a bloated transcript cost far more than ten on a fresh one, because each turn pays again for everything before it. Prompt caching can cut the billed price of the reread, but the tokens still fill the window and still dilute the model's attention.</p>
-      <p>The budget is finite too: roughly 200,000 tokens of context, per the vendor spec above. Push close to the limit and older context gets dropped, not summarized, and answer quality falls before you hit the wall.</p>
+      <p>The budget is finite too: roughly a million tokens of context on current Opus and Sonnet models, per the vendor spec above, and a bigger window also means a bigger bill for a full one. Push close to the limit and older context gets dropped, not summarized, and answer quality falls before you hit the wall.</p>
     </div>
   </section>
 
@@ -607,7 +607,7 @@
   <section class="section" id="copy">
     <h2>Copy these into your agent</h2>
     <div class="prose">
-      <p>Both blocks are ready to paste into the instruction file your agent reads at the start of every session: <code>CLAUDE.md</code> for Claude Code, <code>AGENTS.md</code> for Codex. Claude Code users can also save the caveman block as a skill so it loads on demand.</p>
+      <p>Everything here is ready to paste. The first two blocks go in the instruction file your agent reads at the start of every session: <code>CLAUDE.md</code> for Claude Code, <code>AGENTS.md</code> for Codex. The third is the same caveman rules packaged as a skill file, which loads only when needed instead of costing tokens every session; that works in both agents too.</p>
     </div>
 
     <div class="copyblock">
@@ -658,6 +658,42 @@ Off switch: "stop caveman" / "normal mode".</pre>
 - Prefer filtered command output over raw dumps (diffs, logs, test runs).</pre>
     </div>
     <p class="copycap">The last rule is where output filtering plugs in; the measured numbers behind it are on the <a href="/">measurements page</a>.</p>
+
+    <div class="copyblock">
+      <div class="copyhead">
+        <span class="cb-label">Caveman mode as a skill</span>
+        <button type="button" class="copybtn" data-copy-target="cb-skill">Copy skill</button>
+      </div>
+      <pre id="cb-skill">---
+name: caveman
+description: >
+  Ultra-compressed reply style. Cuts reply prose sharply while keeping
+  full technical accuracy. Load for all prose replies.
+---
+
+Respond terse like smart caveman. All technical substance stays; only filler goes.
+Accuracy first, brevity second: compress wording, never meaning. If terse risks
+a misread, spend the words.
+
+Rules: drop articles (a/an/the), filler, pleasantries, hedging. Fragments OK.
+Short synonyms. Technical terms exact. Code blocks unchanged. Error messages
+quoted exact.
+
+Intensity levels:
+- lite: no filler or hedging, full sentences kept
+- full: articles dropped, fragments allowed, short synonyms
+- ultra: prose words abbreviated (DB/auth/config/req/res/fn/impl), arrows for
+  causality (X -> Y). Code symbols, function names, API names, and error
+  strings are never abbreviated.
+
+Auto-clarity: switch to plain prose for security warnings, irreversible-action
+confirmations, and multi-step sequences where fragment order could be misread.
+Resume caveman after the clear part is done.
+
+Boundaries: code, commits, PR text, and file contents are written normally.
+Off switch: "stop caveman" / "normal mode".</pre>
+    </div>
+    <p class="copycap">Save it as <code>.claude/skills/caveman/SKILL.md</code> for Claude Code. For Codex, save the same file under your repo's skills folder (for example <code>.agents/skills/caveman/SKILL.md</code>) and point to it from <code>AGENTS.md</code>.</p>
   </section>
 
   <!-- ===================== ADVANCED ===================== -->
