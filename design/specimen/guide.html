@@ -29,15 +29,29 @@
       "url": "https://savetokens.tips/guide",
       "datePublished": "2026-07-19",
       "dateModified": "2026-07-19",
-      "author": { "@id": "https://savetokens.tips/#author" },
-      "publisher": { "@id": "https://savetokens.tips/#org" }
+      "author": {
+        "@id": "https://savetokens.tips/#author"
+      },
+      "publisher": {
+        "@id": "https://savetokens.tips/#org"
+      }
     },
     {
       "@type": "BreadcrumbList",
       "@id": "https://savetokens.tips/guide#breadcrumb",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "savetokens.tips", "item": "https://savetokens.tips/" },
-        { "@type": "ListItem", "position": 2, "name": "Token discipline guide", "item": "https://savetokens.tips/guide" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "savetokens.tips",
+          "item": "https://savetokens.tips/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Token discipline guide",
+          "item": "https://savetokens.tips/guide"
+        }
       ]
     },
     {
@@ -65,7 +79,7 @@
           "name": "How much does the caveman response style save?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The design target is roughly 75 percent of reply prose, and it is an estimate: no logged counterfactual exists, so savetokens.tips prints it as [E] ~75 with a leading tilde and never in the measured accent color. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly."
+            "text": "The design target is deliberately lowballed at roughly 50 percent of reply prose, and it is an estimate: no logged counterfactual exists, so savetokens.tips prints it as [E] ~50 with a leading tilde and never in the measured accent color. Scaling the logged caveman reply tokens by the assumed 2x baseline puts the saving at roughly 65 million tokens across 612 sessions, an estimate, not a measurement. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly."
           }
         },
         {
@@ -613,15 +627,18 @@
     <div class="sec-bar"><span class="sec-no">3</span><h2 class="sec-label" id="s3">STK-CAVEMAN-01, the Caveman Response Style</h2></div>
 
     <div class="feature">
+      <!-- LIVE:guide-caveman -->
       <div>
-        <div class="big fig-e"><span class="tag">[E]</span><span class="val num">~75</span>%<sup style="font-size:0.9rem;color:var(--graphite)">1</sup></div>
+        <div class="big fig-e"><span class="tag">[E]</span><span class="val num">~50</span>%<sup style="font-size:0.9rem;color:var(--graphite)">1</sup></div>
         <div class="biglabel">Reply prose reduction, design target</div>
-        <span class="chip" data-figure data-kind="estimated">E, by design, no counterfactual</span>
+        <span class="chip" data-figure data-kind="estimated">E, lowballed by design, no counterfactual</span>
       </div>
       <div class="prose">
         <p>Caveman is a standing instruction that compresses the agent's reply prose while leaving every technical fact intact. The agent drops articles, filler, pleasantries, and hedging, speaks in fragments, and uses arrows for causality. Code, commits, file contents, function names, and error strings are never touched.</p>
         <p>The rule that makes it safe is accuracy first, brevity second. The style compresses wording, not meaning: a fact, caveat, or qualifier is never dropped to save tokens, and the agent returns to plain prose for security warnings, irreversible-action confirmations, and any sequence where compression would risk a misread.</p>
+        <p>The target is deliberately lowballed at 50 percent. Caveman replies logged across 612 sessions total 64.5 million output tokens; assuming plain prose would have run 2x as long, the estimated saving is roughly 65 million tokens. The spent side is logged, the baseline is assumed, so the figure stays estimated.</p>
       </div>
+<!-- END:guide-caveman -->
     </div>
 
     <div class="tablewrap">
@@ -724,7 +741,7 @@ Off switch: "stop caveman" / "normal mode".</pre>
       <p><strong>STK-SUBAGENT-01, subagent dispatch discipline.</strong> A subagent is not a discount: it starts with fresh context, rereads files your session already read, then pays a summarize-back tax to report. What it buys is a thin main transcript, a short summary in place of thousands of lines of search output that every later turn would otherwise reread. Dispatch for large, genuinely independent scopes; for a two-file lookup, a direct read is cheaper.</p>
       <p><strong>Workflow orchestration.</strong> The same economics extend to multi-agent workflows that fan a big job, an audit, a migration, a broad review, across many agents in parallel. Total spend goes up, main-session context stays small, and wall-clock time drops. Reach for orchestration when the job cannot fit one context, not to speed up a small task.</p>
       <!-- LIVE:guide-baseline -->
-      <p><strong>RTK proxy, measured baseline.</strong> Shell output filtering is the one technique on this site with a full counterfactual: across all proxied commands the reduction is <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">82.5</span><sup>1</sup></span>% typ. <span class="chip" data-figure data-kind="measured">M, rtk gain, <span class="date">2026-07-19</span>, global, n=93,501</span></p>
+      <p><strong>RTK proxy, measured baseline.</strong> Shell output filtering is the one technique on this site with a full counterfactual: across all proxied commands the reduction is <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">82.2</span><sup>1</sup></span>% typ. <span class="chip" data-figure data-kind="measured">M, rtk gain, <span class="date">2026-07-19</span>, global, n=93,560</span></p>
 <!-- END:guide-baseline -->
       <p>Session hygiene and output filtering compound: hygiene keeps the transcript short, filtering keeps each turn's tool output small. Per-command characterization lives on <a href="/">datasheet ST-0001</a>, Section 3.</p>
     </div>
@@ -742,7 +759,9 @@ Off switch: "stop caveman" / "normal mode".</pre>
       <h3>When should I use /clear, /compact, or a new session?</h3>
       <p>Use <code>/clear</code> when the next task shares nothing with the current conversation: it wipes context and costs the least. Use <code>/compact</code> at a natural checkpoint, after a fix lands and before a new area, when you need the conclusions but not the transcript. Start a new session when the task changes entirely; carrying an old transcript into new work makes every future turn pay for it.</p>
       <h3>How much does the caveman response style save?</h3>
-      <p>The design target is roughly 75 percent of reply prose, and it is an estimate: no logged counterfactual exists, so this site prints it as [E] ~75 with a leading tilde and never in the measured accent color. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.</p>
+      <!-- LIVE:guide-faq-caveman -->
+      <p>The design target is deliberately lowballed at roughly 50 percent of reply prose, and it is an estimate: no logged counterfactual exists, so this site prints it as [E] ~50 with a leading tilde and never in the measured accent color. Scaling the logged caveman reply tokens by the assumed 2x baseline puts the saving at roughly 65 million tokens across 612 sessions, an estimate, not a measurement. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.</p>
+<!-- END:guide-faq-caveman -->
       <h3>Do subagents and workflows save tokens?</h3>
       <p>Not by default. A subagent starts with fresh context, rereads the files your session already read, then pays a summarize-back tax to report its findings, so total spend usually rises. What subagents buy is a thin main context: the transcript keeps a short summary instead of thousands of lines of search output. Dispatch them for large, genuinely independent scopes, and do direct reads for small lookups.</p>
     </div>

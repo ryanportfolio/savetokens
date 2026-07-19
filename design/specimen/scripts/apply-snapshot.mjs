@@ -17,6 +17,7 @@ const DATE = snap.snapshotDate;
 const S = snap.summary;
 const rows = snap.rows;
 const diff = snap.gitDiffTop;
+const cave = snap.caveman;
 
 // ---------- formatting ----------
 const pct1 = (x) => x.toFixed(1);
@@ -24,6 +25,13 @@ const cnt = (x) => x.toLocaleString("en-US");
 const tok = (x) => (x >= 1e6 ? (x / 1e6).toFixed(1) + "M" : x >= 1e3 ? (x / 1e3).toFixed(1) + "K" : String(x));
 const tokProse = (x) =>
   x >= 1e6 ? (x / 1e6).toFixed(1) + " million" : x >= 1e3 ? (x / 1e3).toFixed(1) + " thousand" : String(x);
+// Estimates print coarse: whole millions/thousands, always with the tilde.
+const estTok = (x) => "~" + (x >= 1e6 ? Math.round(x / 1e6) + "M" : x >= 1e3 ? Math.round(x / 1e3) + "K" : String(x));
+const estProse = (x) =>
+  "roughly " + (x >= 1e6 ? Math.round(x / 1e6) + " million" : x >= 1e3 ? Math.round(x / 1e3) + " thousand" : String(x));
+// Caveman design target percent, deliberately lowballed (0.5 -> "~50").
+const cavePct = Math.round(cave.assumedReduction * 100);
+const caveMult = (1 / (1 - cave.assumedReduction)).toFixed(0); // 0.5 -> "2"
 
 // ---------- derived selections ----------
 const byPct = [...rows].sort((a, b) => b.typPct - a.typPct);
@@ -134,10 +142,10 @@ index = replaceBlock(
             <td class="partno" data-label="Part No">RTK-TERSE-01</td>
             <td data-label="Parameter">Prose reduction, terse prompting</td>
             <td class="n nc" data-label="Min">&middot;</td>
-            <td class="n" data-label="Typ"><span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">[E]</span><span class="val num">~75</span><sup>2</sup></span></td>
+            <td class="n" data-label="Typ"><span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">[E]</span><span class="val num">~${cavePct}</span><sup>2</sup></span></td>
             <td class="n nc" data-label="Max">&middot;</td>
             <td data-label="Unit">%</td>
-            <td class="cond" data-label="Test conditions">no counterfactual, design target only</td>
+            <td class="cond" data-label="Test conditions">assumed ${caveMult}x prose baseline, est ${estTok(cave.estSavedTokens)} saved, no counterfactual</td>
           </tr>
           <tr class="row-m totals">
             <td class="partno" data-label="Part No">STK-TOTAL</td>
@@ -193,6 +201,19 @@ index = replaceBlock(
           `        <text class="ptlbl" x="${p.lx}" y="${p.ly}" text-anchor="${p.side}">${p.label}</text>`
       )
       .join("\n"),
+  "index.html"
+);
+
+// Section 4 estimated reference line, y = 250 - 2.3 * pct.
+const refY = Math.round(250 - 2.3 * cavePct);
+index = replaceBlock(
+  index,
+  "chart-refline",
+  `        <!-- estimated reference: terse prompting ~${cavePct}%, no measured frequency, so a
+             horizontal dashed line that claims no x position rather than a point. -->
+        <line class="refline" x1="70" y1="${refY}" x2="690" y2="${refY}"/>
+        <text class="lbl-full" x="680" y="${refY - 11}" text-anchor="end">[E] ~${cavePct}, design target, no measured frequency</text>
+        <text class="lbl-short" x="680" y="${refY - 11}" text-anchor="end">[E] ~${cavePct}, design target</text>`,
   "index.html"
 );
 
@@ -254,6 +275,40 @@ guide = replaceBlock(
   "guide-baseline",
   `      <p><strong>RTK proxy, measured baseline.</strong> Shell output filtering is the one technique on this site with a full counterfactual: across all proxied commands the reduction is <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">[M]</span><span class="val num">${pct1(S.savedPct)}</span><sup>1</sup></span>% typ. <span class="chip" data-figure data-kind="measured">M, rtk gain, <span class="date">${DATE}</span>, global, n=${cnt(S.commands)}</span></p>`,
   "guide.html"
+);
+// Caveman feature block: one [E] slot (guide expects exactly 3 slots total),
+// derivation and absolute estimate carried in prose, not in a new slot.
+const caveDerivation = `The target is deliberately lowballed at ${cavePct} percent. Caveman replies logged across ${cnt(cave.sessions)} sessions total ${tokProse(cave.outputTokens)} output tokens; assuming plain prose would have run ${caveMult}x as long, the estimated saving is ${estProse(cave.estSavedTokens)} tokens. The spent side is logged, the baseline is assumed, so the figure stays estimated.`;
+guide = replaceBlock(
+  guide,
+  "guide-caveman",
+  `      <div>
+        <div class="big fig-e"><span class="tag">[E]</span><span class="val num">~${cavePct}</span>%<sup style="font-size:0.9rem;color:var(--graphite)">1</sup></div>
+        <div class="biglabel">Reply prose reduction, design target</div>
+        <span class="chip" data-figure data-kind="estimated">E, lowballed by design, no counterfactual</span>
+      </div>
+      <div class="prose">
+        <p>Caveman is a standing instruction that compresses the agent's reply prose while leaving every technical fact intact. The agent drops articles, filler, pleasantries, and hedging, speaks in fragments, and uses arrows for causality. Code, commits, file contents, function names, and error strings are never touched.</p>
+        <p>The rule that makes it safe is accuracy first, brevity second. The style compresses wording, not meaning: a fact, caveat, or qualifier is never dropped to save tokens, and the agent returns to plain prose for security warnings, irreversible-action confirmations, and any sequence where compression would risk a misread.</p>
+        <p>${caveDerivation}</p>
+      </div>`,
+  "guide.html"
+);
+const caveFaq = (site) =>
+  `The design target is deliberately lowballed at roughly ${cavePct} percent of reply prose, and it is an estimate: no logged counterfactual exists, so ${site} prints it as [E] ~${cavePct} with a leading tilde and never in the measured accent color. Scaling the logged caveman reply tokens by the assumed ${caveMult}x baseline puts the saving at ${estProse(cave.estSavedTokens)} tokens across ${cnt(cave.sessions)} sessions, an estimate, not a measurement. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.`;
+guide = replaceBlock(guide, "guide-faq-caveman", `      <p>${caveFaq("this site")}</p>`, "guide.html");
+guide = guide.replace(
+  /(<script type="application\/ld\+json">)([\s\S]*?)(<\/script>)/,
+  (_, open, body, close) => {
+    const data = JSON.parse(body);
+    for (const node of data["@graph"]) {
+      if (String(node["@type"]).toLowerCase() !== "faqpage") continue;
+      for (const q of node.mainEntity) {
+        if (q.name.startsWith("How much does the caveman")) q.acceptedAnswer.text = caveFaq("savetokens.tips");
+      }
+    }
+    return open + "\n" + JSON.stringify(data, null, 2) + "\n" + close;
+  }
 );
 writeFileSync(join(ROOT, "guide.html"), lf(guide));
 
