@@ -2,12 +2,15 @@
 // No dependencies. Reads index.html next to this file and fails loudly (exit 1)
 // on any contract violation it can check statically. Prints PASS details on success.
 
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const FILE = join(HERE, "index.html");
+const ABOUT_FILE = join(HERE, "about.html");
+const DEPLOY_IGNORE_FILE = join(HERE, ".vercelignore");
+const OG_IMAGE_FILE = join(HERE, "renders", "desktop-1440.png");
 
 // ---- Expected counts, encoded as constants (contract-derived) ----
 const EXPECTED_TIP_ENTRIES = 1; // one complete tip entry in Application Information
@@ -107,6 +110,129 @@ if (!html.includes("Production tested")) errors.push('Reserved footnote "Product
 if (!html.includes("Guaranteed by design")) errors.push('Reserved footnote "Guaranteed by design" resolution missing.');
 if (!html.includes("Vendor specification, not measured here")) errors.push('Reserved footnote "Vendor specification, not measured here" resolution missing.');
 if (!errors.some((e) => e.includes("footnote"))) notes.push("Both reserved footnote resolutions present.");
+
+// ---------- 7. Deterministic GEO 100/100 release contract ----------
+// These thresholds mirror geo-audit v1.3.0, the engine behind willaicite.com.
+const tagText = (value) => value.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+const attr = (tag, name) => {
+  const match = tag.match(new RegExp(`${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, "i"));
+  return match ? (match[1] ?? match[2] ?? match[3] ?? "").trim() : null;
+};
+const meta = (key) => {
+  const lowerKey = key.toLowerCase();
+  const tags = html.match(/<meta\b[^>]*>/gi) ?? [];
+  for (const tag of tags) {
+    const tagKey = (attr(tag, "name") ?? attr(tag, "property") ?? "").toLowerCase();
+    if (tagKey === lowerKey) return attr(tag, "content");
+  }
+  return null;
+};
+
+const title = tagText(html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? "");
+if (title.length < 15 || title.length > 70) {
+  errors.push(`GEO topical focus: title must be 15-70 characters, found ${title.length}.`);
+} else {
+  notes.push(`GEO title length: ${title.length} characters.`);
+}
+
+const description = meta("description") ?? "";
+if (description.length < 50 || description.length > 170) {
+  errors.push(`GEO topical focus: meta description must be 50-170 characters, found ${description.length}.`);
+} else {
+  notes.push(`GEO meta description length: ${description.length} characters.`);
+}
+
+const h1s = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)].map((match) => tagText(match[1]));
+if (h1s.length !== 1) {
+  errors.push(`GEO answer readiness: expected exactly one H1, found ${h1s.length}.`);
+} else {
+  const titleTopic = title.split("|")[0].trim();
+  if (h1s[0].toLowerCase() !== titleTopic.toLowerCase()) {
+    errors.push(`GEO topical focus: H1 "${h1s[0]}" must match title topic "${titleTopic}".`);
+  } else {
+    notes.push("GEO title and H1 topic agree.");
+  }
+}
+
+if (!/<link\b[^>]*rel\s*=\s*["']canonical["'][^>]*>/i.test(html)) {
+  errors.push("GEO topical focus: canonical link missing.");
+}
+for (const key of ["og:title", "og:description", "og:image"]) {
+  if (!meta(key)) errors.push(`GEO entity metadata: ${key} missing.`);
+}
+
+const jsonLdNodes = [];
+for (const match of html.matchAll(/<script\b[^>]*type\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+  try {
+    const parsed = JSON.parse(match[1]);
+    for (const node of Array.isArray(parsed) ? parsed : [parsed]) {
+      if (Array.isArray(node?.["@graph"])) jsonLdNodes.push(...node["@graph"]);
+      else if (node && typeof node === "object") jsonLdNodes.push(node);
+    }
+  } catch {
+    errors.push("GEO structured data: invalid JSON-LD block.");
+  }
+}
+const jsonLdTypes = new Set(jsonLdNodes.flatMap((node) => {
+  const type = node?.["@type"];
+  return (Array.isArray(type) ? type : [type]).filter(Boolean).map((value) => String(value).toLowerCase());
+}));
+for (const type of ["organization", "techarticle", "faqpage", "person", "breadcrumblist"]) {
+  if (!jsonLdTypes.has(type)) errors.push(`GEO structured data: top-level ${type} node missing.`);
+}
+const articleNode = jsonLdNodes.find((node) => String(node?.["@type"] ?? "").toLowerCase() === "techarticle");
+if (!articleNode?.author) errors.push("GEO structured data: TechArticle author missing.");
+if (!articleNode?.datePublished || !articleNode?.dateModified) {
+  errors.push("GEO structured data: TechArticle must include datePublished and dateModified.");
+}
+if (["organization", "techarticle", "faqpage", "person", "breadcrumblist"].every((type) => jsonLdTypes.has(type))) {
+  notes.push("GEO JSON-LD types satisfy the 100-point threshold.");
+}
+
+const mainHtml = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] ?? "";
+const mainText = tagText(mainHtml.replace(/<script\b[\s\S]*?<\/script>/gi, " ").replace(/<style\b[\s\S]*?<\/style>/gi, " "));
+const opening = mainText.split(/\s+/).slice(0, 200).join(" ");
+if (!/\bToken-saving techniques for AI coding agents are\b/i.test(opening)) {
+  errors.push('GEO answer readiness: opening must contain the direct answer "Token-saving techniques for AI coding agents are ...".');
+}
+const questionHeadings = [...mainHtml.matchAll(/<h[2-6]\b[^>]*>([\s\S]*?)<\/h[2-6]>/gi)]
+  .map((match) => tagText(match[1]))
+  .filter((text) => /^(who|what|why|how|when|where|which|can|does|do|is|are|should|will)\b/i.test(text) || text.endsWith("?"));
+if (questionHeadings.length < 3) {
+  errors.push(`GEO answer readiness: need at least 3 question headings, found ${questionHeadings.length}.`);
+}
+if (!/\bFAQ\b|Frequently Asked/i.test(mainText)) errors.push("GEO answer readiness: FAQ section missing.");
+if (!/<(?:ul|ol)\b/i.test(mainHtml)) errors.push("GEO answer readiness: main-content list missing.");
+if (!/<table\b/i.test(mainHtml)) errors.push("GEO answer readiness: main-content table missing.");
+
+const stats = mainText.match(/(?:[$€£]\s?\d[\d,.]*)|(?:\b\d[\d,.]*\s?(?:%|percent|million|billion|thousand|tokens?|commands?|runs?|years?)\b)/gi) ?? [];
+if (stats.length < 6) errors.push(`GEO evidence density: need at least 6 statistics, found ${stats.length}.`);
+const blockquotes = (mainHtml.match(/<blockquote\b[^>]*>/gi) ?? []).length;
+if (blockquotes < 3) errors.push(`GEO evidence density: need at least 3 quotations, found ${blockquotes}.`);
+const outbound = [...mainHtml.matchAll(/<a\b[^>]*href\s*=\s*["'](https?:\/\/[^"']+)["'][^>]*>/gi)]
+  .map((match) => match[1])
+  .filter((href) => {
+    try { return new URL(href).hostname.replace(/^www\./, "") !== "savetokens.tips"; }
+    catch { return false; }
+  });
+if (outbound.length < 5) errors.push(`GEO evidence density: need at least 5 outbound citations, found ${outbound.length}.`);
+if (!outbound.some((href) => /\.(gov|edu)(\/|$)|arxiv\.org|acm\.org|ieee\.org/i.test(href))) {
+  errors.push("GEO evidence density: authoritative-domain citation missing.");
+}
+if (stats.length >= 6 && blockquotes >= 3 && outbound.length >= 5) {
+  notes.push(`GEO evidence density: ${stats.length} statistics, ${blockquotes} quotations, ${outbound.length} outbound citations.`);
+}
+
+if (!meta("author")) errors.push("GEO entity trust: meta author missing.");
+if (!/<a\b[^>]*href\s*=\s*["']\/about["']/i.test(mainHtml)) errors.push("GEO entity trust: /about link missing.");
+if (!/<a\b[^>]*>[^<]*contact[^<]*<\/a>/i.test(mainHtml) && !/href\s*=\s*["'](?:mailto:|tel:|\/contact)/i.test(mainHtml)) {
+  errors.push("GEO entity trust: reachable contact route missing.");
+}
+if (!/<link\b[^>]*rel\s*=\s*["'][^"']*icon/i.test(html)) errors.push("GEO entity trust: favicon declaration missing.");
+if (!existsSync(ABOUT_FILE)) errors.push("GEO entity trust: about.html missing.");
+if (!existsSync(OG_IMAGE_FILE)) errors.push("GEO entity metadata: local og:image asset missing.");
+const deployIgnore = readFileSync(DEPLOY_IGNORE_FILE, "utf8");
+if (/^renders\/$/m.test(deployIgnore)) errors.push("GEO entity metadata: renders/ is excluded from the deployment package.");
 
 // ---------- Report ----------
 if (errors.length) {
