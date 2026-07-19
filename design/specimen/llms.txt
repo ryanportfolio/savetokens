@@ -5,5 +5,5 @@
 ## Pages
 
 - [Measurements](https://savetokens.tips/): all techniques with measured versus estimated figures, per-command savings, FAQ
-- [Token-saving guide](https://savetokens.tips/guide): practical guide, /clear versus /compact versus new session, caveman mode, agent copy blocks, model routing, subagent economics
+- [Token-saving guide](https://savetokens.tips/guide): practical guide, /clear versus /compact versus new session, caveman mode, agent copy blocks, auditing with /context and /usage, connector pruning, model routing, subagent economics, output filtering with RTK, further reading
 - [About](https://savetokens.tips/about): who characterizes the data and how the figures are measured
