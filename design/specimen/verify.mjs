@@ -13,11 +13,21 @@ const ABOUT_FILE = join(HERE, "about.html");
 const DEPLOY_IGNORE_FILE = join(HERE, ".vercelignore");
 const OG_IMAGE_FILE = join(HERE, "renders", "desktop-1440.png");
 
-// ---- Expected counts, encoded as constants (contract-derived) ----
+// ---- Expected counts ----
+// The dated snapshot in data/snapshot.json is the source of truth: the label
+// must match its date (stale HTML fails the gate) and the slot count follows
+// its row count. Fallbacks cover a checkout with no snapshot file.
+let SNAP = null;
+try {
+  SNAP = JSON.parse(readFileSync(join(HERE, "data", "snapshot.json"), "utf8"));
+} catch {
+  SNAP = null;
+}
 const EXPECTED_TIP_ENTRIES = 1; // one complete how-it-works entry
-const EXPECTED_FIG_SLOTS = 13; // hero 3 (2 measured + 1 spec) + table 8 (7 measured incl totals + 1 estimate) + feature 2 measured
-const EXPECTED_DATA_FIGURES = 13; // every figure slot declares data-figure + data-kind
-const SNAPSHOT_LABEL = "snapshot 2026-07-18";
+// hero 3 (2 measured + 1 spec) + table (rows + 1 estimate + totals) + feature 2 measured
+const EXPECTED_FIG_SLOTS = SNAP ? SNAP.rows.length + 7 : 13;
+const EXPECTED_DATA_FIGURES = EXPECTED_FIG_SLOTS; // every figure slot declares data-figure + data-kind
+const SNAPSHOT_LABEL = "snapshot " + (SNAP ? SNAP.snapshotDate : "2026-07-18");
 
 const EM_DASH = "—";
 
