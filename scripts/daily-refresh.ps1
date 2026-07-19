@@ -11,7 +11,11 @@
 # Register once (adjust time to taste):
 #   schtasks /Create /TN "savetokens-daily-refresh" /SC DAILY /ST 09:00 /TR "powershell -NoProfile -ExecutionPolicy Bypass -File C:\Users\Home\CoreWise\savetokens\scripts\daily-refresh.ps1"
 
-$ErrorActionPreference = "Stop"
+# "Continue", not "Stop": git writes progress to stderr (Cloning into...,
+# remote counters), and under Stop PowerShell 5.1 turns those stderr lines into
+# terminating NativeCommandError. Failure detection is explicit $LASTEXITCODE
+# checks after every step instead.
+$ErrorActionPreference = "Continue"
 $remote = "https://github.com/ryanportfolio/savetokens.git"
 $work = Join-Path $env:LOCALAPPDATA "savetokens-refresh"
 $log = Join-Path $env:LOCALAPPDATA "savetokens-refresh.log"
@@ -31,39 +35,43 @@ try {
     Log "start"
 
     if (-not (Test-Path (Join-Path $work ".git"))) {
-        git clone $remote $work 2>&1 | Out-Null
+        if (Test-Path $work) { Remove-Item -Recurse -Force $work }
+        cmd /c "git clone --quiet `"$remote`" `"$work`" 2>&1" | Out-Null
         if ($LASTEXITCODE -ne 0) { Fail "initial clone failed" }
         Log "cloned $remote"
     }
     Set-Location $work
 
-    git checkout -q main
-    git fetch origin 2>&1 | Out-Null
-    git reset --hard origin/main 2>&1 | Out-Null
+    cmd /c "git checkout -q main 2>&1" | Out-Null
+    cmd /c "git fetch --quiet origin 2>&1" | Out-Null
+    cmd /c "git reset --hard --quiet origin/main 2>&1" | Out-Null
     if ($LASTEXITCODE -ne 0) { Fail "could not sync clone to origin/main" }
 
     $specimen = Join-Path $work "design\specimen"
-    node (Join-Path $specimen "scripts\export-snapshot.mjs")
-    if ($LASTEXITCODE -ne 0) { Fail "export-snapshot.mjs failed" }
+    $out = cmd /c "node `"$(Join-Path $specimen 'scripts\export-snapshot.mjs')`" 2>&1"
+    if ($LASTEXITCODE -ne 0) { Fail "export-snapshot.mjs failed: $out" }
+    Log "$out"
 
-    node (Join-Path $specimen "scripts\apply-snapshot.mjs")
-    if ($LASTEXITCODE -ne 0) { Fail "apply-snapshot.mjs failed" }
+    $out = cmd /c "node `"$(Join-Path $specimen 'scripts\apply-snapshot.mjs')`" 2>&1"
+    if ($LASTEXITCODE -ne 0) { Fail "apply-snapshot.mjs failed: $out" }
+    Log "$out"
 
-    node (Join-Path $specimen "verify.mjs")
-    if ($LASTEXITCODE -ne 0) { Fail "verify.mjs failed; figures NOT published" }
+    $out = cmd /c "node `"$(Join-Path $specimen 'verify.mjs')`" 2>&1" | Select-Object -First 1
+    if ($LASTEXITCODE -ne 0) { Fail "verify.mjs failed; figures NOT published: $out" }
+    Log "verify: $out"
 
-    git add "design/specimen"
-    git diff --cached --quiet
+    cmd /c "git add design/specimen 2>&1" | Out-Null
+    cmd /c "git diff --cached --quiet 2>&1" | Out-Null
     if ($LASTEXITCODE -eq 0) {
         Log "no figure changes; nothing to publish"
         exit 0
     }
 
     $date = Get-Date -Format "yyyy-MM-dd"
-    git commit -m "chore: daily rtk gain snapshot $date"
+    cmd /c "git commit --quiet -m `"chore: daily rtk gain snapshot $date`" 2>&1" | Out-Null
     if ($LASTEXITCODE -ne 0) { Fail "git commit failed" }
 
-    git push origin main
+    cmd /c "git push --quiet origin main 2>&1" | Out-Null
     if ($LASTEXITCODE -ne 0) { Fail "git push failed; commit is local only" }
 
     Log "published snapshot $date"
