@@ -8,6 +8,7 @@ import { dirname, join } from "node:path";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const FILE = join(HERE, "index.html");
+const GUIDE_FILE = join(HERE, "guide.html");
 const ABOUT_FILE = join(HERE, "about.html");
 const DEPLOY_IGNORE_FILE = join(HERE, ".vercelignore");
 const OG_IMAGE_FILE = join(HERE, "renders", "desktop-1440.png");
@@ -233,6 +234,64 @@ if (!existsSync(ABOUT_FILE)) errors.push("GEO entity trust: about.html missing."
 if (!existsSync(OG_IMAGE_FILE)) errors.push("GEO entity metadata: local og:image asset missing.");
 const deployIgnore = readFileSync(DEPLOY_IGNORE_FILE, "utf8");
 if (/^renders\/$/m.test(deployIgnore)) errors.push("GEO entity metadata: renders/ is excluded from the deployment package.");
+
+// ---------- 8. Guide page (application note AN-0001) ----------
+// Contract Section 1.1 binds all pages. Run the statically checkable copy and
+// number-slot gates against guide.html: no em dash in visible text (copy blocks
+// included, they are user-visible strings), snapshot label on cited figures,
+// kind tags agreeing with slot classes, and the tilde rule.
+const EXPECTED_GUIDE_FIG_SLOTS = 3; // 1 [S] context window + 1 [E] caveman + 1 [M] RTK total
+if (!existsSync(GUIDE_FILE)) {
+  errors.push("guide.html missing. Application note AN-0001 is linked from the datasheet.");
+} else {
+  const guideHtml = readFileSync(GUIDE_FILE, "utf8");
+  const guideVisible = guideHtml
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<[^>]+>/g, " ");
+  if (guideVisible.includes(EM_DASH)) {
+    const idx = guideVisible.indexOf(EM_DASH);
+    errors.push(
+      `guide.html: em dash (U+2014) found in visible text near: "...${guideVisible.slice(Math.max(0, idx - 40), idx + 40).replace(/\s+/g, " ")}..."`
+    );
+  } else {
+    notes.push("guide.html: no em dash in visible text.");
+  }
+  if (!guideVisible.replace(/\s+/g, " ").includes(SNAPSHOT_LABEL)) {
+    errors.push(`guide.html: snapshot label "${SNAPSHOT_LABEL}" not found. Cited figures must carry the dated snapshot label.`);
+  } else {
+    notes.push(`guide.html: snapshot label "${SNAPSHOT_LABEL}" present.`);
+  }
+  // Guide slots appear both inline (span.fig) and as the featured display figure
+  // (div.big), so the match accepts either head while keeping tag and val fixed.
+  const guideSlots = [
+    ...guideHtml.matchAll(
+      /<(?:span class="fig|div class="big) (fig-m|fig-e|fig-s)"[^>]*><span class="tag">\[([MES])\]<\/span><span class="val num">([^<]*)<\/span>/g
+    ),
+  ];
+  let guideSlotCount = 0;
+  for (const m of guideSlots) {
+    guideSlotCount++;
+    const [, kindClass, tagLetter, val] = m;
+    if (TAG_FOR[kindClass] !== tagLetter) {
+      errors.push(`guide.html slot #${guideSlotCount}: class ${kindClass} carries [${tagLetter}], expected [${TAG_FOR[kindClass]}].`);
+    }
+    if (kindClass === "fig-m" && val.includes("~")) {
+      errors.push(`guide.html measured slot #${guideSlotCount} carries a tilde. Tilde is forbidden on measured figures (contract 6.3).`);
+    }
+    if ((kindClass === "fig-e" || kindClass === "fig-s") && !val.trim().startsWith("~")) {
+      errors.push(`guide.html slot #${guideSlotCount} (${kindClass}) lacks the mandatory leading tilde (contract 6.3). Value: ${val}`);
+    }
+  }
+  if (guideSlotCount !== EXPECTED_GUIDE_FIG_SLOTS) {
+    errors.push(`guide.html: expected ${EXPECTED_GUIDE_FIG_SLOTS} number slots, found ${guideSlotCount}.`);
+  } else {
+    notes.push(`guide.html: number slots: ${guideSlotCount} (expected ${EXPECTED_GUIDE_FIG_SLOTS}), each tag agrees with its class and tilde rule.`);
+  }
+  if (!guideHtml.includes("Production tested")) errors.push('guide.html: reserved footnote "Production tested" resolution missing.');
+  if (!guideHtml.includes("Guaranteed by design")) errors.push('guide.html: reserved footnote "Guaranteed by design" resolution missing.');
+  if (!guideHtml.includes("Vendor specification, not measured here")) errors.push('guide.html: reserved footnote "Vendor specification, not measured here" resolution missing.');
+}
 
 // ---------- Report ----------
 if (errors.length) {
