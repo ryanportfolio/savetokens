@@ -551,7 +551,7 @@
     <div class="quickstart">
       <h2>If you only do three things</h2>
       <ol>
-        <li><strong>Keep sessions short and single-purpose.</strong> One task per session; start fresh when the task changes.</li>
+        <li><strong>Compact early, then cut over to a fresh session.</strong> Run <code>/compact</code> once the context window is about 40 percent full, well before the limit. If you find yourself compacting a second time, start a new session instead and hand the work over with a <a href="#copy">handoff-audit prompt</a> so the fresh session can verify it independently.</li>
         <li><strong>Run <code>/clear</code> between unrelated tasks.</strong> Anything left over gets reread on every turn that follows.</li>
         <li><strong>Shrink what the agent reads and writes.</strong> Name file paths instead of pasting files, and turn on caveman mode for shorter replies.</li>
       </ol>
@@ -662,7 +662,7 @@
   <section class="section" id="copy">
     <h2>Copy these into your agent</h2>
     <div class="prose">
-      <p>Everything here is ready to paste. The first two blocks go in the instruction file your agent reads at the start of every session: <code>CLAUDE.md</code> for Claude Code, <code>AGENTS.md</code> for Codex. The third is the same caveman rules packaged as a skill file, which loads only when needed instead of costing tokens every session; that works in both agents too.</p>
+      <p>Everything here is ready to paste. The first two blocks go in the instruction file your agent reads at the start of every session: <code>CLAUDE.md</code> for Claude Code, <code>AGENTS.md</code> for Codex. The last two are skills, loaded only when needed instead of costing tokens every session: caveman mode, and a handoff-audit prompt for the moment you cut a task over to a fresh session. Both work in either agent.</p>
     </div>
 
     <div class="copyblock">
@@ -749,6 +749,49 @@ Boundaries: code, commits, PR text, and file contents are written normally.
 Off switch: "stop caveman" / "normal mode".</pre>
     </div>
     <p class="copycap">Save it as <code>.claude/skills/caveman/SKILL.md</code> for Claude Code. For Codex, save the same file under your repo's skills folder (for example <code>.agents/skills/caveman/SKILL.md</code>) and point to it from <code>AGENTS.md</code>.</p>
+
+    <div class="copyblock">
+      <div class="copyhead">
+        <span class="cb-label">Handoff audit as a skill</span>
+        <button type="button" class="copybtn" data-copy-target="cb-handoff">Copy skill</button>
+      </div>
+      <pre id="cb-handoff">---
+name: handoff-audit
+description: >
+  Draft a self-contained prompt for a fresh session to independently
+  verify the current change. The prompt is the only deliverable.
+---
+
+When the user hands off work for verification, write ONE fenced markdown block
+they can paste into a new session that has zero shared context. Do not run the
+audit here or spawn a subagent: independence is the whole point.
+
+Scope is the work on this branch. Capture the repo URL, the branch, and the
+commit SHAs (git log --oneline main..HEAD, git diff --stat main..HEAD) verbatim.
+
+Build the prompt from:
+- Claims: what changed, what must still hold (the invariants), and why each
+  risky call was safe, so the auditor can try to falsify each one.
+- Fidelity reference: for a move or refactor, the pre-change git handle
+  (git show &lt;base-sha&gt;:path) so they diff old against new instead of
+  trusting a summary.
+- Checks, each with an explicit pass/fail: no dangling consumers of moved or
+  deleted symbols (grep -rw; warn about substring and pointer-comment false
+  positives), deleted code was really dead, kept code is still wired, every
+  reference site was updated, syntax balances.
+- Constraints: what this environment cannot verify (installs, type-checks, a
+  dev server) and the real signal that does (CI, deploy log, test suite).
+- Output contract: PASS/FAIL per check with file:line evidence, re-verify each
+  FAIL before reporting it, fix only real breaks, commit only touched files.
+
+Open with an adversarial role ("skeptical auditor; assume the change is wrong
+until your own grep and read prove otherwise") and a grounding line ("ground
+every verdict in files you open yourself; do not trust this prompt's summary").
+Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
+&lt;fidelity_reference&gt;, &lt;checks&gt;, &lt;constraints&gt;,
+&lt;output_contract&gt;.</pre>
+    </div>
+    <p class="copycap">Save it as <code>.claude/skills/handoff-audit/SKILL.md</code> (or under <code>.agents/skills/</code> for Codex). Invoke it when you cut a task over to a fresh session: it writes the verification prompt, it does not run the audit itself.</p>
   </section>
 
   <!-- ===================== ADVANCED ===================== -->
