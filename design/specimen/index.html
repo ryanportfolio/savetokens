@@ -74,7 +74,7 @@
           "name": "How much does filtering command output reduce token usage?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Measured across 93,690 real commands in the snapshot dated 2026-07-19, routing shell commands through the RTK filter reduced output tokens by 81.8 percent overall, 19.1 million tokens saved. Per-command savings range from 22.4 percent for grep to 99.2 percent for one large git diff. Every number's sample count and source is in the table on this page."
+            "text": "Measured across 93,690 real commands in the snapshot dated 2026-07-19: routing shell output through the RTK filter reduced output tokens by 81.8 percent overall, 19.1 million tokens saved. Per-command savings range from 22.4 percent for grep to 99.2 percent for one large git diff. Every number's sample count and source is in the table on this page."
           }
         },
         {
@@ -90,7 +90,7 @@
           "name": "Which commands save the most tokens?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Commands with large raw output filter best: git diff saved 99.2 percent (n=3), vitest run saved 92.0 percent (n=42), ls -la saved 53.8 percent (n=19). High-frequency commands save a lower percentage but large absolute totals: file reads saved 24.4 percent, 9.5 million tokens, across 635 runs."
+            "text": "Commands with large raw output filter best: git diff saved 99.2 percent (n=3), vitest run saved 92.0 percent (n=42), ls -la saved 53.8 percent (n=19). Figures with n at or below 3 are single observations, not distributions. High-frequency commands save a lower percentage but large absolute totals: file reads saved 24.4 percent, 9.5 million tokens, across 635 runs."
           }
         },
         {
@@ -469,7 +469,42 @@
     font-weight: 600;
     margin: 24px 0 8px;
   }
-  .faq h3:first-child { margin-top: 0; }
+  .faq .qa {
+    display: grid;
+    grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+    column-gap: 40px;
+    align-items: start;
+    padding: 20px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .faq .qa:first-of-type { border-top: none; padding-top: 4px; }
+  .faq .qa-q {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 10px;
+    align-items: baseline;
+  }
+  .faq .qnum {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--graphite);
+    text-decoration: none;
+  }
+  .faq .qnum:hover { text-decoration: underline; }
+  .faq .qa h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 0;
+  }
+  .faq .qa-a { max-width: 62ch; font-size: 0.9375rem; }
+  .faq .qa-a p { margin: 0 0 12px; }
+  .faq .qa-a ul { margin: 0 0 12px; padding-left: 1.3em; }
+  .faq .qa-a li { margin: 6px 0; }
+  .faq .qa-a > :last-child { margin-bottom: 0; }
+  @media (max-width: 760px) {
+    .faq .qa { grid-template-columns: 1fr; row-gap: 10px; padding: 16px 0; }
+  }
 
   /* ---------- Sources ---------- */
   .sources blockquote {
@@ -779,19 +814,48 @@
   <!-- ===================== FAQ ===================== -->
   <section class="section faq" id="faq">
     <h2>Frequently asked questions</h2>
-    <div class="prose">
-      <h3>How much does filtering command output reduce token usage?</h3>
-      <!-- LIVE:faq-q1 -->
-      <p>Measured across 93,690 real commands in the snapshot dated <span class="num">2026-07-19</span>, routing shell commands through the RTK filter reduced output tokens by 81.8 percent overall, 19.1 million tokens saved. Per-command savings range from 22.4 percent for grep to 99.2 percent for one large git diff. Every number's sample count and source is in the table above.</p>
+    <div class="faqlist">
+      <div class="qa" id="faq-how-much">
+        <div class="qa-q">
+          <a class="qnum num" href="#faq-how-much">Q1</a>
+          <h3>How much does filtering command output reduce token usage?</h3>
+        </div>
+        <div class="qa-a">
+          <!-- LIVE:faq-q1 -->
+      <p>Measured across 93,690 real commands in the snapshot dated <span class="num">2026-07-19</span>: routing shell output through the RTK filter reduced output tokens by 81.8 percent overall, 19.1 million tokens saved. Per-command savings range from 22.4 percent for grep to 99.2 percent for one large git diff. Every number's sample count and source is in the table above.</p>
 <!-- END:faq-q1 -->
-      <h3>What is the difference between a measured number and an estimate?</h3>
-      <p>A measured number has a real before-and-after: raw output tokens versus filtered output tokens, logged per command. An estimate has no such log, so it prints gray, deliberately coarse, with a leading tilde, and never in the green reserved for measured numbers.</p>
-      <h3>Which commands save the most tokens?</h3>
-      <!-- LIVE:faq-q3 -->
-      <p>Commands with large raw output filter best: git diff saved 99.2 percent (n=3), vitest run saved 92.0 percent (n=42), ls -la saved 53.8 percent (n=19). High-frequency commands save a lower percentage but large absolute totals: file reads saved 24.4 percent, 9.5 million tokens, across 635 runs.</p>
+        </div>
+      </div>
+      <div class="qa" id="faq-measured-vs-estimate">
+        <div class="qa-q">
+          <a class="qnum num" href="#faq-measured-vs-estimate">Q2</a>
+          <h3>What is the difference between a measured number and an estimate?</h3>
+        </div>
+        <div class="qa-a">
+          <p>A measured number has a real before-and-after: raw output tokens versus filtered output tokens, logged per command.</p>
+          <p>An estimate has no such log, so it prints gray, deliberately coarse, with a leading tilde, and never in the green reserved for measured numbers.</p>
+        </div>
+      </div>
+      <div class="qa" id="faq-best-commands">
+        <div class="qa-q">
+          <a class="qnum num" href="#faq-best-commands">Q3</a>
+          <h3>Which commands save the most tokens?</h3>
+        </div>
+        <div class="qa-a">
+          <!-- LIVE:faq-q3 -->
+      <p>Commands with large raw output filter best: git diff saved 99.2 percent (n=3), vitest run saved 92.0 percent (n=42), ls -la saved 53.8 percent (n=19). Figures with n at or below 3 are single observations, not distributions. High-frequency commands save a lower percentage but large absolute totals: file reads saved 24.4 percent, 9.5 million tokens, across 635 runs.</p>
 <!-- END:faq-q3 -->
-      <h3>Does savetokens.tips apply to both Claude Code and Codex?</h3>
-      <p>Yes. Every technique on this site applies to both <a href="https://code.claude.com/docs/en/overview">Claude Code</a> and Codex. The filter sits between the agent and the shell, so it works the same regardless of which agent runs the command.</p>
+        </div>
+      </div>
+      <div class="qa" id="faq-both-agents">
+        <div class="qa-q">
+          <a class="qnum num" href="#faq-both-agents">Q4</a>
+          <h3>Does savetokens.tips apply to both Claude Code and Codex?</h3>
+        </div>
+        <div class="qa-a">
+          <p>Yes. Every technique on this site applies to both <a href="https://code.claude.com/docs/en/overview">Claude Code</a> and Codex. The filter sits between the agent and the shell, so it works the same regardless of which agent runs the command.</p>
+        </div>
+      </div>
     </div>
   </section>
 

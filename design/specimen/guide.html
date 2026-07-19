@@ -483,8 +483,42 @@
   .section h3:first-of-type { margin-top: 0; }
 
   /* ---------- FAQ ---------- */
-  .faq h3 { margin: 24px 0 8px; }
-  .faq h3:first-child { margin-top: 0; }
+  .faq .qa {
+    display: grid;
+    grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+    column-gap: 40px;
+    align-items: start;
+    padding: 20px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .faq .qa:first-of-type { border-top: none; padding-top: 4px; }
+  .faq .qa-q {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 10px;
+    align-items: baseline;
+  }
+  .faq .qnum {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--graphite);
+    text-decoration: none;
+  }
+  .faq .qnum:hover { text-decoration: underline; }
+  .faq .qa h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 0;
+  }
+  .faq .qa-a { max-width: 62ch; font-size: 0.9375rem; }
+  .faq .qa-a p { margin: 0 0 12px; }
+  .faq .qa-a ul { margin: 0 0 12px; padding-left: 1.3em; }
+  .faq .qa-a li { margin: 6px 0; }
+  .faq .qa-a > :last-child { margin-bottom: 0; }
+  @media (max-width: 760px) {
+    .faq .qa { grid-template-columns: 1fr; row-gap: 10px; padding: 16px 0; }
+  }
 
   /* ---------- Footer ---------- */
   .footer {
@@ -861,21 +895,77 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
   <!-- ===================== FAQ ===================== -->
   <section class="section faq" id="faq">
     <h2>Frequently asked questions</h2>
-    <div class="prose">
-      <h3>Why do long agent sessions cost more tokens?</h3>
-      <p>The model holds no memory between turns, so the whole conversation is resent and reprocessed on every request. A token written on turn one is read again on every later turn, so the cost of a long session compounds. Prompt caching can cut the billed price of that reread, but the tokens still occupy the context window and still dilute attention.</p>
-      <h3>When should I use /clear, /compact, or a new session?</h3>
-      <p>Use <code>/clear</code> when the next task shares nothing with the current conversation: it wipes context and costs the least. Use <code>/compact</code> at a natural checkpoint, after a fix lands and before a new area, when you need the conclusions but not the transcript. Start a new session when the task changes entirely; carrying an old transcript into new work makes every future turn pay for it.</p>
-      <h3>How much does caveman mode save?</h3>
-      <!-- LIVE:guide-faq-caveman -->
-      <p>The target is roughly 50 percent of reply prose, deliberately lowballed: the logged caveman replies total 64.7 million tokens across 615 sessions, and the assumed 2x plain-prose baseline puts the saving at roughly 65 million tokens. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.</p>
+    <div class="faqlist">
+      <div class="qa" id="faq-compounding">
+        <div class="qa-q">
+          <a class="qnum num" href="#faq-compounding">Q1</a>
+          <h3>Why do long agent sessions cost more tokens?</h3>
+        </div>
+        <div class="qa-a">
+          <p>The model holds no memory between turns, so the whole conversation is resent and reprocessed on every request. A token written on turn one is read again on every later turn, so the cost of a long session compounds.</p>
+          <p>Prompt caching can cut the billed price of that reread, but the tokens still occupy the context window and still dilute attention.</p>
+        </div>
+      </div>
+      <div class="qa" id="faq-clear-compact">
+        <div class="qa-q">
+          <a class="qnum num" href="#faq-clear-compact">Q2</a>
+          <h3>When should I use /clear, /compact, or a new session?</h3>
+        </div>
+        <div class="qa-a">
+          <p>Match the move to how much of the conversation still matters:</p>
+          <ul>
+            <li><code>/clear</code> when the next task shares nothing with the current conversation. It wipes context and costs the least.</li>
+            <li><code>/compact</code> at a natural checkpoint, after a fix lands and before a new area, when you need the conclusions but not the transcript.</li>
+            <li>A new session when the task changes entirely. Carrying an old transcript into new work makes every future turn pay for it.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="qa" id="faq-caveman">
+        <div class="qa-q">
+          <a class="qnum num" href="#faq-caveman">Q3</a>
+          <h3>How much does caveman mode save?</h3>
+        </div>
+        <div class="qa-a">
+          <!-- LIVE:guide-faq-caveman -->
+      <p>The target is roughly 50 percent of reply prose, deliberately lowballed: the logged caveman replies total 64.7 million tokens across 615 sessions, and the assumed 2x plain-prose baseline puts the saving at roughly 65 million tokens.</p>
+      <p>The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.</p>
 <!-- END:guide-faq-caveman -->
-      <h3>Do subagents and workflows save tokens?</h3>
-      <p>Not by default. A subagent starts with fresh context, rereads the files your session already read, then spends more tokens reporting back, so total spend usually rises. What subagents buy is a short main transcript: a summary instead of thousands of lines of search output. Dispatch them for big, genuinely independent jobs, and do direct reads for small lookups.</p>
-      <h3>What should I check first when I keep hitting the limit?</h3>
-      <p>Audit before changing anything. Run <code>/context</code> to see what fills the window at session start, connected tools and instruction files are common surprises, and <code>/usage</code> to see plan spend. Then apply the fix that matches what you find: prune preloaded context if the session starts heavy, shorten and split sessions if the transcript is the weight, filter output if shell dumps dominate.</p>
-      <h3>Do I need every skill I have installed?</h3>
-      <p>No. A skill's frontmatter description is loaded into context every session so the agent can tell when the skill applies, whether or not it ever runs; only the body waits until the skill is used. So each installed skill you rarely reach for is a small standing cost on every turn. Remove the ones a project does not use, sharpen the descriptions on the ones you keep, and split any oversized skill into a thin file that points at detail loaded on demand.</p>
+        </div>
+      </div>
+      <div class="qa" id="faq-subagents">
+        <div class="qa-q">
+          <a class="qnum num" href="#faq-subagents">Q4</a>
+          <h3>Do subagents and workflows save tokens?</h3>
+        </div>
+        <div class="qa-a">
+          <p>Not by default. A subagent starts with fresh context, rereads the files your session already read, then spends more tokens reporting back, so total spend usually rises.</p>
+          <p>What subagents buy is a short main transcript: a summary instead of thousands of lines of search output. Dispatch them for big, genuinely independent jobs, and do direct reads for small lookups.</p>
+        </div>
+      </div>
+      <div class="qa" id="faq-limit">
+        <div class="qa-q">
+          <a class="qnum num" href="#faq-limit">Q5</a>
+          <h3>What should I check first when I keep hitting the limit?</h3>
+        </div>
+        <div class="qa-a">
+          <p>Audit before changing anything: <code>/context</code> shows what fills the window at session start, connected tools and instruction files are common surprises, and <code>/usage</code> shows plan spend. Then apply the fix that matches what you find:</p>
+          <ul>
+            <li>The session starts heavy: prune preloaded tools and instruction&nbsp;files.</li>
+            <li>The transcript is the weight: shorten and split sessions.</li>
+            <li>Shell dumps dominate: filter command output.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="qa" id="faq-skills">
+        <div class="qa-q">
+          <a class="qnum num" href="#faq-skills">Q6</a>
+          <h3>Do I need every skill I have installed?</h3>
+        </div>
+        <div class="qa-a">
+          <p>No. A skill's frontmatter description is loaded into context every session so the agent can tell when the skill applies, whether or not it ever runs; only the body waits until the skill is used. So each installed skill you rarely reach for is a small standing cost on every turn.</p>
+          <p>Remove the ones a project does not use, sharpen the descriptions on the ones you keep, and split any oversized skill into a thin file that points at detail loaded on demand.</p>
+        </div>
+      </div>
     </div>
   </section>
 
