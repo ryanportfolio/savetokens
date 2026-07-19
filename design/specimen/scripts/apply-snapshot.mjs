@@ -49,11 +49,17 @@ const mostFrequent = [...rows].sort((a, b) => b.n - a.n)[0];
 const metaDescription = `Token-saving techniques for AI coding agents: ${pct1(S.savedPct)}% token reduction measured across ${cnt(S.commands)} real commands. Measured numbers in green, estimates marked with a tilde.`;
 const articleDescription = `Token-saving techniques for AI coding agents, with measured figures from logged raw-versus-filtered token deltas: ${pct1(S.savedPct)}% typical reduction across ${cnt(S.commands)} real commands, snapshot ${DATE}. Estimates carry no before-and-after log and are marked with a tilde.`;
 const faq1Core = (where) =>
-  `Measured across ${cnt(S.commands)} real commands in the snapshot dated ${DATE}, routing shell commands through the RTK filter reduced output tokens by ${pct1(S.savedPct)} percent overall, ${tokProse(S.savedTokens)} tokens saved. Per-command savings range from ${pct1(minRow.typPct)} percent for ${plainName(minRow)} to ${pct1(maxRow.typPct)} percent for one large ${plainName(maxRow)}. Every number's sample count and source is in the table ${where}.`;
+  `Measured across ${cnt(S.commands)} real commands in the snapshot dated ${DATE}: routing shell output through the RTK filter reduced output tokens by ${pct1(S.savedPct)} percent overall, ${tokProse(S.savedTokens)} tokens saved. Per-command savings range from ${pct1(minRow.typPct)} percent for ${plainName(minRow)} to ${pct1(maxRow.typPct)} percent for one large ${plainName(maxRow)}. Every number's sample count and source is in the table ${where}.`;
+const faq3Caution = top3.some((r) => r.n <= 3)
+  ? " Figures with n at or below 3 are single observations, not distributions."
+  : "";
 const faq3Core = `Commands with large raw output filter best: ${top3
   .map((r) => `${plainName(r)} saved ${pct1(r.typPct)} percent (n=${r.n})`)
-  .join(", ")}. High-frequency commands save a lower percentage but large absolute totals: ${plainName(topAbs)} saved ${pct1(topAbs.typPct)} percent, ${tokProse(topAbs.savedTokens)} tokens, across ${cnt(topAbs.n)} runs.`;
-const caveFaq = `The target is roughly ${cavePct} percent of reply prose, deliberately lowballed: the logged caveman replies total ${tokProse(cave.outputTokens)} tokens across ${cnt(cave.sessions)} sessions, and the assumed ${caveMult}x plain-prose baseline puts the saving at ${estProse(cave.estSavedTokens)} tokens. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.`;
+  .join(", ")}.${faq3Caution} High-frequency commands save a lower percentage but large absolute totals: ${plainName(topAbs)} saved ${pct1(topAbs.typPct)} percent, ${tokProse(topAbs.savedTokens)} tokens, across ${cnt(topAbs.n)} runs.`;
+const caveFaqLead = `The target is roughly ${cavePct} percent of reply prose, deliberately lowballed: the logged caveman replies total ${tokProse(cave.outputTokens)} tokens across ${cnt(cave.sessions)} sessions, and the assumed ${caveMult}x plain-prose baseline puts the saving at ${estProse(cave.estSavedTokens)} tokens.`;
+const caveFaqStyle = `The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.`;
+// Joined form feeds the FAQPage JSON-LD; the visible FAQ renders it as two paragraphs.
+const caveFaq = `${caveFaqLead} ${caveFaqStyle}`;
 
 // Written files are normalized to LF so repeated runs are byte-identical
 // regardless of the checkout's autocrlf state.
@@ -324,7 +330,12 @@ guide = replaceBlock(
 );
 
 // FAQ, visible copy.
-guide = replaceBlock(guide, "guide-faq-caveman", `      <p>${caveFaq}</p>`, "guide.html");
+guide = replaceBlock(
+  guide,
+  "guide-faq-caveman",
+  `      <p>${caveFaqLead}</p>\n      <p>${caveFaqStyle}</p>`,
+  "guide.html"
+);
 
 // Footer (carries the dated snapshot label).
 guide = replaceBlock(
