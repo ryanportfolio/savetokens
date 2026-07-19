@@ -719,7 +719,12 @@ Off switch: "stop caveman" / "normal mode".</pre>
         <span class="cb-label">Caveman mode as a skill</span>
         <button type="button" class="copybtn" data-copy-target="cb-skill">Copy skill</button>
       </div>
-      <pre id="cb-skill">---
+      <pre id="cb-skill">Install this as a skill for me: save the file below, starting at the --- line,
+as .claude/skills/caveman/SKILL.md for Claude Code or
+.agents/skills/caveman/SKILL.md for Codex. Create the folder if needed, then
+load it for prose replies.
+
+---
 name: caveman
 description: >
   Ultra-compressed reply style. Cuts reply prose sharply while keeping
@@ -748,14 +753,18 @@ Resume caveman after the clear part is done.
 Boundaries: code, commits, PR text, and file contents are written normally.
 Off switch: "stop caveman" / "normal mode".</pre>
     </div>
-    <p class="copycap">Save it as <code>.claude/skills/caveman/SKILL.md</code> for Claude Code. For Codex, save the same file under your repo's skills folder (for example <code>.agents/skills/caveman/SKILL.md</code>) and point to it from <code>AGENTS.md</code>.</p>
+    <p class="copycap">Paste the block into your agent and it installs the file for you. Prefer to do it by hand? Save it as <code>.claude/skills/caveman/SKILL.md</code> for Claude Code, or <code>.agents/skills/caveman/SKILL.md</code> for Codex.</p>
 
     <div class="copyblock">
       <div class="copyhead">
         <span class="cb-label">Handoff audit as a skill</span>
         <button type="button" class="copybtn" data-copy-target="cb-handoff">Copy skill</button>
       </div>
-      <pre id="cb-handoff">---
+      <pre id="cb-handoff">Install this as a skill for me: save the file below, starting at the --- line,
+as .claude/skills/handoff-audit/SKILL.md for Claude Code or
+.agents/skills/handoff-audit/SKILL.md for Codex. Create the folder if needed.
+
+---
 name: handoff-audit
 description: >
   Draft a self-contained prompt for a fresh session to independently
@@ -791,7 +800,7 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
 &lt;fidelity_reference&gt;, &lt;checks&gt;, &lt;constraints&gt;,
 &lt;output_contract&gt;.</pre>
     </div>
-    <p class="copycap">Save it as <code>.claude/skills/handoff-audit/SKILL.md</code> (or under <code>.agents/skills/</code> for Codex). Invoke it when you cut a task over to a fresh session: it writes the verification prompt, it does not run the audit itself.</p>
+    <p class="copycap">Paste the block into your agent to install it. It writes the verification prompt when you hand a task to a fresh session; it does not run the audit itself. To install by hand, save it as <code>.claude/skills/handoff-audit/SKILL.md</code> (or under <code>.agents/skills/</code> for Codex).</p>
   </section>
 
   <!-- ===================== ADVANCED ===================== -->
