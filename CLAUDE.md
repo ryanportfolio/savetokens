@@ -17,9 +17,9 @@ BLOCKING requirement. The user's UI does not render them → infinite "awaiting 
 
 ## Default prose mode: caveman ultra
 
-Invoke the `caveman` skill at **ultra** at session start. Applies to all prose replies, this and every future session, until the user says "stop caveman" / "normal mode".
+Invoke the `caveman` skill at **ultra** at session start. Applies to all prose replies, this and every future session.
 
-- Prose only. Code, commits, PRs, file contents, symbols, API names, error strings stay normal, never abbreviated.
+- Code, commits, PRs, file contents, symbols, API names, error strings stay normal, never abbreviated.
 - Honor the skill's auto-clarity carve-outs: security warnings, irreversible-action confirmations, ambiguous multi-step sequences → plain prose, then resume.
 
 ## CRITICAL: Verification
@@ -35,30 +35,27 @@ Defaults until configured:
 
 ## Core principles
 
-- Plan before acting. Break large refactors into atomic, verifiable steps.
-- Verify before declaring done. Reproduce bugs before fixing them.
-- Scope discipline: only changes requested or clearly necessary. No unrequested refactors, features, abstractions, or defensive coding. Minimum complexity for the task at hand.
+- Plan before acting. Break large refactors into atomic steps.
+- Reproduce bugs before fixing them.
+- Scope discipline: No unrequested refactors, features, abstractions, or extra coding. Minimum complexity for the task at hand; optimize performance.
 - Solve generally. Never hard-code to pass specific tests. If a test or requirement is wrong, say so rather than work around it.
 - Scratch work → `.tmp/` (gitignored). Promote to `scripts/` if reusable; otherwise delete.
 - Durable project knowledge → `.claude/reference/` via `/recall save` (committed, travels to every machine and sandbox). Auto-memory is per-machine and supplementary, never a learning's only home.
-- Welcome correction. Confident-sounding mistakes happen; don't defend wrong answers.
-- Restraint is a feature. New kernel rules, skills, and reference entries must earn their place. Prefer pruning stale content over accreting. More ≠ better.
+- Welcome correction. Confident-sounding mistakes happen; don't defend wrong answers. /why
+- Restraint is a feature. New kernel rules, skills, and reference entries must earn their place. Prefer pruning stale content over accreting. More ≠ better. Complex ≠ complexity.
 - Don't restate what the harness already injects every turn (the available-skills list, the environment block, tool-doc behavior). It reloads for free; repeating it in the kernel is pure waste. Keep only the project's value-add. Always-loaded files (this kernel, indexes) = thin hooks; full detail lives in `.claude/reference/` subfiles, loaded on demand. See `/optimize-context`.
 
 ## Subagents: direct-by-default, never Haiku
 
-- Default = direct Grep/Read/Glob in-session. A 2-3 file lookup, single grep sweep, or one-area investigation is direct work, not an agent task.
-- Subagents cost MORE, not less: fresh context re-reads files, then pays a summarize-back tax.
-- Dispatch ONLY when ALL hold: 3+ genuinely independent domains, AND large scope (whole subsystems, not a few files), AND the user didn't ask for a direct answer. Unsure → direct. User says "use agents" / "fan out" → dispatch.
-- Model floor: Sonnet or Opus only. NEVER pass `model: 'haiku'`. Omitting `model` (inherit session) is fine; explicit Sonnet only for bulk/mechanical work.
+- Model floor: Sonnet or Opus only. NEVER pass `model: 'haiku'`. Omitting `model` (inherit session) is fine; subagent Sonnet low-High thinking for bulk/mechanical work, based on task.
 
-## Git: auto-commit + push on completion
+## Git: push on completion
 
-Overrides the Bash tool's built-in "commit only when asked" default: task complete → commit, push, PR, without being asked.
-
-- Branch, never main. If on main, create a feature branch first.
 - Stage intentionally. Never blanket-commit unrelated changes.
-- Open/update a PR after pushing. A merged branch's PR is closed → a reused branch needs a fresh PR.
+
+* One open PR per unit of work; update it, never open a second. Before opening a PR, check for an existing open one (gh pr list --head <branch>) and push to that instead. 
+
+- Merge PRs with **squash** by default (`gh pr merge --squash`); merge-commit or rebase only when the user explicitly asks.
 - Never force-push or run destructive git operations without an explicit request.
 - "Complete" = the requested change finished and verified to this environment's limits. Mid-task or exploratory work is NOT a commit trigger.
 - End commit messages with the standard `Co-Authored-By:` trailer.
