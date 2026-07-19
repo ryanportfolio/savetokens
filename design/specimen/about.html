@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About savetokens.tips</title>
+<meta name="description" content="Who runs savetokens.tips and how its token-saving figures are measured: per-command raw-versus-filtered token deltas logged by the RTK proxy.">
+<meta name="author" content="ryanportfolio">
+<link rel="canonical" href="https://savetokens.tips/about">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23F6F4EE'/%3E%3Ctext x='8' y='12' font-family='monospace' font-size='9' font-weight='600' text-anchor='middle' fill='%2316171A'%3EST%3C/text%3E%3C/svg%3E">
+<meta property="og:title" content="About savetokens.tips">
+<meta property="og:description" content="Who runs savetokens.tips and how its token-saving figures are measured.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://savetokens.tips/about">
+<meta property="og:site_name" content="savetokens.tips">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "url": "https://savetokens.tips/about",
+  "name": "About savetokens.tips",
+  "about": { "@id": "https://savetokens.tips/#org" },
+  "author": {
+    "@type": "Person",
+    "name": "ryanportfolio",
+    "url": "https://github.com/ryanportfolio"
+  }
+}
+</script>
+<style>
+  :root {
+    --paper:    #F6F4EE;
+    --ink:      #16171A;
+    --graphite: #55585E;
+    --rule:     #C9C7BE;
+    --font-sans: "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper:    #141519;
+      --ink:      #ECEAE2;
+      --graphite: #A2A5AC;
+      --rule:     #3A3C41;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 21px; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .sheet { max-width: 72ch; margin: 0 auto; padding: 24px 24px 64px; }
+  h1 {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 600;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 12px;
+    margin: 0 0 16px;
+  }
+  h2 { font-size: 1rem; font-weight: 600; margin: 28px 0 8px; }
+  p { margin: 0 0 12px; }
+  a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  .meta { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--graphite); }
+</style>
+</head>
+<body>
+<main class="sheet">
+  <h1>About savetokens.tips</h1>
+  <p class="meta">Companion page to datasheet ST-0001. <a href="/">Back to the datasheet</a>.</p>
+
+  <h2>What this site is</h2>
+  <p>savetokens.tips documents token-saving techniques for AI coding agents, Claude Code and Codex, in the form of an engineering component datasheet. Each technique carries a part number, a measured or estimated figure, stated test conditions, and a dated snapshot.</p>
+
+  <h2>Who runs it</h2>
+  <p>The site is characterized and maintained by <a href="https://github.com/ryanportfolio">github.com/ryanportfolio</a>, who develops and operates the RTK proxy that produces the measurements.</p>
+
+  <h2>How the figures are measured</h2>
+  <p>Measured figures come from rtk gain, which logs raw output tokens versus RTK-filtered output tokens per command. Every measured value states its source, date, scope, and sample count. Estimated figures carry no counterfactual, print with a leading tilde, and are never dressed as measurements.</p>
+
+  <h2>Honesty rules</h2>
+  <p>No number on the site is invented. A parameter with no measured value shows a not-characterized mark, never a guess. Single-observation figures carry an explicit caution, and every snapshot is dated so stale characterization is visible as stale.</p>
+</main>
+</body>
+</html>

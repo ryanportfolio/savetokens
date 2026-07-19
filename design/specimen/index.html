@@ -3,7 +3,83 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>savetokens.tips, datasheet ST-0001</title>
+<title>savetokens.tips, datasheet ST-0001: token-saving techniques for AI coding agents</title>
+<meta name="description" content="Token-saving techniques for AI coding agents, characterized like a component datasheet: 83.5% typical token reduction measured across 92,695 proxied commands.">
+<meta name="author" content="ryanportfolio">
+<link rel="canonical" href="https://savetokens.tips/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23F6F4EE'/%3E%3Ctext x='8' y='12' font-family='monospace' font-size='9' font-weight='600' text-anchor='middle' fill='%2316171A'%3EST%3C/text%3E%3C/svg%3E">
+<meta property="og:title" content="savetokens.tips, datasheet ST-0001">
+<meta property="og:description" content="Token-saving techniques for AI coding agents, characterized like a component datasheet: 83.5% typical token reduction measured across 92,695 proxied commands.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://savetokens.tips/">
+<meta property="og:site_name" content="savetokens.tips">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://savetokens.tips/#org",
+      "name": "savetokens.tips",
+      "url": "https://savetokens.tips/",
+      "sameAs": ["https://github.com/ryanportfolio"]
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://savetokens.tips/#article",
+      "headline": "savetokens.tips, datasheet ST-0001: token-saving techniques for AI coding agents",
+      "description": "Token-saving techniques for AI coding agents, characterized like a component datasheet. Measured figures come from logged raw-versus-filtered token deltas via the RTK proxy: 83.5% typical reduction across 92,695 proxied commands, snapshot 2026-07-18.",
+      "url": "https://savetokens.tips/",
+      "datePublished": "2026-07-18",
+      "dateModified": "2026-07-18",
+      "author": {
+        "@type": "Person",
+        "name": "ryanportfolio",
+        "url": "https://github.com/ryanportfolio"
+      },
+      "publisher": { "@id": "https://savetokens.tips/#org" }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://savetokens.tips/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How much does routing commands through RTK reduce token usage?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Measured across 92,695 proxied commands in the snapshot dated 2026-07-18, the RTK proxy techniques documented on savetokens.tips reduced output tokens by 83.5 percent overall, 18.4 million tokens saved. Per-command savings range from 23.0 percent for rtk grep to 99.2 percent for one large rtk git diff."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the difference between a measured and an estimated figure?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A measured figure, tagged [M], has a real counterfactual: raw output tokens versus RTK-filtered output tokens, logged per command. An estimated figure, tagged [E], is a design target with no counterfactual, prints coarse with a leading tilde, and never carries the accent color."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which commands save the most tokens?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Commands with large raw output filter best: rtk git diff saved 99.2 percent (n=3), rtk vitest run 92.5 percent (n=38), rtk git pull 92.3 percent (n=73). High-frequency commands save a lower percentage but large absolute totals: rtk read saved 24.9 percent, 8.9 million tokens, across 571 runs."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does savetokens.tips apply to both Claude Code and Codex?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Every technique listed in Ordering Information applies to both Claude Code and Codex. The RTK proxy sits between the agent and the shell, so the token filtering is agent-agnostic."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
 <style>
   /* ---------- Palette, contract Section 3 ---------- */
   :root {
@@ -393,6 +469,15 @@
     margin: 8px 0 0;
   }
 
+  /* ---------- FAQ ---------- */
+  .faq h3 {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    margin: 20px 0 6px;
+  }
+  .faq h3:first-child { margin-top: 0; }
+
   /* ---------- Revision history strip ---------- */
   .revstrip {
     margin-top: 48px;
@@ -566,7 +651,7 @@
         </tbody>
       </table>
       <ol class="fn">
-        <li>Vendor specification, not measured here, no counterfactual. A nominal ceiling for planning, never a characterized figure.</li>
+        <li>Vendor specification, not measured here, no counterfactual. A nominal ceiling for planning, never a characterized figure. Source: <a href="https://platform.claude.com/docs/en/docs/build-with-claude/context-windows">Anthropic, context windows documentation</a>.</li>
       </ol>
       <p class="fn-note">Note: stresses beyond these limits cause context to be dropped, not summarized. Sustained operation near maximum reduces answer quality.</p>
     </div>
@@ -812,6 +897,21 @@
     <p class="decoder">Part-number decoder: RTK-DIFF-01 reads as tool RTK, characterized command git diff, revision 01. STK-prefixed parts are site-level techniques not bound to one command. All listed techniques apply to both Claude Code and Codex. The table shows a subset of ordered parts; STK-CATFULL-00 appears for status only and is not characterized in Section 3.</p>
   </section>
 
+  <!-- ===================== 7 FREQUENTLY ASKED QUESTIONS ===================== -->
+  <section class="section" aria-labelledby="s7">
+    <div class="sec-bar"><span class="sec-no">7</span><h2 class="sec-label" id="s7">Frequently Asked Questions</h2></div>
+    <div class="faq prose">
+      <h3>How much does routing commands through RTK reduce token usage?</h3>
+      <p>Measured across 92,695 proxied commands in the snapshot dated <span class="date">2026-07-18</span>, the RTK proxy techniques documented on savetokens.tips reduced output tokens by 83.5 percent overall, 18.4 million tokens saved. Per-command savings range from 23.0 percent for rtk grep to 99.2 percent for one large rtk git diff. Every figure is characterized in Section 3 with sample counts and test conditions.</p>
+      <h3>What is the difference between a measured and an estimated figure?</h3>
+      <p>A measured figure, tagged [M], has a real counterfactual: raw output tokens versus RTK-filtered output tokens, logged per command. An estimated figure, tagged [E], is a design target with no counterfactual, prints coarse with a leading tilde, and never carries the accent color. The two kinds are held apart on six channels at once, readable in grayscale.</p>
+      <h3>Which commands save the most tokens?</h3>
+      <p>Commands with large raw output filter best: rtk git diff saved 99.2 percent (n=3), rtk vitest run 92.5 percent (n=38), rtk git pull 92.3 percent (n=73). High-frequency commands save a lower percentage but large absolute totals: rtk read saved 24.9 percent, 8.9 million tokens, across 571 runs.</p>
+      <h3>Does savetokens.tips apply to both Claude Code and Codex?</h3>
+      <p>Yes. Every technique listed in Ordering Information applies to both <a href="https://code.claude.com/docs/en/overview">Claude Code</a> and Codex. The RTK proxy sits between the agent and the shell, so the token filtering is agent-agnostic.</p>
+    </div>
+  </section>
+
   <!-- ===================== REVISION HISTORY ===================== -->
   <section class="revstrip" aria-labelledby="srev">
     <div class="sec-bar" style="border-top:none;padding-top:0"><span class="sec-no">&#167;</span><h2 class="sec-label" id="srev">Revision History</h2></div>
@@ -825,6 +925,7 @@
       </tbody>
     </table>
     <p class="fn-note">Note: characterization ages. Every figure is a dated snapshot; re-measure as sample counts grow, and prefer a newer revision over a stale one.</p>
+    <p class="fn-note"><a href="/about">About this datasheet</a></p>
   </section>
 
 </main>
