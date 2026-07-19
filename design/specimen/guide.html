@@ -89,6 +89,14 @@
             "@type": "Answer",
             "text": "Not by default. A subagent starts with fresh context, rereads the files your session already read, then spends more tokens reporting back, so total spend usually rises. What subagents buy is a short main transcript: a summary instead of thousands of lines of search output. Dispatch them for big, genuinely independent jobs, and do direct reads for small lookups."
           }
+        },
+        {
+          "@type": "Question",
+          "name": "What should I check first when I keep hitting the limit?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Audit before changing anything. Run /context to see what fills the window at session start, connected tools and instruction files are common surprises, and /usage to see plan spend. Then apply the fix that matches what you find: prune preloaded context if the session starts heavy, shorten and split sessions if the transcript is the weight, filter output if shell dumps dominate."
+          }
         }
       ]
     }
@@ -492,6 +500,7 @@
       <a href="#copy">Copy blocks</a>
       <a href="#advanced">Advanced</a>
       <a href="#faq">FAQ</a>
+      <a href="#reading">Reading</a>
     </nav>
     <button type="button" class="themebtn" id="themebtn" aria-label="Toggle light or dark rendering">Invert</button>
   </div>
@@ -738,8 +747,14 @@ Off switch: "stop caveman" / "normal mode".</pre>
     <div class="prose">
       <p>Once the basics are habit, the next savings come from routing work to the right place. These matter most on big projects and long working days.</p>
 
+      <h3>Audit before you optimize</h3>
+      <p>Look at where the tokens actually go before changing habits. In Claude Code, <code>/context</code> shows what is filling the window right now: system prompt, connected tools, instruction files, and conversation. <code>/usage</code> shows how much of your plan you have spent, and <code>/cost</code> totals the session on API billing. One look often changes the plan: a session that feels expensive because of long replies sometimes turns out to be carrying tens of thousands of tokens of connected tools it never uses.</p>
+
       <h3>Keep your instruction file thin</h3>
       <p>Your <code>CLAUDE.md</code> or <code>AGENTS.md</code> is reloaded into context every single session, so every line in it is a recurring cost. Keep it to cross-cutting rules, and move topical detail into reference files the agent reads only when needed. A fat instruction file taxes every session; a thin one with an index taxes only the sessions that use the detail.</p>
+
+      <h3>Prune connectors and tools you are not using</h3>
+      <p>The same thin-kernel rule applies to tooling. Every MCP server you connect ships its tool definitions into the context at session start, whether or not you ever call them, and an eagerly loaded skill costs the same way. Disconnect servers the current project does not use, and prefer skills that load on demand over rules pasted into the instruction file. Newer agent versions defer some tool schemas until they are needed, which softens the cost, but a leaner set of connectors still wins: <code>/context</code> will show you exactly what each one costs.</p>
 
       <h3>Match the model to the task</h3>
       <p>Not every step needs the largest model at the highest reasoning effort. Send hard design and debugging to the strong tier, and mechanical bulk work, renames, sweeps, and formatting, to a cheaper tier at reduced effort. Route per task, not per session: one session can mix tiers by handing the mechanical parts to subagents on the cheaper model.</p>
@@ -751,10 +766,14 @@ Off switch: "stop caveman" / "normal mode".</pre>
       <h3>Workflows, for jobs that outgrow one context</h3>
       <p>The same economics extend to multi-agent workflows that fan a big job, an audit, a migration, a broad review, across many agents in parallel. Total spend goes up, main-session context stays small, and wall-clock time drops. Reach for workflows when the job cannot fit one context, not to hurry a small one.</p>
 
+      <h3>Move repeatable work into scripts</h3>
+      <p>An agent turn is the most expensive way to do anything a script could do. When a task is deterministic, the same transformation across many files, a data pull, a formatting sweep, have the agent write a script once and run the script from then on. Only the writing costs tokens; every later run is free. It is also more reliable: a script does not paraphrase, skip a file, or improvise.</p>
+
       <h3>Filter command output before the agent reads it</h3>
       <!-- LIVE:guide-rtk-inline -->
       <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering it is the one technique on this site with full before-and-after logs: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">82.1</span></span>% of output tokens removed across 93,646 commands (snapshot 2026-07-19). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>
 <!-- END:guide-rtk-inline -->
+      <p>The tool behind those numbers is <a href="https://github.com/rtk-ai/rtk">RTK</a>, an open-source proxy that condenses command output before the agent reads it.</p>
     </div>
   </section>
 
@@ -772,6 +791,20 @@ Off switch: "stop caveman" / "normal mode".</pre>
 <!-- END:guide-faq-caveman -->
       <h3>Do subagents and workflows save tokens?</h3>
       <p>Not by default. A subagent starts with fresh context, rereads the files your session already read, then spends more tokens reporting back, so total spend usually rises. What subagents buy is a short main transcript: a summary instead of thousands of lines of search output. Dispatch them for big, genuinely independent jobs, and do direct reads for small lookups.</p>
+      <h3>What should I check first when I keep hitting the limit?</h3>
+      <p>Audit before changing anything. Run <code>/context</code> to see what fills the window at session start, connected tools and instruction files are common surprises, and <code>/usage</code> to see plan spend. Then apply the fix that matches what you find: prune preloaded context if the session starts heavy, shorten and split sessions if the transcript is the weight, filter output if shell dumps dominate.</p>
+    </div>
+  </section>
+
+  <!-- ===================== FURTHER READING ===================== -->
+  <section class="section" id="reading">
+    <h2>Further reading</h2>
+    <div class="prose">
+      <ul>
+        <li><a href="https://corewise.academy/guides/stop-hitting-your-token-limit/">Stop Hitting Your Token Limit</a> (CoreWise Academy): the same problem worked from the budget side. Audit your usage, cut consumption, downshift models for routine work, and weigh the riskier tactics honestly. Covers caveman mode and output filtering too.</li>
+        <li><a href="https://code.claude.com/docs/en/best-practices">Claude Code best practices</a> (Anthropic): the vendor's own guidance on context management, instruction files, and workflow.</li>
+        <li><a href="https://github.com/rtk-ai/rtk">RTK on GitHub</a>: the open-source output filter behind the measured figures on this site.</li>
+      </ul>
     </div>
   </section>
 
