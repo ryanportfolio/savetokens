@@ -101,13 +101,16 @@ try {
   # Commit exactly the generated set and push. Vercel deploys on the push.
   $date = (Get-Content (Join-Path $SpecimenDir 'data/snapshot.json') -Raw | ConvertFrom-Json).snapshotDate
   $msgFile = Join-Path $env:TEMP 'savetokens-refresh-msg.txt'
-  @(
+  $msg = @(
     "site: refresh measured snapshot $date",
     '',
     'Automated daily regen from RTK history.db via refresh-and-publish.ps1.',
     '',
     'Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>'
-  ) -join "`n" | Set-Content -Path $msgFile -Encoding utf8 -NoNewline
+  ) -join "`n"
+  # WriteAllText with a no-BOM UTF8 encoder - Windows PowerShell 5.1's
+  # Set-Content -Encoding utf8 prepends a BOM that leaks into the commit subject.
+  [System.IO.File]::WriteAllText($msgFile, $msg, (New-Object System.Text.UTF8Encoding($false)))
 
   Run git (@('add','--') + $Generated)
   Run git @('commit','-F',$msgFile)
