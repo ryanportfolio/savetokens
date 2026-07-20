@@ -566,8 +566,8 @@
 
   <!-- ===================== HERO ===================== -->
   <section class="hero">
-    <h1>Save tokens in Claude Code and Codex</h1>
-    <p class="lede">Tokens are metered and billed, and <strong>every word in your session gets reread on every turn</strong>. This guide collects the habits that cut the bill, starting with the two-second ones. Green numbers are measured; gray numbers with a tilde are estimates.</p>
+    <h1>Save tokens<br>Claude Code and Codex</h1>
+    <p class="lede"><strong>Every word in your session gets reread on every turn.</strong> This guide collects the habits that cut the bill.</p>
 
     <div class="stats">
       <!-- LIVE:guide-hero-measured -->
@@ -582,7 +582,7 @@
       <div class="stat">
         <span class="badge">Estimate</span>
         <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~50</span><span class="unit">%</span></span>
-        <p class="what">shorter replies with caveman mode. A deliberately lowballed target, not a measurement.</p>
+        <p class="what">shorter replies with caveman mode.</p>
         <p class="src">assumed 2x prose baseline, est ~65M saved, no before-and-after log</p>
       </div>
 <!-- END:guide-hero-caveman -->
@@ -591,8 +591,8 @@
     <div class="quickstart">
       <h2>If you only do three things</h2>
       <ol>
-        <li><strong>Compact early, then cut over to a fresh session.</strong> Run <code>/compact</code> once the context window is about 40% full, well before the limit. If you find yourself compacting a second time, start a new session instead and hand the work over with a <a href="#copy">handoff-audit prompt</a> so the fresh session can verify it independently.</li>
-        <li><strong>Run <code>/clear</code> between unrelated tasks.</strong> Anything left over gets reread on every turn that follows.</li>
+        <li><strong>Compact early, then cut over to a fresh session.</strong> Run <code>/compact</code> once the context window is about 40% full. If you find yourself compacting a 3rd time, start a new session instead and hand the work over with a <a href="#copy">handoff-audit prompt</a> so the fresh session can verify it independently.</li>
+        <li><strong>Run <code>/clear</code> between unrelated tasks.</strong> Anything left over keeps being reread.</li>
         <li><strong>Keep <a href="#caveman">caveman mode</a> turned on.</strong></li>
       </ol>
     </div>
@@ -603,8 +603,8 @@
     <h2>Why long sessions get expensive</h2>
     <div class="prose">
       <p>Every time you send a message, the whole conversation goes with it: your prompts, the agent's replies, and every line of tool output.</p>
-      <p>So the cost of a session compounds as it grows. Ten turns on a bloated transcript cost far more than ten on a fresh one, because each turn pays again for everything before it. Prompt caching can cut the billed price of the reread, but the tokens still fill the window and still dilute the model's attention.</p>
-      <p>Push close to the limit and older context gets dropped, not summarized, and answer quality falls before you hit the wall.</p>
+      <p>So the cost of a session compounds as it grows. Prompt caching cuts price but the tokens still fill the context window.</p>
+      <p><code>/compact</code> to summarize the session.</p>
     </div>
   </section>
 
@@ -624,17 +624,17 @@
       <div class="move">
         <span class="cmd">/compact</span>
         <span class="when">At a checkpoint</span>
-        <p>Use it after a fix lands, before a new area. Avoid it mid-investigation, because summaries drop detail you still need.</p>
+        <p>Avoid it mid-investigation, because summaries drop detail you still need.</p>
       </div>
       <div class="move">
         <span class="cmd">new session</span>
         <span class="when">When the task changes</span>
-        <p>Steering a long transcript into new work makes every future turn pay rent on everything already said.</p>
+        <p>Use the <a href="#copy">handoff-audit skill</a> to get fresh eyes on what's been done so far.</p>
       </div>
     </div>
 
     <div class="prose">
-      <p>Alongside those, two habits shrink what enters the context in the first place:</p>
+      <p>Remember:</p>
       <ul>
         <li><strong>Never paste whole files.</strong> Name the path and let the agent read the ranges it needs. The agent reads once; a pasted file gets reread every turn.</li>
       </ul>
@@ -648,8 +648,8 @@
       <p>Prompt caching is the reason the reread on every turn does not bill at full price.</p>
       <p>The catch is timing. The cache lives for about five minutes, and the clock resets every time it is used. Reply within the window and each turn's reread stays at the cheap rate.</p>
       <ul>
-        <li><strong>Work in bursts.</strong> While a session is hot, keep replies coming inside the five-minute window. Every turn that lands in the window pays a tenth of the price for the history it carries.</li>
-        <li><strong>A long break is a decision point.</strong> Stepping away from a big transcript for more than a few minutes? That is the natural moment to <code>/compact</code> or <code>/clear</code>.</li>
+        <li><strong>Work in bursts.</strong> Reply within the 5 minute window and that saves money. Replies within 5 mins of the last pay a tenth of the price.</li>
+        <li><strong>A long break is a decision point.</strong> That is the natural moment to <code>/compact</code> or <code>/clear</code>.</li>
         <li><strong>Short transcripts make cold starts cheap.</strong> Every habit on this page that keeps the conversation small also shrinks the penalty when the cache does expire.</li>
       </ul>
       <p>Some setups use a one-hour cache at a higher write price, and the same logic applies with a longer clock.</p>
