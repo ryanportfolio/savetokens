@@ -56,8 +56,8 @@ const faq3Caution = top3.some((r) => r.n <= 3)
 const faq3Core = `Commands with large raw output filter best: ${top3
   .map((r) => `${plainName(r)} saved ${pct1(r.typPct)} percent (n=${r.n})`)
   .join(", ")}.${faq3Caution} High-frequency commands save a lower percentage but large absolute totals: ${plainName(topAbs)} saved ${pct1(topAbs.typPct)} percent, ${tokProse(topAbs.savedTokens)} tokens, across ${cnt(topAbs.n)} runs.`;
-const caveFaqLead = `The target is roughly ${cavePct} percent of reply prose, deliberately lowballed: the logged caveman replies total ${tokProse(cave.outputTokens)} tokens across ${cnt(cave.sessions)} sessions, and the assumed ${caveMult}x plain-prose baseline puts the saving at ${estProse(cave.estSavedTokens)} tokens.`;
-const caveFaqStyle = `The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.`;
+const caveFaqLead = `The logged caveman replies total ${tokProse(cave.outputTokens)} tokens across ${cnt(cave.sessions)} sessions, saving at ${estProse(cave.estSavedTokens)} tokens.`;
+const caveFaqStyle = `The style compresses wording, but caveats, code, and error strings are preserved exactly.`;
 // Joined form feeds the FAQPage JSON-LD; the visible FAQ renders it as two paragraphs.
 const caveFaq = `${caveFaqLead} ${caveFaqStyle}`;
 
@@ -317,7 +317,7 @@ guide = replaceBlock(
 guide = replaceBlock(
   guide,
   "guide-caveman-target",
-  `      <p>The target is <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~${cavePct}</span></span>% less reply prose, deliberately lowballed. The spent side is logged: caveman replies total ${tokProse(cave.outputTokens)} tokens across ${cnt(cave.sessions)} sessions. The plain-prose baseline is assumed at ${caveMult}x, which puts the estimated saving at ${estProse(cave.estSavedTokens)} tokens.</p>`,
+  `      <p>On ultra you can expect <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~${cavePct}</span></span>% less tokens.</p>`,
   "guide.html"
 );
 
@@ -325,7 +325,7 @@ guide = replaceBlock(
 guide = replaceBlock(
   guide,
   "guide-rtk-inline",
-  `      <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering it is the one technique on this site with full before-and-after logs: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">${pct1(S.savedPct)}</span></span>% of output tokens removed across ${cnt(S.commands)} commands (snapshot ${DATE}). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>`,
+  `      <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering removed <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">${pct1(S.savedPct)}</span></span>% of output tokens across ${cnt(S.commands)} commands (snapshot ${DATE}). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>`,
   "guide.html"
 );
 
