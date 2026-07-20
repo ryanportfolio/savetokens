@@ -63,7 +63,7 @@
           "name": "Why do long agent sessions cost more tokens?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The model holds no memory between turns, so the whole conversation is resent and reprocessed on every request. A token written on turn one is read again on every later turn, so the cost of a long session compounds. Prompt caching can cut the billed price of that reread, but the tokens still occupy the context window and still dilute attention."
+            "text": "The whole conversation is resent and reprocessed on every request, so long sessions compound. Prompt caching can cut the billed price of that reread, but the tokens still dilute attention."
           }
         },
         {
@@ -79,7 +79,7 @@
           "name": "How much does caveman mode save?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The target is roughly 50 percent of reply prose, deliberately lowballed: the logged caveman replies total 64.7 million tokens across 615 sessions, and the assumed 2x plain-prose baseline puts the saving at roughly 65 million tokens. The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly."
+            "text": "The logged caveman replies total 64.7 million tokens across 615 sessions, saving at roughly 65 million tokens. The style compresses wording, but caveats, code, and error strings are preserved exactly."
           }
         },
         {
@@ -87,7 +87,7 @@
           "name": "Do subagents and workflows save tokens?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Not by default. A subagent starts with fresh context, rereads the files your session already read, then spends more tokens reporting back, so total spend usually rises. What subagents buy is a short main transcript: a summary instead of thousands of lines of search output. Dispatch them for big, genuinely independent jobs, and do direct reads for small lookups."
+            "text": "Not by default. A subagent starts with fresh context, rereads the files your session already read, then spends more tokens reporting back. What subagents buy is a short main transcript. Dispatch for big projects."
           }
         },
         {
@@ -103,7 +103,7 @@
           "name": "Do unused skills still cost tokens?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, but only a little each. A skill's frontmatter description is loaded every session so the agent can tell when the skill applies; the body loads only when the skill actually runs. So a skill you never trigger still costs its one-line description on every turn, and nothing more. Whether that is worth acting on depends on how many skills you carry and how many you use: if /context shows the descriptions taking real space, drop the ones a project does not need and sharpen the descriptions on the ones you keep."
+            "text": "Yes, always from the description. The full skill loads when it actually runs though. If /context shows the Skills taking a lot of space, drop the ones a project does not need and sharpen the descriptions on the ones you keep."
           }
         }
       ]
@@ -260,7 +260,7 @@
   /* ---------- Stat cards ---------- */
   .stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
     margin: 28px 0 0;
   }
@@ -586,20 +586,14 @@
         <p class="src">assumed 2x prose baseline, est ~65M saved, no before-and-after log</p>
       </div>
 <!-- END:guide-hero-caveman -->
-      <div class="stat">
-        <span class="badge">Vendor spec</span>
-        <span class="fig fig-s" data-figure data-kind="spec"><span class="tag">spec</span><span class="val num">~1M</span></span>
-        <p class="what">tokens in the context window on current Opus and Sonnet models; smaller models still run ~200,000.</p>
-        <p class="src"><a href="https://platform.claude.com/docs/en/build-with-claude/context-windows">Anthropic documentation</a>, not measured here</p>
-      </div>
     </div>
 
     <div class="quickstart">
       <h2>If you only do three things</h2>
       <ol>
-        <li><strong>Compact early, then cut over to a fresh session.</strong> Run <code>/compact</code> once the context window is about 40 percent full, well before the limit. If you find yourself compacting a second time, start a new session instead and hand the work over with a <a href="#copy">handoff-audit prompt</a> so the fresh session can verify it independently.</li>
+        <li><strong>Compact early, then cut over to a fresh session.</strong> Run <code>/compact</code> once the context window is about 40% full, well before the limit. If you find yourself compacting a second time, start a new session instead and hand the work over with a <a href="#copy">handoff-audit prompt</a> so the fresh session can verify it independently.</li>
         <li><strong>Run <code>/clear</code> between unrelated tasks.</strong> Anything left over gets reread on every turn that follows.</li>
-        <li><strong>Shrink what the agent reads and writes.</strong> Name file paths instead of pasting files, and turn on caveman mode for shorter replies.</li>
+        <li><strong>Keep <a href="#caveman">caveman mode</a> turned on.</strong></li>
       </ol>
     </div>
   </section>
@@ -608,9 +602,9 @@
   <section class="section" id="why">
     <h2>Why long sessions get expensive</h2>
     <div class="prose">
-      <p>The model has no memory between turns. Every time you send a message, the whole conversation goes with it: your prompts, the agent's replies, and every line of tool output. A token written on turn one is read again on every later turn.</p>
+      <p>Every time you send a message, the whole conversation goes with it: your prompts, the agent's replies, and every line of tool output.</p>
       <p>So the cost of a session compounds as it grows. Ten turns on a bloated transcript cost far more than ten on a fresh one, because each turn pays again for everything before it. Prompt caching can cut the billed price of the reread, but the tokens still fill the window and still dilute the model's attention.</p>
-      <p>The budget is finite too: roughly a million tokens of context on current Opus and Sonnet models, per the vendor spec above, and a bigger window also means a bigger bill for a full one. Push close to the limit and older context gets dropped, not summarized, and answer quality falls before you hit the wall.</p>
+      <p>Push close to the limit and older context gets dropped, not summarized, and answer quality falls before you hit the wall.</p>
     </div>
   </section>
 
@@ -618,24 +612,24 @@
   <section class="section" id="basics">
     <h2>The basics: clear, compact, or start fresh</h2>
     <div class="prose">
-      <p>Three moves control how much history you carry. They differ in how much they drop, and picking the right one is most of the skill.</p>
+      <p>Three moves control how much history you carry.</p>
     </div>
 
     <div class="moves">
       <div class="move">
         <span class="cmd">/clear</span>
         <span class="when">Between unrelated tasks</span>
-        <p>Wipes the conversation, keeps the session open. Cheapest move there is. If the next task shares nothing with the current one, nothing is lost.</p>
+        <p>Wipes the conversation, keeps the session open.</p>
       </div>
       <div class="move">
         <span class="cmd">/compact</span>
         <span class="when">At a checkpoint</span>
-        <p>Replaces the transcript with a summary. Use it after a fix lands, before a new area: you keep the conclusions, not the word-for-word history. Avoid it mid-investigation, because summaries drop detail you still need.</p>
+        <p>Use it after a fix lands, before a new area. Avoid it mid-investigation, because summaries drop detail you still need.</p>
       </div>
       <div class="move">
         <span class="cmd">new session</span>
         <span class="when">When the task changes</span>
-        <p>The cleanest cut. Steering a long transcript into new work makes every future turn pay rent on everything already said. Start fresh instead.</p>
+        <p>Steering a long transcript into new work makes every future turn pay rent on everything already said.</p>
       </div>
     </div>
 
@@ -643,7 +637,6 @@
       <p>Alongside those, two habits shrink what enters the context in the first place:</p>
       <ul>
         <li><strong>Never paste whole files.</strong> Name the path and let the agent read the ranges it needs. The agent reads once; a pasted file gets reread every turn.</li>
-        <li><strong>Ask precisely.</strong> "Fix the expiry check in auth middleware" sends the agent straight to one file; "look at the auth system" buys a tour of all of them.</li>
       </ul>
     </div>
   </section>
@@ -652,14 +645,14 @@
   <section class="section" id="cache">
     <h2>The five-minute cache window</h2>
     <div class="prose">
-      <p>Prompt caching is the reason the reread on every turn does not bill at full price. The provider keeps the already-processed conversation in a cache: the first turn writes it at about 1.25x the normal input price, and every later turn reads it back at roughly a tenth of the normal price. Those figures are <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching">Anthropic's published caching rates</a>, not measured here.</p>
-      <p>The catch is timing. The cache lives for about five minutes, and the clock resets every time it is used. Reply within the window and each turn's reread stays at the cheap rate. Walk away longer than that and the cache expires: the next message rewrites the entire transcript at the premium rate, as if the whole conversation were being sent for the first time. For the same tokens, that cold rewrite costs roughly twelve times a cached reread, so on a long transcript one idle gap can out-bill several active turns.</p>
+      <p>Prompt caching is the reason the reread on every turn does not bill at full price.</p>
+      <p>The catch is timing. The cache lives for about five minutes, and the clock resets every time it is used. Reply within the window and each turn's reread stays at the cheap rate.</p>
       <ul>
         <li><strong>Work in bursts.</strong> While a session is hot, keep replies coming inside the five-minute window. Every turn that lands in the window pays a tenth of the price for the history it carries.</li>
-        <li><strong>A long break is a decision point.</strong> Stepping away from a big transcript for more than a few minutes? That is the natural moment to <code>/compact</code> or <code>/clear</code>. Coming back cold pays the full rewrite either way, so come back to a small transcript instead of a large one.</li>
-        <li><strong>Short transcripts make cold starts cheap.</strong> Every habit on this page that keeps the conversation small also shrinks the penalty when the cache does expire. The two compound.</li>
+        <li><strong>A long break is a decision point.</strong> Stepping away from a big transcript for more than a few minutes? That is the natural moment to <code>/compact</code> or <code>/clear</code>.</li>
+        <li><strong>Short transcripts make cold starts cheap.</strong> Every habit on this page that keeps the conversation small also shrinks the penalty when the cache does expire.</li>
       </ul>
-      <p>Agent tools set the cache markers themselves; there is nothing to configure. Timing and transcript size are the levers you actually hold. Some setups use a one-hour cache at a higher write price, and the same logic applies with a longer clock.</p>
+      <p>Some setups use a one-hour cache at a higher write price, and the same logic applies with a longer clock.</p>
     </div>
   </section>
 
@@ -667,9 +660,9 @@
   <section class="section" id="caveman">
     <h2>Caveman mode: shorter replies, same facts</h2>
     <div class="prose">
-      <p>Caveman mode is a standing instruction that makes the agent's replies drastically shorter without losing technical content. The agent drops articles, filler, pleasantries, and hedging, speaks in fragments, and uses arrows for causality. Code, commits, file contents, function names, and error strings are never touched.</p>
+      <p>Caveman mode is a standing instruction that makes the agent's replies drastically shorter without losing technical content.</p>
       <!-- LIVE:guide-caveman-target -->
-      <p>The target is <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~50</span></span>% less reply prose, deliberately lowballed. The spent side is logged: caveman replies total 64.7 million tokens across 615 sessions. The plain-prose baseline is assumed at 2x, which puts the estimated saving at roughly 65 million tokens.</p>
+      <p>On ultra you can expect <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~50</span></span>% less tokens.</p>
 <!-- END:guide-caveman-target -->
     </div>
 
@@ -700,7 +693,6 @@
 
     <div class="honesty">
       <p><strong>The rule that makes it safe: accuracy first, brevity second.</strong> A fact, caveat, or qualifier is never dropped to save tokens; only the wording compresses.</p>
-      <p>The agent also switches back to plain prose on its own for security warnings, irreversible-action confirmations, and any step where compressed wording could be misread.</p>
     </div>
   </section>
 
@@ -708,37 +700,8 @@
   <section class="section" id="copy">
     <h2>Copy these into your agent</h2>
     <div class="prose">
-      <p>Everything here is ready to paste. The first two blocks go in the instruction file your agent reads at the start of every session: <code>CLAUDE.md</code> for Claude Code, <code>AGENTS.md</code> for Codex. The last two are skills, loaded only when needed instead of costing tokens every session: caveman mode, and a handoff-audit prompt for the moment you cut a task over to a fresh session.</p>
+      <p>The first two blocks go in the instruction file your agent reads at the start of every session: <code>CLAUDE.md</code> for Claude Code, <code>AGENTS.md</code> for Codex.</p>
     </div>
-
-    <div class="copyblock">
-      <div class="copyhead">
-        <span class="cb-label">Caveman mode</span>
-        <button type="button" class="copybtn" data-copy-target="cb-caveman">Copy</button>
-      </div>
-      <pre id="cb-caveman">## Response style: caveman (ultra)
-
-Respond terse like smart caveman. All technical substance stays; only filler goes.
-Accuracy first, brevity second. Never drop a fact, caveat, or qualifier to save
-tokens: compress wording, not meaning. If terse risks a misread, spend the words.
-
-Drop: articles (a/an/the), filler (just/really/basically/actually/simply),
-pleasantries (sure/certainly/of course), hedging. Fragments OK. Short synonyms
-(big not extensive, fix not "implement a solution for"). Technical terms exact.
-Code blocks unchanged. Error messages quoted exact.
-
-Ultra intensity: abbreviate prose words (DB/auth/config/req/res/fn/impl), use
-arrows for causality (X -> Y), one word when one word is enough. Code symbols,
-function names, API names, and error strings are never abbreviated.
-
-Auto-clarity: switch to plain prose for security warnings, irreversible-action
-confirmations, and multi-step sequences where fragment order could be misread.
-Resume caveman after the clear part is done.
-
-Boundaries: code, commits, PR text, and file contents are written normally.
-Off switch: "stop caveman" / "normal mode".</pre>
-    </div>
-    <p class="copycap">Want it gentler? Delete the ultra paragraph for classic caveman, or keep full sentences for the lite setting shown in the table above.</p>
 
     <div class="copyblock">
       <div class="copyhead">
@@ -747,13 +710,14 @@ Off switch: "stop caveman" / "normal mode".</pre>
       </div>
       <pre id="cb-kernel">## Context discipline
 
-- One task per session. Unrelated task -> /clear or a new session.
-- Compact at natural checkpoints (after a fix lands, before a new area),
-  never mid-investigation.
-- Do not paste whole files into the prompt. Name the path and let the agent
-  read targeted ranges.
-- Keep this file a thin kernel. Topical detail lives in reference files the
-  agent loads on demand.
+- One task per session. When the conversation drifts to an unrelated task,
+  say so and suggest /clear or a fresh session.
+- Suggest /compact at natural checkpoints (after a fix lands, before a new
+  area), never mid-investigation.
+- When you need a file, read targeted ranges yourself instead of asking for a
+  paste; a pasted file is reread every turn.
+- Keep this file a thin kernel. Topical detail lives in reference files you
+  load on demand.
 - Subagents are not a discount. A subagent rereads context fresh and pays a
   summarize-back tax; dispatch only for large, genuinely independent scopes.
 - Prefer filtered command output over raw dumps (diffs, logs, test runs).</pre>
@@ -763,7 +727,7 @@ Off switch: "stop caveman" / "normal mode".</pre>
     <div class="copyblock">
       <div class="copyhead">
         <span class="cb-label">Caveman mode as a skill</span>
-        <button type="button" class="copybtn" data-copy-target="cb-skill">Copy skill</button>
+        <button type="button" class="copybtn" data-copy-target="cb-skill">Copy for Agent</button>
       </div>
       <pre id="cb-skill">Install this as a skill for me: save the file below, starting at the --- line,
 as .claude/skills/caveman/SKILL.md for Claude Code or
@@ -804,7 +768,7 @@ Off switch: "stop caveman" / "normal mode".</pre>
     <div class="copyblock">
       <div class="copyhead">
         <span class="cb-label">Handoff audit as a skill</span>
-        <button type="button" class="copybtn" data-copy-target="cb-handoff">Copy skill</button>
+        <button type="button" class="copybtn" data-copy-target="cb-handoff">Copy for Agent</button>
       </div>
       <pre id="cb-handoff">Install this as a skill for me: save the file below, starting at the --- line,
 as .claude/skills/handoff-audit/SKILL.md for Claude Code or
@@ -856,37 +820,42 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
       <p>Once the basics are habit, the next savings come from routing work to the right place. These matter most on big projects and long working days.</p>
 
       <h3>Audit before you optimize</h3>
-      <p>Look at where the tokens actually go before changing habits. In Claude Code, <code>/context</code> shows what is filling the window right now: system prompt, connected tools, instruction files, and conversation. <code>/usage</code> shows how much of your plan you have spent, and <code>/cost</code> totals the session on API billing. One look often changes the plan: a session that feels expensive because of long replies sometimes turns out to be carrying tens of thousands of tokens of connected tools it never uses.</p>
+      <p>Look at where the tokens actually go before changing habits. In Claude Code, <code>/context</code> shows what is filling the window right now: system prompt, connected tools, instruction files, and conversation. Disable connected tools/MCP you rarely use.</p>
 
       <h3>Keep your instruction file thin</h3>
-      <p>Your <code>CLAUDE.md</code> or <code>AGENTS.md</code> is reloaded into context every single session, so every line in it is a recurring cost. Keep it to cross-cutting rules, and move topical detail into reference files the agent reads only when needed. A fat instruction file taxes every session; a thin one with an index taxes only the sessions that use the detail.</p>
-      <p>The same rule covers memory. When you want the agent to remember something for later, write it to a committed reference file through a recall command, not into the instruction file. An index that points at short wiki-style notes lets a session pull in only the note it needs; a running memory list pasted into <code>CLAUDE.md</code> grows without limit and gets reread in full every session.</p>
-      <p>For a ready-made version of this layout, <a href="https://github.com/ryanportfolio/AI-Firmware">AI-Firmware</a> is a project template built around it: a short rule-only kernel, a <code>.claude/reference/</code> index for topical detail, committed memory added with <code>/recall save</code>, and an <code>AGENTS.md</code> mirror so the same setup works in Codex. It is open source under MIT, free to clone as a starting point.</p>
+      <p>Your <code>CLAUDE.md</code> or <code>AGENTS.md</code> is reloaded into context every single session, so every line in it is a recurring cost. Keep it as a <strong>wiki</strong>, and move detailed context into subfiles that are referenced only when the agent needs it.</p>
+      <p><strong>For memory</strong>, using <a href="https://github.com/ryanportfolio/AI-Firmware">AI Firmware</a> will have the model use its recall command. This points at short wiki-style notes and lets a session pull in only the note it needs. This keeps the always-on <code>CLAUDE.md</code> optimized and lean.</p>
+      <p><a href="https://github.com/ryanportfolio/AI-Firmware">AI-Firmware</a> is my project template built around a short rule-only kernel, a <code>.claude/reference/</code> index for more detail, auto memory with <code>/recall save</code>, and an <code>AGENTS.md</code> mirror so the same setup works in Codex. Use or clone as a starting point.</p>
 
       <h3>Prune connectors and tools you are not using</h3>
-      <p>The same thin-kernel rule applies to tooling. Every MCP server you connect ships its tool definitions into the context at session start, whether or not you ever call them. Disconnect servers the current project does not use. Newer agent versions defer some tool schemas until they are needed, which softens the cost, but a leaner set of connectors still wins: <code>/context</code> will show you exactly what each one costs.</p>
+      <p>Tools: every MCP server you connect wastes tokens immediately, used or not. Disconnect servers the current project does not use.</p>
+      <p><code>/context</code> will show you exactly what each one costs.</p>
 
       <h3>Trim your skills, and drop the ones you never use</h3>
-      <p>A skill costs tokens in two places, and only one of them is optional. The one-line description in its frontmatter, the summary the agent reads to decide whether the skill applies, is loaded every session whether or not the skill ever runs; the body loads only when it does. So a shelf of installed skills is a standing tax: every description is reread on every turn, including the skills you reach for once a month. Remove the ones a project does not use, and that per-turn weight leaves with them.</p>
-      <p>For the skills you keep, trim them to your own work. The description is the line that pays rent constantly, so sharpen it first: keep the trigger words that decide when the skill should fire and cut the rest. Then trim the body. Skills you install from elsewhere tend to ship with setup notes, examples, and options that do not apply to your repo, so cutting what does not apply leaves fewer tokens per run and less irrelevant instruction competing for the agent's attention. You can compress the wording itself the same way caveman mode compresses replies, applied to the skill file instead of the reply.</p>
-      <p>When a skill's body is genuinely large, split it the way a thin instruction file is split: a short <code>SKILL.md</code> that states the rule and points at detail files, with the detail loaded only on the runs that need it. The skill then costs its description every session, a small hook when it fires, and the heavy detail only when a task actually reaches for it, the same layout that keeps a kernel instruction file cheap.</p>
+      <p>Skills: models read a skill's description to decide whether it applies. That context is loaded every session whether or not the skill ever runs. Remove the ones a project does not use and shorten descriptions.</p>
+      <p>Skill descriptions: keep the trigger words that decide when the skill should fire and cut the rest. Skills on GitHub tend to ship with setup notes, examples, and options that <strong>may not apply to your repo</strong>, so cutting irrelevant = fewer tokens &amp; better output.</p>
+      <p>Compress the skill wording the same way caveman mode compresses replies.</p>
+      <p>When a skill's body is very large, split it into an instruction file: just a rule that points at subfiles that have all the detail, loaded only when needed.</p>
 
       <h3>Match the model to the task</h3>
-      <p>Not every step needs the largest model at the highest reasoning effort. Send hard design and debugging to the strong tier, and mechanical bulk work, renames, sweeps, and formatting, to a cheaper tier at reduced effort. Route per task, not per session: one session can mix tiers by handing the mechanical parts to subagents on the cheaper model.</p>
-      <p>The reasoning-effort dial works the same way: the default (high) is the sweet spot for most work. Save xhigh for the hardest coding and agentic tasks, and skip max almost always: past a point, extra thinking buys diminishing returns or outright overthinking while the token bill keeps climbing.</p>
+      <p>Efficiency: Avoid xhigh unless it's needed. Avoid max. Mechanical bulk work should be a cheaper model at reduced thinking.</p>
+      <p>The default (high) is the sweet spot for most work. Save xhigh for the hardest coding and long agentic tasks.</p>
 
       <h3>What a subagent really costs</h3>
-      <p>A subagent starts with fresh context, rereads files your session already read, then spends more tokens reporting what it found back to you. Total spend usually goes up. What you buy is a short main transcript: a summary in place of thousands of lines of search output that every later turn would otherwise reread. Dispatch subagents for big, genuinely independent jobs; for a two-file lookup, a direct read is cheaper.</p>
+      <p>A subagent starts with fresh context, rereads files your session already read, then spends more tokens reporting what it found back to you.</p>
+      <p>But the main transcript stays clean. Dispatch subagents for big projects.</p>
 
       <h3>Workflows, for jobs that outgrow one context</h3>
-      <p>The same economics extend to multi-agent workflows that fan a big job, an audit, a migration, a broad review, across many agents in parallel. Total spend goes up, main-session context stays small, and wall-clock time drops. Reach for workflows when the job cannot fit one context, not to hurry a small one.</p>
+      <p>Claude Code <code>/workflows</code> with Opus on medium thinking is great, for jobs that outgrow one context.</p>
+      <p>Subagents have fresh context and can bring different perspectives and angles that a single worker may miss.</p>
 
       <h3>Move repeatable work into scripts</h3>
-      <p>An agent turn is the most expensive way to do anything a script could do. When a task is deterministic, the same transformation across many files, a data pull, a formatting sweep, have the agent write a script once and run the script from then on. Only the writing costs tokens; every later run is free. It is also more reliable: a script does not paraphrase, skip a file, or improvise.</p>
+      <p>For deterministic work, have the agent write a script once. Only writing costs tokens; every later run is free &amp; more reliable.</p>
+      <p>For example I've run python scripts for hours that collect data, and then at the very end the model reviews.</p>
 
       <h3>Filter command output before the agent reads it</h3>
       <!-- LIVE:guide-rtk-inline -->
-      <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering it is the one technique on this site with full before-and-after logs: <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">81.8</span></span>% of output tokens removed across 93,690 commands (snapshot 2026-07-19). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>
+      <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering removed <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">81.8</span></span>% of output tokens across 93,690 commands (snapshot 2026-07-19). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>
 <!-- END:guide-rtk-inline -->
       <p>The tool behind those numbers is <a href="https://github.com/rtk-ai/rtk">RTK</a>, an open-source proxy that condenses command output before the agent reads it.</p>
     </div>
@@ -902,8 +871,8 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
           <h3>Why do long agent sessions cost more tokens?</h3>
         </div>
         <div class="qa-a">
-          <p>The model holds no memory between turns, so the whole conversation is resent and reprocessed on every request. A token written on turn one is read again on every later turn, so the cost of a long session compounds.</p>
-          <p>Prompt caching can cut the billed price of that reread, but the tokens still occupy the context window and still dilute attention.</p>
+          <p>The whole conversation is resent and reprocessed on every request, so long sessions compound.</p>
+          <p>Prompt caching can cut the billed price of that reread, but the tokens still dilute attention.</p>
         </div>
       </div>
       <div class="qa" id="faq-clear-compact">
@@ -927,8 +896,8 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
         </div>
         <div class="qa-a">
           <!-- LIVE:guide-faq-caveman -->
-      <p>The target is roughly 50 percent of reply prose, deliberately lowballed: the logged caveman replies total 64.7 million tokens across 615 sessions, and the assumed 2x plain-prose baseline puts the saving at roughly 65 million tokens.</p>
-      <p>The style compresses wording, not meaning; facts, caveats, code, and error strings are preserved exactly.</p>
+      <p>The logged caveman replies total 64.7 million tokens across 615 sessions, saving at roughly 65 million tokens.</p>
+      <p>The style compresses wording, but caveats, code, and error strings are preserved exactly.</p>
 <!-- END:guide-faq-caveman -->
         </div>
       </div>
@@ -938,8 +907,8 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
           <h3>Do subagents and workflows save tokens?</h3>
         </div>
         <div class="qa-a">
-          <p>Not by default. A subagent starts with fresh context, rereads the files your session already read, then spends more tokens reporting back, so total spend usually rises.</p>
-          <p>What subagents buy is a short main transcript: a summary instead of thousands of lines of search output. Dispatch them for big, genuinely independent jobs, and do direct reads for small lookups.</p>
+          <p>Not by default. A subagent starts with fresh context, rereads the files your session already read, then spends more tokens reporting back.</p>
+          <p>What subagents buy is a short main transcript. Dispatch for big projects.</p>
         </div>
       </div>
       <div class="qa" id="faq-limit">
@@ -962,8 +931,8 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
           <h3>Do unused skills still cost tokens?</h3>
         </div>
         <div class="qa-a">
-          <p>Yes, but only a little each. A skill's frontmatter description is loaded every session so the agent can tell when the skill applies; the body loads only when the skill actually runs. So a skill you never trigger still costs its one-line description on every turn, and nothing more.</p>
-          <p>Whether that is worth acting on depends on how many skills you carry and how many you use. If <code>/context</code> shows the descriptions taking real space, drop the ones a project does not need and sharpen the descriptions on the ones you keep; if not, leave them be.</p>
+          <p>Yes, always from the description. The full skill loads when it actually runs though.</p>
+          <p>If <code>/context</code> shows the Skills taking a lot of space, drop the ones a project does not need and sharpen the descriptions on the ones you keep.</p>
         </div>
       </div>
     </div>
