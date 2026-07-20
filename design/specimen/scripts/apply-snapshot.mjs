@@ -307,7 +307,7 @@ guide = replaceBlock(
   `      <div class="stat">
         <span class="badge">Estimate</span>
         <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~${cavePct}</span><span class="unit">%</span></span>
-        <p class="what">shorter replies with caveman mode. A deliberately lowballed target, not a measurement.</p>
+        <p class="what">shorter replies with caveman mode.</p>
         <p class="src">assumed ${caveMult}x prose baseline, est ${estTok(cave.estSavedTokens)} saved, no before-and-after log</p>
       </div>`,
   "guide.html"
