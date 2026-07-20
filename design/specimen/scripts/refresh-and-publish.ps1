@@ -55,9 +55,12 @@ try {
   $branch = (& git rev-parse --abbrev-ref HEAD).Trim()
   if ($branch -ne 'main') { Log "SKIP: on branch '$branch', not main"; exit 0 }
 
-  # Guard 2: clean tree. Refuse to fold unrelated manual edits into an auto-commit.
-  $dirty = (& git status --porcelain)
-  if ($dirty) { Log "SKIP: working tree not clean"; ($dirty | ForEach-Object { Log "    ? $_" }); exit 0 }
+  # Guard 2: no uncommitted *tracked* changes. Untracked files are ignored - the
+  # commit only ever stages the explicit generated paths, so stray untracked files
+  # (e.g. local .codex config) can never be swept into the auto-commit. Tracked
+  # edits, though, could collide with pull --ff-only or the regen, so block on them.
+  $dirty = (& git status --porcelain --untracked-files=no)
+  if ($dirty) { Log "SKIP: uncommitted tracked changes present"; ($dirty | ForEach-Object { Log "    ? $_" }); exit 0 }
 
   # Fast-forward main to origin.
   Run 'git' @('pull','--ff-only','origin','main') $RepoRoot
