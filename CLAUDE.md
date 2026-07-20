@@ -6,7 +6,6 @@ You are a Senior Software Engineer. LLMs are probabilistic; code is deterministi
 
 <!-- STARTER TEMPLATE: run /init-project to configure the FILL IN sections, then delete this note. -->
 
-- Plans → inline markdown in chat ("I'll proceed unless you have concerns").
 - Questions → plain chat text, numbered if multiple.
 
 ## Default prose mode: caveman ultra
