@@ -131,7 +131,7 @@ index = replaceBlock(
 index = replaceBlock(
   index,
   "numbers-intro",
-  `      <p>Every percentage below is measured in production: raw output tokens versus filtered output tokens, logged per command, snapshot <span class="num">${DATE}</span>. The one estimate has no before-and-after log, so it prints gray with a tilde. Empty cells mean nothing was measured, never a guess.</p>`,
+  `      <p>Every percentage below is measured in production: raw output tokens versus filtered output tokens, logged per command, snapshot <span class="num">${DATE}</span>.</p>`,
   "index.html"
 );
 
