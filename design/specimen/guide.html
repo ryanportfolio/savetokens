@@ -228,6 +228,46 @@
     cursor: pointer;
     white-space: nowrap;
   }
+  .menubtn {
+    display: none;
+    font-family: var(--font-cond);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--ink);
+    padding: 4px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  /* Mobile: the inline toc collapses into a panel under the bar. */
+  @media (max-width: 760px) {
+    .topbar-inner { position: relative; }
+    .menubtn { display: inline-block; margin-left: auto; }
+    nav.toc {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      padding: 4px 12px 12px;
+      background: var(--paper);
+      border-bottom: 2px solid var(--ink);
+      overflow: visible;
+    }
+    nav.toc.open { display: flex; }
+    nav.toc a {
+      font-size: 0.875rem;
+      padding: 12px 8px;
+      border: 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    nav.toc a:last-child { border-bottom: 0; }
+  }
   @media (max-width: 640px) {
     .topbar-inner { padding: 8px 12px; gap: 10px; }
     .brand span { display: none; }
@@ -548,7 +588,7 @@
 <header class="topbar">
   <div class="topbar-inner">
     <a class="brand" href="/">savetokens<span>.tips</span></a>
-    <nav class="toc" aria-label="Guide sections">
+    <nav class="toc" id="site-toc" aria-label="Guide sections">
       <a href="#why">Why</a>
       <a href="#basics">Basics</a>
       <a href="#cache">Cache</a>
@@ -558,6 +598,7 @@
       <a href="#faq">FAQ</a>
       <a href="#reading">Reading</a>
     </nav>
+    <button type="button" class="menubtn" id="menubtn" aria-expanded="false" aria-controls="site-toc">Menu</button>
     <button type="button" class="themebtn" id="themebtn" aria-label="Toggle light or dark rendering">Invert</button>
   </div>
 </header>
@@ -1028,6 +1069,32 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
     }
     window.addEventListener('scroll', update, { passive: true });
     update();
+  })();
+
+  // Mobile menu: the Menu button toggles the toc panel; it closes on a link
+  // tap, a tap outside, or Escape.
+  (function () {
+    var btn = document.getElementById('menubtn');
+    var toc = document.getElementById('site-toc');
+    if (!btn || !toc) return;
+    function setOpen(open) {
+      toc.classList.toggle('open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.textContent = open ? 'Close' : 'Menu';
+    }
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setOpen(!toc.classList.contains('open'));
+    });
+    toc.addEventListener('click', function (e) {
+      if (e.target.tagName === 'A') setOpen(false);
+    });
+    document.addEventListener('click', function (e) {
+      if (toc.classList.contains('open') && !toc.contains(e.target)) setOpen(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') setOpen(false);
+    });
   })();
 </script>
 </body>
