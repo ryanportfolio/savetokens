@@ -102,7 +102,9 @@ index = index.replace(
   }
 );
 
-// Hero stats: two measured + one static vendor spec.
+// Hero stats: two measured + the STK showpiece card. The STK figure is
+// fetched client-side from /stk/data/gain.json (same origin via the /stk
+// proxy); the static "LIVE" text is the no-JS / failed-fetch fallback.
 index = replaceBlock(
   index,
   "hero-stats",
@@ -119,10 +121,10 @@ index = replaceBlock(
         <p class="src">rtk gain, snapshot ${DATE}, global scope</p>
       </div>
       <div class="stat">
-        <span class="badge">Vendor spec</span>
-        <span class="fig fig-s" data-figure data-kind="spec"><span class="tag">spec</span><span class="val num">~1M</span></span>
-        <p class="what">tokens in the context window on current Opus and Sonnet models.</p>
-        <p class="src"><a href="https://platform.claude.com/docs/en/build-with-claude/context-windows">Anthropic's numbers</a>, not measured here</p>
+        <span class="badge">Showpiece</span>
+        <span class="fig fig-m" data-figure data-kind="measured" id="stk-live"><span class="tag">measured</span><span class="val num">LIVE</span></span>
+        <p class="what">tokens kept out of context by STK, a hook that clamps oversized file reads. Running meter, updated daily.</p>
+        <p class="src"><a href="/stk/">STK &middot; Session Token Killer &#8594;</a></p>
       </div>`,
   "index.html"
 );
