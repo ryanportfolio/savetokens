@@ -8,8 +8,14 @@
 #   4. run verify.mjs (release gate; no commit on failure)
 #   5. commit and push to main only if figures changed (Vercel deploys from main)
 #
-# Register once (adjust time to taste):
-#   schtasks /Create /TN "savetokens-daily-refresh" /SC DAILY /ST 09:00 /TR "powershell -NoProfile -ExecutionPolicy Bypass -File C:\Users\Home\CoreWise\savetokens\scripts\daily-refresh.ps1"
+# Register once (5:00 PM local; machine runs Eastern). schtasks defaults block
+# battery starts and skip missed runs, so set the task up with PowerShell:
+#   $trigger  = New-ScheduledTaskTrigger -Daily -At 5:00PM
+#   $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable
+#   $action   = New-ScheduledTaskAction -Execute "powershell" -Argument "-NoProfile -ExecutionPolicy Bypass -File C:\Users\Home\CoreWise\savetokens\scripts\daily-refresh.ps1"
+#   Register-ScheduledTask -TaskName "savetokens-daily-refresh" -Trigger $trigger -Settings $settings -Action $action
+# StartWhenAvailable makes a missed 5 PM run fire as soon as the machine is
+# back on; the battery flags keep it from being skipped or stopped unplugged.
 
 # "Continue", not "Stop": git writes progress to stderr (Cloning into...,
 # remote counters), and under Stop PowerShell 5.1 turns those stderr lines into

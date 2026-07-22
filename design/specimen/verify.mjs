@@ -113,8 +113,9 @@ if (dataFigCount !== EXPECTED_DATA_FIGURES) {
 // reserved footnote resolutions: measured, estimate, vendor spec) ----------
 if (!html.includes("measured in production")) errors.push('Provenance statement "measured in production" missing.');
 if (!html.includes("no before-and-after log")) errors.push('Provenance statement "no before-and-after log" missing.');
-if (!html.includes("not measured here")) errors.push('Provenance statement "not measured here" missing.');
-if (!errors.some((e) => e.includes("Provenance statement"))) notes.push("All three provenance statements present.");
+// The vendor-spec statement ("not measured here") was dropped from the hero
+// spec stat by owner decision; the [S] tag and tilde still mark the figure.
+if (!errors.some((e) => e.includes("Provenance statement"))) notes.push("Both provenance statements present.");
 
 // ---------- 7. Deterministic GEO 100/100 release contract ----------
 // These thresholds mirror geo-audit v1.3.0, the engine behind willaicite.com.
@@ -244,7 +245,7 @@ if (/^renders\/$/m.test(deployIgnore)) errors.push("GEO entity metadata: renders
 // versus estimated stays impossible to confuse. Checks: no em dash in visible
 // text (copy blocks included, they are user-visible strings), snapshot label on
 // cited figures, word tags agreeing with slot classes, and the tilde rule.
-const EXPECTED_GUIDE_FIG_SLOTS = 4; // hero stats: 1 measured + 1 estimate; inline: 1 estimate (caveman) + 1 measured (RTK total)
+const EXPECTED_GUIDE_FIG_SLOTS = 5; // hero stats: 1 measured + 1 estimate; inline: 1 estimate (caveman) + 1 measured (RTK total) + 1 spec (AXI vendor figure)
 if (!existsSync(GUIDE_FILE)) {
   errors.push("guide.html missing. Application note AN-0001 is linked from the datasheet.");
 } else {
