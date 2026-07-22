@@ -1,3 +1,9 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/stk", "destination": "/stk/", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/stk/:path*", "destination": "https://ryanportfolio.github.io/STK/:path*" }
+  ]
 }
