@@ -582,9 +582,10 @@
         <p class="src">rtk gain, snapshot 2026-07-22, global scope</p>
       </div>
       <div class="stat">
-        <span class="badge">Vendor spec</span>
-        <span class="fig fig-s" data-figure data-kind="spec"><span class="tag">spec</span><span class="val num">~1M</span></span>
-        <p class="what">tokens in the context window on current Opus and Sonnet models.</p>
+        <span class="badge">Showpiece</span>
+        <span class="fig fig-m" data-figure data-kind="measured" id="stk-live"><span class="tag">measured</span><span class="val num">LIVE</span></span>
+        <p class="what">tokens kept out of context by STK, a hook that clamps oversized file reads. Running meter, updated daily.</p>
+        <p class="src"><a href="/stk/">STK &middot; Session Token Killer &#8594;</a></p>
       </div>
 <!-- END:hero-stats -->
     </div>
@@ -925,6 +926,22 @@
     }
     window.addEventListener('scroll', update, { passive: true });
     update();
+  })();
+
+  // STK showpiece: swap the static LIVE label for the current meter reading.
+  // Same-origin fetch through the /stk proxy; on any failure the static
+  // fallback text stands.
+  (function () {
+    var fig = document.getElementById('stk-live');
+    var el = fig && fig.querySelector('.val');
+    if (!el) return;
+    fetch('/stk/data/gain.json', { cache: 'no-cache' })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (d) {
+        var n = d && d.stk && d.stk.est_tokens;
+        if (typeof n === 'number' && n > 0) el.textContent = n.toLocaleString('en-US');
+      })
+      .catch(function () {});
   })();
 </script>
 </body>

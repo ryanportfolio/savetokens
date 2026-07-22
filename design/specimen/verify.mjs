@@ -15,7 +15,7 @@ const OG_IMAGE_FILE = join(HERE, "renders", "desktop-1440.png");
 
 // ---- Expected counts, encoded as constants (contract-derived) ----
 const EXPECTED_TIP_ENTRIES = 1; // one complete how-it-works entry
-const EXPECTED_FIG_SLOTS = 13; // hero 3 (2 measured + 1 spec) + table 8 (7 measured incl totals + 1 estimate) + feature 2 measured
+const EXPECTED_FIG_SLOTS = 13; // hero 3 (2 measured + 1 STK showpiece, measured) + table 8 (7 measured incl totals + 1 estimate) + feature 2 measured
 const EXPECTED_DATA_FIGURES = 13; // every figure slot declares data-figure + data-kind
 // The dated label is bound to the committed snapshot, so a stale apply run
 // (HTML not regenerated after a new export) fails this gate.
@@ -111,10 +111,11 @@ if (dataFigCount !== EXPECTED_DATA_FIGURES) {
 
 // ---------- 6. Provenance statements present (plain-language successors of the
 // reserved footnote resolutions: measured, estimate, vendor spec) ----------
+// The vendor-spec provenance ("not measured here") retired with the spec
+// figure when the STK showpiece replaced the vendor-spec hero card; if a
+// fig-s slot returns, restore that check with it.
 if (!html.includes("measured in production")) errors.push('Provenance statement "measured in production" missing.');
 if (!html.includes("no before-and-after log")) errors.push('Provenance statement "no before-and-after log" missing.');
-// The vendor-spec statement ("not measured here") was dropped from the hero
-// spec stat by owner decision; the [S] tag and tilde still mark the figure.
 if (!errors.some((e) => e.includes("Provenance statement"))) notes.push("Both provenance statements present.");
 
 // ---------- 7. Deterministic GEO 100/100 release contract ----------
