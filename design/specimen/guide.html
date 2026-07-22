@@ -79,7 +79,7 @@
           "name": "How much does caveman mode save?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The logged caveman replies total 72.9 million tokens across 728 sessions, saving at roughly 73 million tokens. The style compresses wording, but caveats, code, and error strings are preserved exactly."
+            "text": "The logged caveman replies total 73.5 million tokens across 737 sessions, saving at roughly 73 million tokens. The style compresses wording, but caveats, code, and error strings are preserved exactly."
           }
         },
         {
@@ -614,9 +614,9 @@
       <!-- LIVE:guide-hero-measured -->
       <div class="stat">
         <span class="badge">Measured</span>
-        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">77.9</span><span class="unit">%</span></span>
+        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">77.8</span><span class="unit">%</span></span>
         <p class="what">of output tokens removed by filtering command output before the agent reads it.</p>
-        <p class="src">rtk gain, snapshot 2026-07-22, 97,810 commands, 20.1M tokens saved</p>
+        <p class="src">rtk gain, snapshot 2026-07-22, 98,090 commands, 20.1M tokens saved</p>
       </div>
 <!-- END:guide-hero-measured -->
       <!-- LIVE:guide-hero-caveman -->
@@ -893,7 +893,7 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
 
       <h3>Filter command output before the agent reads it</h3>
       <!-- LIVE:guide-rtk-inline -->
-      <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering removed <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">77.9</span></span>% of output tokens across 97,810 commands (snapshot 2026-07-22). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>
+      <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering removed <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">77.8</span></span>% of output tokens across 98,090 commands (snapshot 2026-07-22). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>
 <!-- END:guide-rtk-inline -->
       <p>The tool behind those numbers is <a href="https://github.com/rtk-ai/rtk">RTK</a>, an open-source proxy that condenses command output before the agent reads it.</p>
 
@@ -945,7 +945,7 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
         </div>
         <div class="qa-a">
           <!-- LIVE:guide-faq-caveman -->
-      <p>The logged caveman replies total 72.9 million tokens across 728 sessions, saving at roughly 73 million tokens.</p>
+      <p>The logged caveman replies total 73.5 million tokens across 737 sessions, saving at roughly 73 million tokens.</p>
       <p>The style compresses wording, but caveats, code, and error strings are preserved exactly.</p>
 <!-- END:guide-faq-caveman -->
         </div>

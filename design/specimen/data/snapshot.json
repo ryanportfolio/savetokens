@@ -3,20 +3,20 @@
   "source": "rtk gain history.db",
   "scope": "global",
   "summary": {
-    "commands": 97810,
-    "inputTokens": 25770553,
-    "outputTokens": 5705899,
-    "savedTokens": 20075949,
-    "savedPct": 77.9
+    "commands": 98090,
+    "inputTokens": 25840503,
+    "outputTokens": 5745438,
+    "savedTokens": 20106611,
+    "savedPct": 77.81
   },
   "rows": [
     {
       "family": "read",
       "display": "rtk read",
       "shortLabel": "read",
-      "n": 934,
-      "savedTokens": 9704071,
-      "typPct": 23
+      "n": 942,
+      "savedTokens": 9724393,
+      "typPct": 23.3
     },
     {
       "family": "git diff",
@@ -38,9 +38,9 @@
       "family": "grep",
       "display": "rtk grep",
       "shortLabel": "grep",
-      "n": 1773,
-      "savedTokens": 899638,
-      "typPct": 21.4
+      "n": 1786,
+      "savedTokens": 900491,
+      "typPct": 21.3
     },
     {
       "family": "vitest",
@@ -66,11 +66,11 @@
     "typPct": 99.2
   },
   "caveman": {
-    "sessions": 728,
-    "replies": 62922,
-    "outputTokens": 72895484,
+    "sessions": 737,
+    "replies": 63580,
+    "outputTokens": 73496022,
     "assumedReduction": 0.5,
-    "estSavedTokens": 72895484
+    "estSavedTokens": 73496022
   },
   "daily": [
     {
@@ -219,11 +219,11 @@
     },
     {
       "date": "2026-07-22",
-      "commands": 495,
-      "inputTokens": 406395,
-      "outputTokens": 147002,
-      "savedTokens": 259803,
-      "savedPct": 63.93
+      "commands": 774,
+      "inputTokens": 476345,
+      "outputTokens": 186538,
+      "savedTokens": 290465,
+      "savedPct": 60.98
     }
   ]
 }
