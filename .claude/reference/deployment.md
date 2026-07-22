@@ -7,6 +7,7 @@
 - Host: Vercel, project `savetokens`, team scope `sardonicasts-projects`, production domain `https://savetokens.tips`.
 - **Git integration is connected (since 2026-07-19).** Merging to `main` auto-deploys to production. Project `rootDirectory` is `design/specimen` (set via API PATCH; `vercel git connect` had left it at `.`, which would have deployed the repo root).
 - Deploy root: `design/specimen/` (static files, no build step). `vercel.json` sets `cleanUrls: true`, so `guide.html` serves at `/guide`.
+- `/stk` is the STK site, proxied: `vercel.json` redirects `/stk` -> `/stk/` and rewrites `/stk/:path(.*)` to `https://ryanportfolio.github.io/STK/:path` (the STK repo's GitHub Pages deploy). Content updates land via pushes to ryanportfolio/STK main; no deploy here needed. Gotcha: `:path*` does NOT match the empty path after a trailing slash — the `(.*)` regex form is required or `/stk/` 404s.
 - `.vercelignore` excludes `verify.mjs` and `scripts/`; `renders/` must stay deployed (og:image, checked by verify). `data/snapshot.json` deploys on purpose: it is the public machine-readable figure feed.
 - Manual fallback (if git integration is off or a deploy must bypass it):
 

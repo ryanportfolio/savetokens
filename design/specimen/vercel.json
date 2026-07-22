@@ -4,6 +4,6 @@
     { "source": "/stk", "destination": "/stk/", "permanent": false }
   ],
   "rewrites": [
-    { "source": "/stk/:path*", "destination": "https://ryanportfolio.github.io/STK/:path*" }
+    { "source": "/stk/:path(.*)", "destination": "https://ryanportfolio.github.io/STK/:path" }
   ]
 }
