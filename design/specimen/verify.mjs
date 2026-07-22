@@ -232,7 +232,9 @@ if (stats.length >= 6 && blockquotes >= 3 && outbound.length >= 5) {
 
 if (!meta("author")) errors.push("GEO entity trust: meta author missing.");
 if (!/<a\b[^>]*href\s*=\s*["']\/about["']/i.test(mainHtml)) errors.push("GEO entity trust: /about link missing.");
-if (!/<a\b[^>]*>[^<]*contact[^<]*<\/a>/i.test(mainHtml) && !/href\s*=\s*["'](?:mailto:|tel:|\/contact)/i.test(mainHtml)) {
+// The footer's contact route is the owner's site fullbuild.ai (owner decision,
+// replacing the GitHub contact link); accept it alongside mailto/tel//contact.
+if (!/<a\b[^>]*>[^<]*contact[^<]*<\/a>/i.test(mainHtml) && !/href\s*=\s*["'](?:mailto:|tel:|\/contact|https:\/\/fullbuild\.ai)/i.test(mainHtml)) {
   errors.push("GEO entity trust: reachable contact route missing.");
 }
 if (!/<link\b[^>]*rel\s*=\s*["'][^"']*icon/i.test(html)) errors.push("GEO entity trust: favicon declaration missing.");
