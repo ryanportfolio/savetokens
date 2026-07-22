@@ -17,7 +17,7 @@ Source for [savetokens.tips](https://savetokens.tips): token-saving techniques f
 >
 > | | |
 > |---|---|
-> | **[M] 77.8%** | of output tokens removed by filtering command output before the agent reads it. rtk gain, 97,766 commands, 19.9M tokens saved |
+> | **[M] 77.9%** | of output tokens removed by filtering command output before the agent reads it. rtk gain, 97,810 commands, 20.1M tokens saved |
 > | **[E] ~50%** | shorter replies with caveman mode. Deliberately lowballed target, est ~73M tokens, no before-and-after log |
 <!-- END:readme-figures -->
 

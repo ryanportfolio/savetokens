@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Token-saving techniques for AI coding agents | savetokens.tips</title>
-<meta name="description" content="Token-saving techniques for AI coding agents: 77.8% token reduction measured across 97,766 real commands. Measured numbers in green, estimates marked with a tilde.">
+<meta name="description" content="Token-saving techniques for AI coding agents: 77.9% token reduction measured across 97,810 real commands. Measured numbers in green, estimates marked with a tilde.">
 <meta name="author" content="Ryan">
 <link rel="canonical" href="https://savetokens.tips/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23F6F4EE'/%3E%3Ctext x='8' y='12' font-family='monospace' font-size='9' font-weight='600' text-anchor='middle' fill='%2316171A'%3EST%3C/text%3E%3C/svg%3E">
 <meta property="og:title" content="Token-saving techniques for AI coding agents | savetokens.tips">
-<meta property="og:description" content="Token-saving techniques for AI coding agents: 77.8% token reduction measured across 97,766 real commands. Measured numbers in green, estimates marked with a tilde.">
+<meta property="og:description" content="Token-saving techniques for AI coding agents: 77.9% token reduction measured across 97,810 real commands. Measured numbers in green, estimates marked with a tilde.">
 <meta property="og:image" content="https://savetokens.tips/renders/desktop-1440.png">
 <meta property="og:image:width" content="1440">
 <meta property="og:image:height" content="900">
@@ -42,7 +42,7 @@
       "@type": "TechArticle",
       "@id": "https://savetokens.tips/#article",
       "headline": "Token-saving techniques for AI coding agents",
-      "description": "Token-saving techniques for AI coding agents, with measured figures from logged raw-versus-filtered token deltas: 77.8% typical reduction across 97,766 real commands, snapshot 2026-07-22. Estimates carry no before-and-after log and are marked with a tilde.",
+      "description": "Token-saving techniques for AI coding agents, with measured figures from logged raw-versus-filtered token deltas: 77.9% typical reduction across 97,810 real commands, snapshot 2026-07-22. Estimates carry no before-and-after log and are marked with a tilde.",
       "url": "https://savetokens.tips/",
       "datePublished": "2026-07-18",
       "dateModified": "2026-07-22",
@@ -74,7 +74,7 @@
           "name": "How much does filtering command output reduce token usage?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Measured across 97,766 real commands in the snapshot dated 2026-07-22: routing shell output through the RTK filter reduced output tokens by 77.8 percent overall, 19.9 million tokens saved. Per-command savings range from 21.4 percent for grep to 99.2 percent for one large git diff. Every number's sample count and source is in the table on this page."
+            "text": "Measured across 97,810 real commands in the snapshot dated 2026-07-22: routing shell output through the RTK filter reduced output tokens by 77.9 percent overall, 20.1 million tokens saved. Per-command savings range from 21.4 percent for grep to 99.2 percent for one large git diff. Every number's sample count and source is in the table on this page."
           }
         },
         {
@@ -90,7 +90,7 @@
           "name": "Which commands save the most tokens?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Commands with large raw output filter best: git diff saved 99.2 percent (n=3), vitest run saved 92.4 percent (n=46), ls -la saved 53.8 percent (n=19). Figures with n at or below 3 are single observations, not distributions. High-frequency commands save a lower percentage but large absolute totals: file reads saved 22.8 percent, 9.7 million tokens, across 932 runs."
+            "text": "Commands with large raw output filter best: git diff saved 99.2 percent (n=3), vitest run saved 92.4 percent (n=46), ls -la saved 53.8 percent (n=19). Figures with n at or below 3 are single observations, not distributions. High-frequency commands save a lower percentage but large absolute totals: file reads saved 23.0 percent, 9.7 million tokens, across 934 runs."
           }
         },
         {
@@ -571,13 +571,13 @@
       <!-- LIVE:hero-stats -->
       <div class="stat">
         <span class="badge">Measured</span>
-        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">77.8</span><span class="unit">%</span></span>
+        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">77.9</span><span class="unit">%</span></span>
         <p class="what">of output tokens removed across every command routed through the filter.</p>
-        <p class="src">rtk gain, snapshot 2026-07-22, 97,766 commands</p>
+        <p class="src">rtk gain, snapshot 2026-07-22, 97,810 commands</p>
       </div>
       <div class="stat">
         <span class="badge">Measured</span>
-        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">19.9M</span></span>
+        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">20.1M</span></span>
         <p class="what">tokens saved in total by filtering command output before the agent reads it.</p>
         <p class="src">rtk gain, snapshot 2026-07-22, global scope</p>
       </div>
@@ -612,9 +612,9 @@
           <!-- LIVE:table-rows -->
           <tr class="row-m">
             <td class="cmd" data-label="Command">rtk read</td>
-            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">22.8</span></span>%</td>
+            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">23.0</span></span>%</td>
             <td class="n" data-label="Total saved">9.7M</td>
-            <td class="n" data-label="Sample">n=932</td>
+            <td class="n" data-label="Sample">n=934</td>
             <td class="note" data-label="Notes">Biggest total saver in the log</td>
           </tr>
           <tr class="row-m">
@@ -634,8 +634,8 @@
           <tr class="row-m">
             <td class="cmd" data-label="Command">rtk grep</td>
             <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">21.4</span></span>%</td>
-            <td class="n" data-label="Total saved">723.3K</td>
-            <td class="n" data-label="Sample">n=1,766</td>
+            <td class="n" data-label="Total saved">899.6K</td>
+            <td class="n" data-label="Sample">n=1,773</td>
             <td class="note" data-label="Notes">The most frequent command in the log</td>
           </tr>
           <tr class="row-m">
@@ -661,9 +661,9 @@
           </tr>
           <tr class="row-m totals">
             <td class="cmd" data-label="Command">All commands</td>
-            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">77.8</span></span>%</td>
-            <td class="n" data-label="Total saved">19.9M</td>
-            <td class="n" data-label="Sample">n=97,766</td>
+            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">77.9</span></span>%</td>
+            <td class="n" data-label="Total saved">20.1M</td>
+            <td class="n" data-label="Sample">n=97,810</td>
             <td class="note" data-label="Notes">Everything routed through the filter</td>
           </tr>
 <!-- END:table-rows -->
@@ -703,14 +703,14 @@
         <!-- measured points: x = 110 + 172 * log10(n), y = 250 - 2.3 * pct.
              Marker area encodes sample confidence: r = 2.5 + 1.5 * log10(n).
              Generated from data/snapshot.json, snapshot 2026-07-22. -->
-        <circle class="pt-m" cx="621" cy="198" r="7"/><!-- read 22.8% n=932 -->
-        <text class="ptlbl" x="613" y="190" text-anchor="end">read, n=932</text>
+        <circle class="pt-m" cx="621" cy="197" r="7"/><!-- read 23.0% n=934 -->
+        <text class="ptlbl" x="613" y="189" text-anchor="end">read, n=934</text>
         <circle class="pt-m" cx="192" cy="22" r="3.2"/><!-- diff 99.2% n=3 -->
         <text class="ptlbl" x="200" y="36" text-anchor="start">diff, n=3</text>
         <circle class="pt-m" cx="110" cy="20" r="2.5"/><!-- log 100.0% n=1 -->
         <text class="ptlbl" x="118" y="34" text-anchor="start">log, n=1</text>
-        <circle class="pt-m" cx="668" cy="201" r="7.4"/><!-- grep 21.4% n=1766 -->
-        <text class="ptlbl" x="660" y="204" text-anchor="end">grep, n=1,766</text>
+        <circle class="pt-m" cx="669" cy="201" r="7.4"/><!-- grep 21.4% n=1773 -->
+        <text class="ptlbl" x="661" y="203" text-anchor="end">grep, n=1,773</text>
         <circle class="pt-m" cx="396" cy="37" r="5"/><!-- vitest 92.4% n=46 -->
         <text class="ptlbl" x="404" y="51" text-anchor="start">vitest, n=46</text>
         <circle class="pt-m" cx="330" cy="126" r="4.4"/><!-- ls 53.8% n=19 -->
@@ -822,7 +822,7 @@
         </div>
         <div class="qa-a">
           <!-- LIVE:faq-q1 -->
-      <p>Measured across 97,766 real commands in the snapshot dated <span class="num">2026-07-22</span>: routing shell output through the RTK filter reduced output tokens by 77.8 percent overall, 19.9 million tokens saved. Per-command savings range from 21.4 percent for grep to 99.2 percent for one large git diff. Every number's sample count and source is in the table above.</p>
+      <p>Measured across 97,810 real commands in the snapshot dated <span class="num">2026-07-22</span>: routing shell output through the RTK filter reduced output tokens by 77.9 percent overall, 20.1 million tokens saved. Per-command savings range from 21.4 percent for grep to 99.2 percent for one large git diff. Every number's sample count and source is in the table above.</p>
 <!-- END:faq-q1 -->
         </div>
       </div>
@@ -843,7 +843,7 @@
         </div>
         <div class="qa-a">
           <!-- LIVE:faq-q3 -->
-      <p>Commands with large raw output filter best: git diff saved 99.2 percent (n=3), vitest run saved 92.4 percent (n=46), ls -la saved 53.8 percent (n=19). Figures with n at or below 3 are single observations, not distributions. High-frequency commands save a lower percentage but large absolute totals: file reads saved 22.8 percent, 9.7 million tokens, across 932 runs.</p>
+      <p>Commands with large raw output filter best: git diff saved 99.2 percent (n=3), vitest run saved 92.4 percent (n=46), ls -la saved 53.8 percent (n=19). Figures with n at or below 3 are single observations, not distributions. High-frequency commands save a lower percentage but large absolute totals: file reads saved 23.0 percent, 9.7 million tokens, across 934 runs.</p>
 <!-- END:faq-q3 -->
         </div>
       </div>
