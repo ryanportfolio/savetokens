@@ -113,8 +113,9 @@ if (dataFigCount !== EXPECTED_DATA_FIGURES) {
 // reserved footnote resolutions: measured, estimate, vendor spec) ----------
 if (!html.includes("measured in production")) errors.push('Provenance statement "measured in production" missing.');
 if (!html.includes("no before-and-after log")) errors.push('Provenance statement "no before-and-after log" missing.');
-if (!html.includes("not measured here")) errors.push('Provenance statement "not measured here" missing.');
-if (!errors.some((e) => e.includes("Provenance statement"))) notes.push("All three provenance statements present.");
+// The vendor-spec statement ("not measured here") was dropped from the hero
+// spec stat by owner decision; the [S] tag and tilde still mark the figure.
+if (!errors.some((e) => e.includes("Provenance statement"))) notes.push("Both provenance statements present.");
 
 // ---------- 7. Deterministic GEO 100/100 release contract ----------
 // These thresholds mirror geo-audit v1.3.0, the engine behind willaicite.com.
