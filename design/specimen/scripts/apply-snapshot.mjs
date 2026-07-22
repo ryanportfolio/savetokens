@@ -109,13 +109,13 @@ index = replaceBlock(
   index,
   "hero-stats",
   `      <div class="stat">
-        <span class="badge">Measured</span>
+        <span class="badge">RTK</span>
         <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">${pct1(S.savedPct)}</span><span class="unit">%</span></span>
         <p class="what">of output tokens removed across every command routed through the filter.</p>
         <p class="src">rtk gain, snapshot ${DATE}, ${cnt(S.commands)} commands</p>
       </div>
       <div class="stat">
-        <span class="badge">Measured</span>
+        <span class="badge">RTK</span>
         <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">${tok(S.savedTokens)}</span></span>
         <p class="what">tokens saved in total by filtering command output before the agent reads it.</p>
         <p class="src">rtk gain, snapshot ${DATE}, global scope</p>
@@ -123,7 +123,7 @@ index = replaceBlock(
       <div class="stat">
         <span class="badge">STK</span>
         <span class="fig fig-m" data-figure data-kind="measured" id="stk-live"><span class="tag">measured</span><span class="val num">LIVE</span></span>
-        <p class="what">tokens kept out of context by STK, a hook that clamps oversized file reads. Running meter, updated daily.</p>
+        <p class="what">tokens kept out of context by STK, a hook that clamps oversized file reads.</p>
         <p class="src"><a href="/stk/">STK &middot; Session Token Killer &#8594;</a></p>
       </div>`,
   "index.html"

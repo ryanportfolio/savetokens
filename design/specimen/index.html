@@ -254,11 +254,19 @@
   .hero .lede strong { color: var(--ink); }
 
   /* ---------- Stat cards ---------- */
+  .stats-lead {
+    margin: 28px 0 0;
+    font-family: var(--font-cond);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
   .stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
-    margin: 28px 0 0;
+    margin: 12px 0 0;
   }
   @media (max-width: 760px) { .stats { grid-template-columns: 1fr; } }
   .stat {
@@ -566,17 +574,18 @@
   <section class="hero">
     <h1>Token-saving techniques for AI coding agents</h1>
     <p class="lede">Token-saving techniques for AI coding agents are the habits and tools that shrink how much the model reads and writes, without losing anything it needs.</p>
+    <p class="stats-lead">My sessions have saved:</p>
 
     <div class="stats">
       <!-- LIVE:hero-stats -->
       <div class="stat">
-        <span class="badge">Measured</span>
+        <span class="badge">RTK</span>
         <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">77.9</span><span class="unit">%</span></span>
         <p class="what">of output tokens removed across every command routed through the filter.</p>
         <p class="src">rtk gain, snapshot 2026-07-22, 97,810 commands</p>
       </div>
       <div class="stat">
-        <span class="badge">Measured</span>
+        <span class="badge">RTK</span>
         <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">20.1M</span></span>
         <p class="what">tokens saved in total by filtering command output before the agent reads it.</p>
         <p class="src">rtk gain, snapshot 2026-07-22, global scope</p>
@@ -584,7 +593,7 @@
       <div class="stat">
         <span class="badge">STK</span>
         <span class="fig fig-m" data-figure data-kind="measured" id="stk-live"><span class="tag">measured</span><span class="val num">LIVE</span></span>
-        <p class="what">tokens kept out of context by STK, a hook that clamps oversized file reads. Running meter, updated daily.</p>
+        <p class="what">tokens kept out of context by STK, a hook that clamps oversized file reads.</p>
         <p class="src"><a href="/stk/">STK &middot; Session Token Killer &#8594;</a></p>
       </div>
 <!-- END:hero-stats -->
