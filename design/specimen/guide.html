@@ -856,6 +856,11 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
 <!-- END:guide-rtk-inline -->
       <p>The tool behind those numbers is <a href="https://github.com/rtk-ai/rtk">RTK</a>, an open-source proxy that condenses command output before the agent reads it.</p>
 
+      <h3>Clamp oversized file reads</h3>
+      <p>Shell output is one flood. Whole-file reads are the other: one oversized read can dump thousands of lines into context when the agent needed a dozen.</p>
+      <p><a href="/stk">STK</a> is a Claude Code hook that intercepts big reads and hands the agent a short line-numbered outline instead, with instructions to fetch just the ranges it needs. Small files, scoped reads, and anything it cannot analyze pass through untouched.</p>
+      <p>Live clamp counters and the measurement that motivated it are at <a href="/stk">savetokens.tips/stk</a>.</p>
+
       <h3>Choose tools designed for agents</h3>
       <p>RTK trims what a command prints after the fact. The other half of the fix is tools that print less in the first place.</p>
       <p><a href="https://axi.md">AXI</a> is a short set of design rules for command-line tools that agents, not people, will read. A tool built to those rules returns the three or four fields a task needs instead of a full JSON dump, combines common steps into one call, and cuts long content short with a note saying how much was left out.</p>
@@ -949,6 +954,7 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
         <li><a href="https://corewise.academy/guides/stop-hitting-your-token-limit/">Stop Hitting Your Token Limit</a> (CoreWise Academy): the same problem worked from the budget side. Audit your usage, cut consumption, downshift models for routine work, and weigh the riskier tactics honestly. Covers caveman mode and output filtering too.</li>
         <li><a href="https://code.claude.com/docs/en/best-practices">Claude Code best practices</a> (Anthropic): the vendor's own guidance on context management, instruction files, and workflow.</li>
         <li><a href="https://github.com/rtk-ai/rtk">RTK on GitHub</a>: the open-source output filter behind the measured figures on this site.</li>
+        <li><a href="/stk">STK</a>: a Claude Code hook that clamps oversized file reads to a short outline, with live counters and methodology.</li>
         <li><a href="https://axi.md">AXI</a>: design rules for agent-facing command-line tools, with drop-in replacements for GitHub and browser work that return less output to begin with.</li>
       </ul>
     </div>
