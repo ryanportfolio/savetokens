@@ -244,7 +244,7 @@ if (/^renders\/$/m.test(deployIgnore)) errors.push("GEO entity metadata: renders
 // versus estimated stays impossible to confuse. Checks: no em dash in visible
 // text (copy blocks included, they are user-visible strings), snapshot label on
 // cited figures, word tags agreeing with slot classes, and the tilde rule.
-const EXPECTED_GUIDE_FIG_SLOTS = 4; // hero stats: 1 measured + 1 estimate; inline: 1 estimate (caveman) + 1 measured (RTK total)
+const EXPECTED_GUIDE_FIG_SLOTS = 5; // hero stats: 1 measured + 1 estimate; inline: 1 estimate (caveman) + 1 measured (RTK total) + 1 spec (AXI vendor figure)
 if (!existsSync(GUIDE_FILE)) {
   errors.push("guide.html missing. Application note AN-0001 is linked from the datasheet.");
 } else {
