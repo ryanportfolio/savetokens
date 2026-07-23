@@ -456,6 +456,69 @@
   }
 
   /* ---------- Block diagram ---------- */
+  /* Guide CTA: a terminal window. Dark in both themes, so the palette is the
+     site's dark values as literals; green marks only the actionable. */
+  a.ctaterm {
+    display: block;
+    margin: 48px 0;
+    border: 1px solid #3A3C41;
+    background: #141519;
+    color: #ECEAE2;
+    text-decoration: none;
+    font-family: var(--font-mono);
+    transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  a.ctaterm:hover, a.ctaterm:focus-visible {
+    border-color: #3FB489;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+  }
+  .ctaterm .chrome {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-bottom: 1px solid #3A3C41;
+  }
+  .ctaterm .dots { display: flex; gap: 5px; }
+  .ctaterm .dots span { width: 9px; height: 9px; border-radius: 50%; background: #3A3C41; display: block; }
+  .ctaterm .termtitle {
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #A2A5AC;
+  }
+  .ctaterm .termbody { display: block; padding: 26px 24px 24px; }
+  .ctaterm .termcmd {
+    display: block;
+    font-size: clamp(1.5rem, 4.5vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .ctaterm .prompt { color: #3FB489; }
+  .ctaterm .cmdpath { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+  .ctaterm .cursor {
+    display: inline-block;
+    width: 0.55em;
+    height: 1.05em;
+    margin-left: 0.18em;
+    vertical-align: text-bottom;
+    background: #3FB489;
+    animation: ctablink 1.1s steps(2, start) infinite;
+  }
+  a.ctaterm:hover .cursor, a.ctaterm:focus-visible .cursor { animation: none; }
+  @keyframes ctablink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .ctaterm .cursor { animation: none; } }
+  .ctaterm .termout {
+    display: block;
+    margin-top: 14px;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: #ECEAE2;
+  }
+  .ctaterm .termout.dim { margin-top: 6px; color: #A2A5AC; }
+  @media (max-width: 540px) { .ctaterm .termbody { padding: 20px 16px 18px; } }
+
   /* RTK repo card: browser-chrome frame around GitHub's live OpenGraph image. */
   a.repocard {
     display: block;
@@ -889,6 +952,22 @@
 <!-- END:feature -->
     </div>
   </section>
+
+  <!-- ===================== GUIDE CTA ===================== -->
+  <!-- Terminal conceit: the page measures; the guide is the next command you
+       run. Dark in both themes (terminals are), palette = the site's own dark
+       values, green reserved for the actionable. -->
+  <a class="ctaterm" href="/guide" aria-label="Open the practical guide">
+    <span class="chrome" aria-hidden="true">
+      <span class="dots"><span></span><span></span><span></span></span>
+      <span class="termtitle">next session</span>
+    </span>
+    <span class="termbody">
+      <span class="termcmd" aria-hidden="true"><span class="prompt">$</span> open <span class="cmdpath">/guide</span><span class="cursor"></span></span>
+      <span class="termout">&#8594; the practical guide: daily habits, caveman mode, RTK setup, copy-paste rules for your agent</span>
+      <span class="termout dim"># everything measured on this page, turned into steps you can run today</span>
+    </span>
+  </a>
 
   <!-- ===================== TECHNIQUES ===================== -->
   <section class="section" id="techniques">
