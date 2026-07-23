@@ -14,6 +14,11 @@ const ROOT = join(HERE, "..");
 const snap = JSON.parse(readFileSync(join(ROOT, "data", "snapshot.json"), "utf8"));
 
 const DATE = snap.snapshotDate;
+// Coarse "July 2026" label for the STK card; the live fetch overwrites it with
+// the month of the meter reading's own generated_at.
+const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"];
+const MONTH_YEAR = `${MONTH_NAMES[Number(DATE.slice(5, 7)) - 1]} ${DATE.slice(0, 4)}`;
 const S = snap.summary;
 const rows = snap.rows;
 const diff = snap.gitDiffTop;
@@ -124,6 +129,7 @@ index = replaceBlock(
         <span class="badge">STK</span>
         <span class="fig fig-m" data-figure data-kind="measured" id="stk-live"><span class="tag">measured</span><span class="val num">LIVE</span></span>
         <p class="what">tokens kept out of context by STK, a hook that clamps oversized file reads.</p>
+        <p class="src">as of <span id="stk-asof">${MONTH_YEAR}</span></p>
         <p class="src"><strong>STK &middot; Session Token Killer &#8594;</strong></p>
       </a>`,
   "index.html"

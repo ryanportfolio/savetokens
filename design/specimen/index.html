@@ -348,6 +348,8 @@
     color: var(--graphite);
     margin: 8px 0 0;
   }
+  /* Second source line (the STK card link) sits tight under the first. */
+  .stat .src + .src { margin-top: 3px; }
   .fig-m .val { color: var(--measured); }
   .fig-e .val, .fig-s .val { color: var(--graphite); font-weight: 500; }
   .fig .tag { position: absolute; left: -9999px; }
@@ -454,6 +456,59 @@
   }
 
   /* ---------- Block diagram ---------- */
+  /* RTK repo card: browser-chrome frame around GitHub's live OpenGraph image. */
+  a.repocard {
+    display: block;
+    max-width: 560px;
+    margin: 24px auto 8px;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    background: var(--paper);
+    transition: border-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  a.repocard:hover {
+    border-color: var(--ink);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  }
+  .repocard .chrome {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    background: var(--faint);
+  }
+  .repocard .dots { display: flex; gap: 5px; }
+  .repocard .dots span {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--rule); display: block;
+  }
+  .repocard .urlbar {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--graphite);
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 5px;
+    padding: 3px 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .repocard img { display: block; width: 100%; height: auto; }
+  .repocard .repocap {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--graphite);
+    padding: 8px 12px;
+    border-top: 1px solid var(--rule);
+    margin: 0;
+  }
+  .repocard .repocap strong { color: var(--ink); }
   .blockdiag {
     display: flex;
     align-items: center;
@@ -643,6 +698,7 @@
         <span class="badge">STK</span>
         <span class="fig fig-m" data-figure data-kind="measured" id="stk-live"><span class="tag">measured</span><span class="val num">LIVE</span></span>
         <p class="what">tokens kept out of context by STK, a hook that clamps oversized file reads.</p>
+        <p class="src">as of <span id="stk-asof">July 2026</span></p>
         <p class="src"><strong>STK &middot; Session Token Killer &#8594;</strong></p>
       </a>
 <!-- END:hero-stats -->
@@ -807,6 +863,15 @@
         <li>failing tests and error lines, quoted exactly</li>
       </ul>
     </div>
+
+    <a class="repocard" href="https://github.com/rtk-ai/rtk">
+      <span class="chrome" aria-hidden="true">
+        <span class="dots"><span></span><span></span><span></span></span>
+        <span class="urlbar">github.com/rtk-ai/rtk</span>
+      </span>
+      <img src="https://opengraph.githubassets.com/1/rtk-ai/rtk" alt="RTK repository on GitHub: CLI proxy that reduces LLM token consumption by 60-90% on common dev commands. Single Rust binary, zero dependencies." width="1200" height="600" loading="lazy">
+      <p class="repocap"><strong>rtk-ai/rtk</strong> on GitHub: the open-source filter behind every measured number on this page &#8594;</p>
+    </a>
 
     <div class="feature">
       <!-- LIVE:feature -->
@@ -1012,18 +1077,26 @@
     });
   })();
 
-  // STK showpiece: swap the static LIVE label for the current meter reading.
-  // Same-origin fetch through the /stk proxy; on any failure the static
-  // fallback text stands.
+  // STK showpiece: swap the static LIVE label for the current meter reading and
+  // stamp the reading's own date. Same-origin fetch through the /stk proxy; on
+  // any failure the static fallback text and snapshot date stand.
   (function () {
     var fig = document.getElementById('stk-live');
     var el = fig && fig.querySelector('.val');
+    var asof = document.getElementById('stk-asof');
     if (!el) return;
     fetch('/stk/data/gain.json', { cache: 'no-cache' })
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(function (d) {
         var n = d && d.stk && d.stk.est_tokens;
         if (typeof n === 'number' && n > 0) el.textContent = n.toLocaleString('en-US');
+        var at = d && d.generated_at;
+        var m = typeof at === 'string' && at.match(/^(\d{4})-(\d{2})-\d{2}/);
+        if (asof && m) {
+          var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'];
+          asof.textContent = MONTHS[Number(m[2]) - 1] + ' ' + m[1];
+        }
       })
       .catch(function () {});
   })();
