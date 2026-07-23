@@ -522,6 +522,57 @@
   }
   .section h3:first-of-type { margin-top: 0; }
 
+  /* ---------- Advanced tactics ---------- */
+  .tactics { margin-top: 20px; }
+  .tactic {
+    display: grid;
+    grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+    column-gap: 40px;
+    align-items: start;
+    padding: 20px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .tactic:first-of-type { border-top: 2px solid var(--ink); }
+  .tactic-q {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 10px;
+    align-items: baseline;
+  }
+  .tactic .tnum {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    color: var(--graphite);
+    text-decoration: none;
+  }
+  .tactic .tnum:hover { text-decoration: underline; }
+  .tactic h3 {
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin: 0;
+  }
+  @media (max-width: 760px) {
+    .tactic h3 { font-size: 1.125rem; }
+  }
+  .tactic-a { max-width: 62ch; font-size: 0.9375rem; }
+  .tactic-a p { margin: 0 0 12px; }
+  .tactic-a > :last-child { margin-bottom: 0; }
+  @media (max-width: 760px) {
+    .tactic { grid-template-columns: 1fr; row-gap: 10px; padding: 16px 0; }
+  }
+
+  /* ---------- Further reading list ---------- */
+  #reading .prose ul { list-style: none; padding: 0; margin: 0; }
+  #reading .prose li {
+    padding: 12px 0;
+    margin: 0;
+    border-top: 1px solid var(--rule);
+    max-width: 72ch;
+  }
+  #reading .prose li:first-child { border-top: none; padding-top: 0; }
+  #reading .prose li > a:first-child { font-weight: 600; }
+
   /* ---------- FAQ ---------- */
   .faq .qa {
     display: grid;
@@ -856,57 +907,136 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
     <h2>Advanced: models, subagents, workflows</h2>
     <div class="prose">
       <p>Once the basics are habit, the next savings come from routing work to the right place. These matter most on big projects and long working days.</p>
+    </div>
 
-      <h3>Audit before you optimize</h3>
-      <p>Look at where the tokens actually go before changing habits. In Claude Code, <code>/context</code> shows what is filling the window right now: system prompt, connected tools, instruction files, and conversation. Disable connected tools/MCP you rarely use.</p>
+    <div class="tactics">
+      <div class="tactic" id="adv-audit">
+        <div class="tactic-q">
+          <a class="tnum num" href="#adv-audit">01</a>
+          <h3>Audit before you optimize</h3>
+        </div>
+        <div class="tactic-a">
+          <p>Look at where the tokens actually go before changing habits. In Claude Code, <code>/context</code> shows what is filling the window right now: system prompt, connected tools, instruction files, and conversation. Disable connected tools/MCP you rarely use.</p>
+        </div>
+      </div>
 
-      <h3>Keep your instruction file thin</h3>
-      <p>Your <code>CLAUDE.md</code> or <code>AGENTS.md</code> is reloaded into context every single session, so every line in it is a recurring cost. Keep it as a <strong>wiki</strong>, and move detailed context into subfiles that are referenced only when the agent needs it.</p>
-      <p><strong>For memory</strong>, using <a href="https://github.com/ryanportfolio/AI-Firmware">AI Firmware</a> will have the model use its recall command. This points at short wiki-style notes and lets a session pull in only the note it needs. This keeps the always-on <code>CLAUDE.md</code> optimized and lean.</p>
-      <p><a href="https://github.com/ryanportfolio/AI-Firmware">AI-Firmware</a> is my project template built around a short rule-only kernel, a <code>.claude/reference/</code> index for more detail, auto memory with <code>/recall save</code>, and an <code>AGENTS.md</code> mirror so the same setup works in Codex. Use or clone as a starting point.</p>
+      <div class="tactic" id="adv-instruction-file">
+        <div class="tactic-q">
+          <a class="tnum num" href="#adv-instruction-file">02</a>
+          <h3>Keep your instruction file thin</h3>
+        </div>
+        <div class="tactic-a">
+          <p>Your <code>CLAUDE.md</code> or <code>AGENTS.md</code> is reloaded into context every single session, so every line in it is a recurring cost. Keep it as a <strong>wiki</strong>, and move detailed context into subfiles that are referenced only when the agent needs it.</p>
+          <p><strong>For memory</strong>, using <a href="https://github.com/ryanportfolio/AI-Firmware">AI Firmware</a> will have the model use its recall command. This points at short wiki-style notes and lets a session pull in only the note it needs. This keeps the always-on <code>CLAUDE.md</code> optimized and lean.</p>
+          <p><a href="https://github.com/ryanportfolio/AI-Firmware">AI-Firmware</a> is my project template built around a short rule-only kernel, a <code>.claude/reference/</code> index for more detail, auto memory with <code>/recall save</code>, and an <code>AGENTS.md</code> mirror so the same setup works in Codex. Use or clone as a starting point.</p>
+        </div>
+      </div>
 
-      <h3>Prune connectors and tools you are not using</h3>
-      <p>Tools: every MCP server you connect wastes tokens immediately, used or not. Disconnect servers the current project does not use.</p>
-      <p><code>/context</code> will show you exactly what each one costs.</p>
+      <div class="tactic" id="adv-connectors">
+        <div class="tactic-q">
+          <a class="tnum num" href="#adv-connectors">03</a>
+          <h3>Prune connectors and tools you are not using</h3>
+        </div>
+        <div class="tactic-a">
+          <p>Tools: every MCP server you connect wastes tokens immediately, used or not. Disconnect servers the current project does not use.</p>
+          <p><code>/context</code> will show you exactly what each one costs.</p>
+        </div>
+      </div>
 
-      <h3>Trim your skills, and drop the ones you never use</h3>
-      <p>Skills: models read a skill's description to decide whether it applies. That context is loaded every session whether or not the skill ever runs. Remove the ones a project does not use and shorten descriptions.</p>
-      <p>Skill descriptions: keep the trigger words that decide when the skill should fire and cut the rest. Skills on GitHub tend to ship with setup notes, examples, and options that <strong>may not apply to your repo</strong>, so cutting irrelevant = fewer tokens &amp; better output.</p>
-      <p>Compress the skill wording the same way caveman mode compresses replies.</p>
-      <p>When a skill's body is very large, split it into an instruction file: just a rule that points at subfiles that have all the detail, loaded only when needed.</p>
+      <div class="tactic" id="adv-skills">
+        <div class="tactic-q">
+          <a class="tnum num" href="#adv-skills">04</a>
+          <h3>Trim your skills, and drop the ones you never use</h3>
+        </div>
+        <div class="tactic-a">
+          <p>Skills: models read a skill's description to decide whether it applies. That context is loaded every session whether or not the skill ever runs. Remove the ones a project does not use and shorten descriptions.</p>
+          <p>Skill descriptions: keep the trigger words that decide when the skill should fire and cut the rest. Skills on GitHub tend to ship with setup notes, examples, and options that <strong>may not apply to your repo</strong>, so cutting irrelevant = fewer tokens &amp; better output.</p>
+          <p>Compress the skill wording the same way caveman mode compresses replies.</p>
+          <p>When a skill's body is very large, split it into an instruction file: just a rule that points at subfiles that have all the detail, loaded only when needed.</p>
+        </div>
+      </div>
 
-      <h3>Match the model to the task</h3>
-      <p>Efficiency: Avoid xhigh unless it's needed. Avoid max. Mechanical bulk work should be a cheaper model at reduced thinking.</p>
-      <p>The default (high) is the sweet spot for most work. Save xhigh for the hardest coding and long agentic tasks.</p>
+      <div class="tactic" id="adv-model">
+        <div class="tactic-q">
+          <a class="tnum num" href="#adv-model">05</a>
+          <h3>Match the model to the task</h3>
+        </div>
+        <div class="tactic-a">
+          <p>Efficiency: Avoid xhigh unless it's needed. Avoid max. Mechanical bulk work should be a cheaper model at reduced thinking.</p>
+          <p>The default (high) is the sweet spot for most work. Save xhigh for the hardest coding and long agentic tasks.</p>
+        </div>
+      </div>
 
-      <h3>What a subagent really costs</h3>
-      <p>A subagent starts with fresh context, rereads files your session already read, then spends more tokens reporting what it found back to you.</p>
-      <p>But the main transcript stays clean. Dispatch subagents for big projects.</p>
+      <div class="tactic" id="adv-subagents">
+        <div class="tactic-q">
+          <a class="tnum num" href="#adv-subagents">06</a>
+          <h3>What a subagent really costs</h3>
+        </div>
+        <div class="tactic-a">
+          <p>A subagent starts with fresh context, rereads files your session already read, then spends more tokens reporting what it found back to you.</p>
+          <p>But the main context stays clean. Dispatch subagents for big projects.</p>
+        </div>
+      </div>
 
-      <h3>Workflows, for jobs that outgrow one context</h3>
-      <p>Claude Code <code>/workflows</code> with Opus on medium thinking is great, for jobs that outgrow one context.</p>
-      <p>Subagents have fresh context and can bring different perspectives and angles that a single worker may miss.</p>
+      <div class="tactic" id="adv-workflows">
+        <div class="tactic-q">
+          <a class="tnum num" href="#adv-workflows">07</a>
+          <h3>Workflows, for jobs that outgrow one context</h3>
+        </div>
+        <div class="tactic-a">
+          <p>Claude Code <code>/workflows</code> with Opus on medium thinking is great, for jobs that outgrow one context.</p>
+          <p>Subagents have fresh context and can bring different perspectives and angles that a single worker may miss.</p>
+        </div>
+      </div>
 
-      <h3>Move repeatable work into scripts</h3>
-      <p>For deterministic work, have the agent write a script once. Only writing costs tokens; every later run is free &amp; more reliable.</p>
-      <p>For example I've run python scripts for hours that collect data, and then at the very end the model reviews.</p>
+      <div class="tactic" id="adv-scripts">
+        <div class="tactic-q">
+          <a class="tnum num" href="#adv-scripts">08</a>
+          <h3>Move repeatable work into scripts</h3>
+        </div>
+        <div class="tactic-a">
+          <p>For deterministic work, have the agent write a script once. Only writing costs tokens; every later run is free &amp; more reliable.</p>
+          <p>For example I've run python scripts for hours that collect data, and then at the very end the model reviews.</p>
+        </div>
+      </div>
 
-      <h3>Filter command output before the agent reads it</h3>
-      <!-- LIVE:guide-rtk-inline -->
+      <div class="tactic" id="adv-filter-output">
+        <div class="tactic-q">
+          <a class="tnum num" href="#adv-filter-output">09</a>
+          <h3>Filter command output before the agent reads it</h3>
+        </div>
+        <div class="tactic-a">
+          <!-- LIVE:guide-rtk-inline -->
       <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering removed <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">77.5</span></span>% of output tokens across 98,859 commands (snapshot 2026-07-23). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>
 <!-- END:guide-rtk-inline -->
-      <p>The tool behind those numbers is <a href="https://github.com/rtk-ai/rtk">RTK</a>, an open-source proxy that condenses command output before the agent reads it.</p>
+          <p>The tool behind those numbers is <a href="https://github.com/rtk-ai/rtk">RTK</a>, an open-source proxy that condenses command output before the agent reads it.</p>
+        </div>
+      </div>
 
-      <h3>Clamp oversized file reads</h3>
-      <p>Shell output is one flood. Whole-file reads are the other: one oversized read can dump thousands of lines into context when the agent needed a dozen.</p>
-      <p><a href="/stk">STK</a> is a Claude Code hook that intercepts big reads and hands the agent a short line-numbered outline instead, with instructions to fetch just the ranges it needs. Small files, scoped reads, and anything it cannot analyze pass through untouched.</p>
-      <p>Live clamp counters and the measurement that motivated it are at <a href="/stk">savetokens.tips/stk</a>.</p>
+      <div class="tactic" id="adv-clamp-reads">
+        <div class="tactic-q">
+          <a class="tnum num" href="#adv-clamp-reads">10</a>
+          <h3>Clamp oversized file reads</h3>
+        </div>
+        <div class="tactic-a">
+          <p>Shell output is one flood. Whole-file reads are the other: one oversized read can dump thousands of lines into context when the agent needed a dozen.</p>
+          <p><a href="/stk">STK</a> is a Claude Code hook that intercepts big reads and hands the agent a short line-numbered outline instead, with instructions to fetch just the ranges it needs. Small files, scoped reads, and anything it cannot analyze pass through untouched.</p>
+          <p>Live clamp counters and the measurement that motivated it are at <a href="/stk">savetokens.tips/stk</a>.</p>
+        </div>
+      </div>
 
-      <h3>Choose tools designed for agents</h3>
-      <p>RTK trims what a command prints after the fact. The other half of the fix is tools that print less in the first place.</p>
-      <p><a href="https://axi.md">AXI</a> is a short set of design rules for command-line tools that agents, not people, will read. A tool built to those rules returns the three or four fields a task needs instead of a full JSON dump, combines common steps into one call, and cuts long content short with a note saying how much was left out.</p>
-      <p>The project ships ready-to-use tools: <code>npx -y gh-axi</code> for GitHub work and <code>npx -y chrome-devtools-axi</code> for browser automation. Its compact output format claims <span class="fig fig-s" data-figure data-kind="spec"><span class="tag">spec</span><span class="val num">~40</span></span>% fewer tokens than the same data as JSON (vendor figure, not measured here, no before-and-after log in this site's data).</p>
-      <p>Read the principles and get the tools at <a href="https://axi.md">axi.md</a>.</p>
+      <div class="tactic" id="adv-agent-tools">
+        <div class="tactic-q">
+          <a class="tnum num" href="#adv-agent-tools">11</a>
+          <h3>Choose tools designed for agents</h3>
+        </div>
+        <div class="tactic-a">
+          <p>RTK trims what a command prints after the fact. The other half of the fix is tools that print less in the first place.</p>
+          <p><a href="https://axi.md">AXI</a> is a short set of design rules for command-line tools that agents, not people, will read. A tool built to those rules returns the three or four fields a task needs instead of a full JSON dump, combines common steps into one call, and cuts long content short with a note saying how much was left out.</p>
+          <p>The project ships ready-to-use tools: <code>npx -y gh-axi</code> for GitHub work and <code>npx -y chrome-devtools-axi</code> for browser automation. Its compact output format claims <span class="fig fig-s" data-figure data-kind="spec"><span class="tag">spec</span><span class="val num">~40</span></span>% fewer tokens than the same data as JSON (vendor figure, not measured here, no before-and-after log in this site's data).</p>
+          <p>Read the principles and get the tools at <a href="https://axi.md">axi.md</a>.</p>
+        </div>
+      </div>
     </div>
   </section>
 
