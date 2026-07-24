@@ -48,12 +48,29 @@ If `mergeable` is `CONFLICTING` or the merge is blocked by divergence:
 - Re-check `mergeable`, then proceed.
 
 ### 6. Merge into main
+
+Pick the merge method before merging — repos disable methods, and a blind
+`--merge` fails with `GraphQL: Merge commits are not allowed on this repository`.
+First time this session, check what the repo allows:
+
+```bash
+gh repo view --json mergeCommitAllowed,squashMergeAllowed,rebaseMergeAllowed
 ```
-gh pr merge <number> --merge
+
+Choose in this order, then reuse that choice for the rest of the session:
+
+1. The method the user explicitly asked for.
+2. The repo's own default if its `CLAUDE.md` states one (this repo: **squash**).
+3. Whatever is allowed — `--squash` if merge commits are off, `--merge` if squash is off.
+
+If the chosen method is disallowed, fall back to an allowed one and say so in the
+report. Only stop and ask when the repo allows several and none is the documented
+default.
+
 ```
-- `--merge` → merge commit (matches this repo's `Merge pull request #...` history).
+gh pr merge <number> --squash
+```
 - **No `--delete-branch`** — the one session branch is kept until the session is done.
-- **No `--squash` / `--rebase`** unless the user explicitly asked.
 - **No `--admin`** — do not bypass branch protection or failing required checks. If the merge is blocked by checks/protection, report why and stop (pause the cycle for that task); do not force it.
 
 ### 7. Report
@@ -76,9 +93,9 @@ Turn the mode OFF when the user says "stop merge", "stop auto-merge", "normal mo
 - Don't merge mid-task, exploratory, or unverified work — "complete + verified" is the gate.
 - Don't fabricate verification just to trigger the cycle.
 - Don't blanket-commit unrelated files — stage only what the task touched.
-- Don't push merge commits straight to `main` via `git push` — always integrate through `gh pr merge` so history stays `Merge pull request #...`.
+- Don't push straight to `main` via `git push` — always integrate through `gh pr merge` so the PR record stays intact.
 - Don't delete the branch (`--delete-branch`) — one branch for the whole session.
-- Don't switch merge method (`--squash`/`--rebase`) on your own.
+- Don't hardcode a merge method — read what the repo allows and what its `CLAUDE.md` documents (step 6).
 - Don't bypass protections/checks (`--admin`) without an explicit ask — report the block and stop.
 - Don't guess on semantic merge conflicts — resolve the unambiguous ones, stop and ask on the rest.
 - Don't fabricate success — report the real `gh pr merge` / `git merge` outcome.
