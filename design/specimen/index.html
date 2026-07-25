@@ -277,6 +277,40 @@
   @media (max-width: 640px) { .sheet { padding: 24px 16px 48px; } }
 
   /* ---------- Hero ---------- */
+  /* Top-of-hero repo banner: first thing on the page points at the STK source. */
+  a.herorepo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    border: 1.5px solid var(--ink);
+    background: var(--faint);
+    padding: 14px 16px;
+    margin: 0 0 24px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  a.herorepo:hover { background: var(--paper); transform: translateY(-1px); }
+  .herorepo .badge { margin-bottom: 0; flex: none; }
+  .herorepo .herorepo-text {
+    flex: 1 1 260px;
+    font-size: 1.0625rem;
+    line-height: 1.4;
+    color: var(--graphite);
+  }
+  .herorepo .herorepo-text strong { color: var(--ink); }
+  .herorepo .herorepo-cta {
+    flex: none;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border-bottom: 1.5px solid var(--ink);
+    padding-bottom: 1px;
+    white-space: nowrap;
+  }
+  @media (max-width: 540px) { .herorepo .herorepo-cta { font-size: 0.75rem; white-space: normal; } }
+
   .hero h1 {
     font-family: var(--font-sans);
     font-size: clamp(1.8rem, 4.5vw, 2.5rem);
@@ -739,6 +773,11 @@
 
   <!-- ===================== HERO ===================== -->
   <section class="hero">
+    <a class="herorepo" href="https://github.com/ryanportfolio/STK">
+      <span class="badge">STK</span>
+      <span class="herorepo-text"><strong>Session Token Killer</strong> is open source: a Claude Code hook that clamps oversized file reads to a short outline.</span>
+      <span class="herorepo-cta">github.com/ryanportfolio/STK &#8594;</span>
+    </a>
     <h1>Token-saving techniques for AI coding agents</h1>
     <p class="lede">Token-saving techniques for AI coding agents are the habits and tools that shrink how much the model reads and writes, without losing anything it needs.</p>
     <p class="stats-lead">My sessions have saved:</p>
