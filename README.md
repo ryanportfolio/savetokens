@@ -13,12 +13,12 @@
 Source for [savetokens.tips](https://savetokens.tips): token-saving techniques for AI coding agents (Claude Code, Codex), published as a component datasheet. Measured figures come from per-command before-and-after token logs and refresh daily; estimates carry no log and print gray with a tilde. No number on the site is invented.
 
 <!-- LIVE:readme-figures -->
-> **Current characterization** (snapshot 2026-07-25, global scope)
+> **Current characterization** (snapshot 2026-07-26, global scope)
 >
 > | | |
 > |---|---|
-> | **[M] 67.2%** | of output tokens removed by filtering command output before the agent reads it. rtk gain, 103,983 commands, 21.3M tokens saved |
-> | **[E] ~50%** | shorter replies with caveman mode. Deliberately lowballed target, est ~81M tokens, no before-and-after log |
+> | **[M] 51.7%** | of output tokens removed by filtering command output before the agent reads it. rtk gain, 107,075 commands, 22.7M tokens saved |
+> | **[E] ~50%** | shorter replies with caveman mode. Deliberately lowballed target, est ~83M tokens, no before-and-after log |
 <!-- END:readme-figures -->
 
 <a href="https://savetokens.tips"><img src="design/specimen/renders/desktop-1440.png" alt="The savetokens.tips measurements page, laid out as an engineering datasheet"></a>
