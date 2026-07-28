@@ -349,7 +349,7 @@ guide = replaceBlock(
 guide = replaceBlock(
   guide,
   "guide-footer-note",
-  `    <p>Updated ${DATE}. Measured figures come from per-command before-and-after logs, snapshot ${DATE}; estimates are labeled and printed with a tilde. No number here is invented.</p>`,
+  `    <p>Updated ${DATE}. Measured figures come from per-command before-and-after logs, snapshot ${DATE}.</p>`,
   "guide.html"
 );
 
