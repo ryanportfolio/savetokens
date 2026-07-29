@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash 'C:\\Users\\Home\\CoreWise\\savetokens\\.codex\\hooks\\session-start.sh'"
+          }
+        ]
+      }
+    ]
+  }
+}
