@@ -788,29 +788,8 @@
   <section class="section" id="copy">
     <h2>Copy these into your agent</h2>
     <div class="prose">
-      <p>The first two blocks go in the instruction file your agent reads at the start of every session: <code>CLAUDE.md</code> for Claude Code, <code>AGENTS.md</code> for Codex.</p>
+      <p>Each block below is a prompt you paste into your agent; it installs the skill for you.</p>
     </div>
-
-    <div class="copyblock">
-      <div class="copyhead">
-        <span class="cb-label">Context discipline rules</span>
-        <button type="button" class="copybtn" data-copy-target="cb-kernel">Copy</button>
-      </div>
-      <pre id="cb-kernel">## Context discipline
-
-- One task per session. When the conversation drifts to an unrelated task,
-  say so and suggest /clear or a fresh session.
-- Suggest /compact at natural checkpoints (after a fix lands, before a new
-  area), never mid-investigation.
-- When you need a file, read targeted ranges yourself instead of asking for a
-  paste; a pasted file is reread every turn.
-- Keep this file a thin kernel. Topical detail lives in reference files you
-  load on demand.
-- Subagents are not a discount. A subagent rereads context fresh and pays a
-  summarize-back tax; dispatch only for large, genuinely independent scopes.
-- Prefer filtered command output over raw dumps (diffs, logs, test runs).</pre>
-    </div>
-    <p class="copycap">The last rule is where output filtering plugs in; the measured numbers behind it are on the <a href="/">measurements page</a>.</p>
 
     <div class="copyblock">
       <div class="copyhead">
