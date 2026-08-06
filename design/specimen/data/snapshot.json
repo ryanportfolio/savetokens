@@ -1,22 +1,22 @@
 {
-  "snapshotDate": "2026-08-05",
+  "snapshotDate": "2026-08-06",
   "source": "rtk gain history.db",
   "scope": "global",
   "summary": {
-    "commands": 114391,
-    "inputTokens": 51462332,
-    "outputTokens": 26370775,
-    "savedTokens": 25111075,
-    "savedPct": 48.8
+    "commands": 115772,
+    "inputTokens": 52648908,
+    "outputTokens": 27119377,
+    "savedTokens": 25549823,
+    "savedPct": 48.53
   },
   "rows": [
     {
       "family": "read",
       "display": "rtk read",
       "shortLabel": "read",
-      "n": 2385,
-      "savedTokens": 11756383,
-      "typPct": 21.1
+      "n": 2480,
+      "savedTokens": 11851968,
+      "typPct": 21.8
     },
     {
       "family": "git diff",
@@ -30,8 +30,8 @@
       "family": "grep",
       "display": "rtk grep",
       "shortLabel": "grep",
-      "n": 5614,
-      "savedTokens": 2770514,
+      "n": 5848,
+      "savedTokens": 2952892,
       "typPct": 23.4
     },
     {
@@ -66,21 +66,13 @@
     "typPct": 99.2
   },
   "caveman": {
-    "sessions": 1112,
-    "replies": 88679,
-    "outputTokens": 95369488,
+    "sessions": 1142,
+    "replies": 91023,
+    "outputTokens": 97697370,
     "assumedReduction": 0.5,
-    "estSavedTokens": 95369488
+    "estSavedTokens": 97697370
   },
   "daily": [
-    {
-      "date": "2026-07-07",
-      "commands": 71,
-      "inputTokens": 7228,
-      "outputTokens": 4621,
-      "savedTokens": 2691,
-      "savedPct": 37.23
-    },
     {
       "date": "2026-07-08",
       "commands": 96,
@@ -307,11 +299,19 @@
     },
     {
       "date": "2026-08-05",
-      "commands": 1049,
-      "inputTokens": 699917,
-      "outputTokens": 532696,
-      "savedTokens": 167924,
-      "savedPct": 23.99
+      "commands": 1460,
+      "inputTokens": 955622,
+      "outputTokens": 737528,
+      "savedTokens": 218942,
+      "savedPct": 22.91
+    },
+    {
+      "date": "2026-08-06",
+      "commands": 970,
+      "inputTokens": 930871,
+      "outputTokens": 543770,
+      "savedTokens": 387730,
+      "savedPct": 41.65
     }
   ]
 }
