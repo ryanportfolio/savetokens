@@ -1,22 +1,22 @@
 {
-  "snapshotDate": "2026-08-06",
+  "snapshotDate": "2026-08-07",
   "source": "rtk gain history.db",
   "scope": "global",
   "summary": {
-    "commands": 115772,
-    "inputTokens": 52648908,
-    "outputTokens": 27119377,
-    "savedTokens": 25549823,
-    "savedPct": 48.53
+    "commands": 116862,
+    "inputTokens": 53597479,
+    "outputTokens": 27786350,
+    "savedTokens": 25831936,
+    "savedPct": 48.2
   },
   "rows": [
     {
       "family": "read",
       "display": "rtk read",
       "shortLabel": "read",
-      "n": 2480,
-      "savedTokens": 11851968,
-      "typPct": 21.8
+      "n": 2607,
+      "savedTokens": 11961018,
+      "typPct": 21.3
     },
     {
       "family": "git diff",
@@ -30,9 +30,9 @@
       "family": "grep",
       "display": "rtk grep",
       "shortLabel": "grep",
-      "n": 5848,
-      "savedTokens": 2952892,
-      "typPct": 23.4
+      "n": 6021,
+      "savedTokens": 2968475,
+      "typPct": 23.3
     },
     {
       "family": "git log",
@@ -66,21 +66,13 @@
     "typPct": 99.2
   },
   "caveman": {
-    "sessions": 1142,
-    "replies": 91023,
-    "outputTokens": 97697370,
+    "sessions": 1176,
+    "replies": 92214,
+    "outputTokens": 98945264,
     "assumedReduction": 0.5,
-    "estSavedTokens": 97697370
+    "estSavedTokens": 98945264
   },
   "daily": [
-    {
-      "date": "2026-07-08",
-      "commands": 96,
-      "inputTokens": 60757,
-      "outputTokens": 23484,
-      "savedTokens": 37320,
-      "savedPct": 61.43
-    },
     {
       "date": "2026-07-09",
       "commands": 209,
@@ -307,11 +299,19 @@
     },
     {
       "date": "2026-08-06",
-      "commands": 970,
-      "inputTokens": 930871,
-      "outputTokens": 543770,
-      "savedTokens": 387730,
-      "savedPct": 41.65
+      "commands": 1057,
+      "inputTokens": 989840,
+      "outputTokens": 574816,
+      "savedTokens": 415739,
+      "savedPct": 42
+    },
+    {
+      "date": "2026-08-07",
+      "commands": 1003,
+      "inputTokens": 889602,
+      "outputTokens": 635927,
+      "savedTokens": 254104,
+      "savedPct": 28.56
     }
   ]
 }
