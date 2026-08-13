@@ -1,22 +1,22 @@
 {
-  "snapshotDate": "2026-08-12",
+  "snapshotDate": "2026-08-13",
   "source": "rtk gain history.db",
   "scope": "global",
   "summary": {
-    "commands": 121560,
-    "inputTokens": 59090900,
-    "outputTokens": 31016241,
-    "savedTokens": 28098914,
-    "savedPct": 47.55
+    "commands": 121748,
+    "inputTokens": 59449568,
+    "outputTokens": 31159235,
+    "savedTokens": 28314684,
+    "savedPct": 47.63
   },
   "rows": [
     {
       "family": "read",
       "display": "rtk read",
       "shortLabel": "read",
-      "n": 2893,
-      "savedTokens": 12370493,
-      "typPct": 21.7
+      "n": 2902,
+      "savedTokens": 12558690,
+      "typPct": 21.8
     },
     {
       "family": "git diff",
@@ -30,8 +30,8 @@
       "family": "grep",
       "display": "rtk grep",
       "shortLabel": "grep",
-      "n": 6967,
-      "savedTokens": 3503431,
+      "n": 6976,
+      "savedTokens": 3504851,
       "typPct": 23.3
     },
     {
@@ -66,21 +66,13 @@
     "typPct": 99.2
   },
   "caveman": {
-    "sessions": 1285,
-    "replies": 100081,
-    "outputTokens": 106461262,
+    "sessions": 1305,
+    "replies": 100687,
+    "outputTokens": 107182944,
     "assumedReduction": 0.5,
-    "estSavedTokens": 106461262
+    "estSavedTokens": 107182944
   },
   "daily": [
-    {
-      "date": "2026-07-14",
-      "commands": 230,
-      "inputTokens": 463110,
-      "outputTokens": 50926,
-      "savedTokens": 412322,
-      "savedPct": 89.03
-    },
     {
       "date": "2026-07-15",
       "commands": 286,
@@ -307,11 +299,19 @@
     },
     {
       "date": "2026-08-12",
-      "commands": 129,
-      "inputTokens": 148311,
-      "outputTokens": 110624,
-      "savedTokens": 37765,
-      "savedPct": 25.46
+      "commands": 201,
+      "inputTokens": 181972,
+      "outputTokens": 141237,
+      "savedTokens": 40871,
+      "savedPct": 22.46
+    },
+    {
+      "date": "2026-08-13",
+      "commands": 116,
+      "inputTokens": 325007,
+      "outputTokens": 112381,
+      "savedTokens": 212664,
+      "savedPct": 65.43
     }
   ]
 }
