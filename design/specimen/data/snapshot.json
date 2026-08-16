@@ -1,22 +1,22 @@
 {
-  "snapshotDate": "2026-08-15",
+  "snapshotDate": "2026-08-16",
   "source": "rtk gain history.db",
   "scope": "global",
   "summary": {
-    "commands": 123151,
-    "inputTokens": 63813781,
-    "outputTokens": 32557700,
-    "savedTokens": 31281862,
-    "savedPct": 49.02
+    "commands": 124982,
+    "inputTokens": 67365460,
+    "outputTokens": 34975752,
+    "savedTokens": 32416160,
+    "savedPct": 48.12
   },
   "rows": [
     {
       "family": "read",
       "display": "rtk read",
       "shortLabel": "read",
-      "n": 2988,
-      "savedTokens": 14711106,
-      "typPct": 22.2
+      "n": 3084,
+      "savedTokens": 15202364,
+      "typPct": 22
     },
     {
       "family": "git diff",
@@ -30,9 +30,9 @@
       "family": "grep",
       "display": "rtk grep",
       "shortLabel": "grep",
-      "n": 7178,
-      "savedTokens": 3789055,
-      "typPct": 23.4
+      "n": 7913,
+      "savedTokens": 4241669,
+      "typPct": 23.5
     },
     {
       "family": "git log",
@@ -66,21 +66,13 @@
     "typPct": 99.2
   },
   "caveman": {
-    "sessions": 1369,
-    "replies": 104165,
-    "outputTokens": 110396077,
+    "sessions": 1408,
+    "replies": 106597,
+    "outputTokens": 112394771,
     "assumedReduction": 0.5,
-    "estSavedTokens": 110396077
+    "estSavedTokens": 112394771
   },
   "daily": [
-    {
-      "date": "2026-07-17",
-      "commands": 1266,
-      "inputTokens": 1037765,
-      "outputTokens": 606202,
-      "savedTokens": 432294,
-      "savedPct": 41.66
-    },
     {
       "date": "2026-07-18",
       "commands": 1820,
@@ -307,11 +299,19 @@
     },
     {
       "date": "2026-08-15",
-      "commands": 708,
-      "inputTokens": 1169133,
-      "outputTokens": 1007357,
-      "savedTokens": 163053,
-      "savedPct": 13.95
+      "commands": 757,
+      "inputTokens": 1196357,
+      "outputTokens": 1021466,
+      "savedTokens": 176211,
+      "savedPct": 14.73
+    },
+    {
+      "date": "2026-08-16",
+      "commands": 1782,
+      "inputTokens": 3524455,
+      "outputTokens": 2403943,
+      "savedTokens": 1121140,
+      "savedPct": 31.81
     }
   ]
 }
