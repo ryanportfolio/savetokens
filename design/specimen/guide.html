@@ -28,7 +28,7 @@
       "description": "A practical guide to spending fewer tokens with AI coding agents: when to clear, compact, or start fresh, caveman mode for shorter replies, and copy-paste blocks for your agent.",
       "url": "https://savetokens.tips/guide",
       "datePublished": "2026-07-19",
-      "dateModified": "2026-08-16",
+      "dateModified": "2026-08-17",
       "author": {
         "@id": "https://savetokens.tips/#author"
       },
@@ -79,7 +79,7 @@
           "name": "How much does caveman mode save?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "The logged caveman replies total 112.4 million tokens across 1,408 sessions, saving at roughly 112 million tokens. The style compresses wording, but caveats, code, and error strings are preserved exactly."
+            "text": "The logged caveman replies total 114.2 million tokens across 1,447 sessions, saving at roughly 114 million tokens. The style compresses wording, but caveats, code, and error strings are preserved exactly."
           }
         },
         {
@@ -664,9 +664,9 @@
       <!-- LIVE:guide-hero-measured -->
       <div class="stat">
         <span class="badge">Measured</span>
-        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">48.1</span><span class="unit">%</span></span>
+        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">48.0</span><span class="unit">%</span></span>
         <p class="what">of output tokens removed by filtering command output before the agent reads it.</p>
-        <p class="src">rtk gain, snapshot 2026-08-16, 124,982 commands, 32.4M tokens saved</p>
+        <p class="src">rtk gain, snapshot 2026-08-17, 126,054 commands, 32.7M tokens saved</p>
       </div>
 <!-- END:guide-hero-measured -->
       <!-- LIVE:guide-hero-caveman -->
@@ -674,7 +674,7 @@
         <span class="badge">Estimate</span>
         <span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~50</span><span class="unit">%</span></span>
         <p class="what">shorter replies with caveman mode.</p>
-        <p class="src">assumed 2x prose baseline, est ~112M saved, no before-and-after log</p>
+        <p class="src">assumed 2x prose baseline, est ~114M saved, no before-and-after log</p>
       </div>
 <!-- END:guide-hero-caveman -->
     </div>
@@ -985,7 +985,7 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
         </div>
         <div class="tactic-a">
           <!-- LIVE:guide-rtk-inline -->
-      <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering removed <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">48.1</span></span>% of output tokens across 124,982 commands (snapshot 2026-08-16). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>
+      <p>Shell output is the biggest silent cost: a large diff or test run can dump thousands of lines the agent never needed. Filtering removed <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">48.0</span></span>% of output tokens across 126,054 commands (snapshot 2026-08-17). Per-command numbers and how it works are on the <a href="/">measurements page</a>.</p>
 <!-- END:guide-rtk-inline -->
           <p>The tool behind those numbers is <a href="https://github.com/rtk-ai/rtk">RTK</a>, an open-source proxy that condenses command output before the agent reads it.</p>
         </div>
@@ -1053,7 +1053,7 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
         </div>
         <div class="qa-a">
           <!-- LIVE:guide-faq-caveman -->
-      <p>The logged caveman replies total 112.4 million tokens across 1,408 sessions, saving at roughly 112 million tokens.</p>
+      <p>The logged caveman replies total 114.2 million tokens across 1,447 sessions, saving at roughly 114 million tokens.</p>
       <p>The style compresses wording, but caveats, code, and error strings are preserved exactly.</p>
 <!-- END:guide-faq-caveman -->
         </div>
@@ -1111,7 +1111,7 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
 
   <footer class="footer">
     <!-- LIVE:guide-footer-note -->
-    <p>Updated 2026-08-16. Measured figures come from per-command before-and-after logs, snapshot 2026-08-16.</p>
+    <p>Updated 2026-08-17. Measured figures come from per-command before-and-after logs, snapshot 2026-08-17.</p>
 <!-- END:guide-footer-note -->
     <p><a href="/">Full measurements</a> · <a href="/about">About this site</a> · <a href="https://fullbuild.ai"><strong>fullbuild.ai</strong></a></p>
   </footer>
