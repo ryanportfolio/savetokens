@@ -1,38 +1,38 @@
 {
-  "snapshotDate": "2026-08-22",
+  "snapshotDate": "2026-08-23",
   "source": "rtk gain history.db",
   "scope": "global",
   "summary": {
-    "commands": 136163,
-    "inputTokens": 112618658,
-    "outputTokens": 64406058,
-    "savedTokens": 48242471,
-    "savedPct": 42.84
+    "commands": 140123,
+    "inputTokens": 122534532,
+    "outputTokens": 67779976,
+    "savedTokens": 54786016,
+    "savedPct": 44.71
   },
   "rows": [
     {
       "family": "read",
       "display": "rtk read",
       "shortLabel": "read",
-      "n": 4152,
-      "savedTokens": 16775597,
-      "typPct": 21.8
-    },
-    {
-      "family": "grep",
-      "display": "rtk grep",
-      "shortLabel": "grep",
-      "n": 10589,
-      "savedTokens": 9341774,
-      "typPct": 23.7
+      "n": 4719,
+      "savedTokens": 17083193,
+      "typPct": 20.2
     },
     {
       "family": "lint",
       "display": "rtk lint eslint",
       "shortLabel": "lint",
-      "n": 142,
-      "savedTokens": 7600792,
-      "typPct": 95.9
+      "n": 153,
+      "savedTokens": 12814558,
+      "typPct": 96.1
+    },
+    {
+      "family": "grep",
+      "display": "rtk grep",
+      "shortLabel": "grep",
+      "n": 11244,
+      "savedTokens": 9447226,
+      "typPct": 23.9
     },
     {
       "family": "git diff",
@@ -51,12 +51,12 @@
       "typPct": 100
     },
     {
-      "family": "playwright",
-      "display": "rtk playwright test",
-      "shortLabel": "playwright",
-      "n": 45,
-      "savedTokens": 628555,
-      "typPct": 98.4
+      "family": "rg",
+      "display": "rtk rg",
+      "shortLabel": "rg",
+      "n": 391,
+      "savedTokens": 810987,
+      "typPct": 20.8
     }
   ],
   "gitDiffTop": {
@@ -66,21 +66,13 @@
     "typPct": 99.2
   },
   "caveman": {
-    "sessions": 1610,
-    "replies": 120895,
-    "outputTokens": 124660782,
+    "sessions": 1628,
+    "replies": 124719,
+    "outputTokens": 127320170,
     "assumedReduction": 0.5,
-    "estSavedTokens": 124660782
+    "estSavedTokens": 127320170
   },
   "daily": [
-    {
-      "date": "2026-07-24",
-      "commands": 1168,
-      "inputTokens": 1367954,
-      "outputTokens": 1126807,
-      "savedTokens": 241810,
-      "savedPct": 17.68
-    },
     {
       "date": "2026-07-25",
       "commands": 4617,
@@ -307,11 +299,19 @@
     },
     {
       "date": "2026-08-22",
-      "commands": 2973,
-      "inputTokens": 14096119,
-      "outputTokens": 5495514,
-      "savedTokens": 8601582,
-      "savedPct": 61.02
+      "commands": 3455,
+      "inputTokens": 16857997,
+      "outputTokens": 5710481,
+      "savedTokens": 11148823,
+      "savedPct": 66.13
+    },
+    {
+      "date": "2026-08-23",
+      "commands": 3478,
+      "inputTokens": 7153996,
+      "outputTokens": 3158951,
+      "savedTokens": 3996304,
+      "savedPct": 55.86
     }
   ]
 }
