@@ -1,12 +1,12 @@
 {
-  "snapshotDate": "2026-09-12",
+  "snapshotDate": "2026-09-13",
   "source": "rtk gain history.db",
   "scope": "global",
   "summary": {
-    "commands": 170526,
-    "inputTokens": 350315338,
-    "outputTokens": 143161528,
-    "savedTokens": 207188948,
+    "commands": 170691,
+    "inputTokens": 350560664,
+    "outputTokens": 143257002,
+    "savedTokens": 207338819,
     "savedPct": 59.14
   },
   "rows": [
@@ -14,8 +14,8 @@
       "family": "read",
       "display": "rtk read",
       "shortLabel": "read",
-      "n": 9184,
-      "savedTokens": 91422199,
+      "n": 9218,
+      "savedTokens": 91484665,
       "typPct": 15.1
     },
     {
@@ -38,8 +38,8 @@
       "family": "grep",
       "display": "rtk grep",
       "shortLabel": "grep",
-      "n": 19139,
-      "savedTokens": 25101467,
+      "n": 19171,
+      "savedTokens": 25107356,
       "typPct": 23.5
     },
     {
@@ -66,21 +66,13 @@
     "typPct": 99.2
   },
   "caveman": {
-    "sessions": 1775,
-    "replies": 138558,
-    "outputTokens": 138675976,
+    "sessions": 1776,
+    "replies": 138761,
+    "outputTokens": 138827942,
     "assumedReduction": 0.5,
-    "estSavedTokens": 138675976
+    "estSavedTokens": 138827942
   },
   "daily": [
-    {
-      "date": "2026-08-14",
-      "commands": 659,
-      "inputTokens": 3154057,
-      "outputTokens": 350419,
-      "savedTokens": 2803786,
-      "savedPct": 88.89
-    },
     {
       "date": "2026-08-15",
       "commands": 757,
@@ -307,11 +299,19 @@
     },
     {
       "date": "2026-09-12",
-      "commands": 2100,
-      "inputTokens": 11836870,
-      "outputTokens": 11654580,
-      "savedTokens": 182340,
-      "savedPct": 1.54
+      "commands": 2206,
+      "inputTokens": 11953871,
+      "outputTokens": 11702860,
+      "savedTokens": 251077,
+      "savedPct": 2.1
+    },
+    {
+      "date": "2026-09-13",
+      "commands": 59,
+      "inputTokens": 128325,
+      "outputTokens": 47194,
+      "savedTokens": 81134,
+      "savedPct": 63.23
     }
   ]
 }
