@@ -1,12 +1,12 @@
 {
-  "snapshotDate": "2026-09-13",
+  "snapshotDate": "2026-09-14",
   "source": "rtk gain history.db",
   "scope": "global",
   "summary": {
-    "commands": 170691,
-    "inputTokens": 350560664,
-    "outputTokens": 143257002,
-    "savedTokens": 207338819,
+    "commands": 170698,
+    "inputTokens": 350561174,
+    "outputTokens": 143257500,
+    "savedTokens": 207338831,
     "savedPct": 59.14
   },
   "rows": [
@@ -22,8 +22,8 @@
       "family": "rg",
       "display": "rtk rg",
       "shortLabel": "rg",
-      "n": 2321,
-      "savedTokens": 37755724,
+      "n": 2322,
+      "savedTokens": 37755731,
       "typPct": 24.8
     },
     {
@@ -307,11 +307,11 @@
     },
     {
       "date": "2026-09-13",
-      "commands": 59,
-      "inputTokens": 128325,
-      "outputTokens": 47194,
-      "savedTokens": 81134,
-      "savedPct": 63.23
+      "commands": 66,
+      "inputTokens": 128835,
+      "outputTokens": 47692,
+      "savedTokens": 81146,
+      "savedPct": 62.98
     }
   ]
 }
