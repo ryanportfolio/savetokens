@@ -714,21 +714,6 @@
     .faq .qa { grid-template-columns: 1fr; row-gap: 10px; padding: 16px 0; }
   }
 
-  /* ---------- Sources ---------- */
-  .sources blockquote {
-    max-width: 68ch;
-    margin: 16px 0;
-    padding: 12px 16px;
-    border-left: 3px solid var(--ink);
-    background: var(--faint);
-  }
-  .sources blockquote p { margin: 0 0 6px; }
-  .sources blockquote footer {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    color: var(--graphite);
-  }
-
   /* ---------- Footer ---------- */
   .footer {
     margin-top: 64px;
@@ -775,7 +760,7 @@
   <section class="hero">
     <a class="herorepo" href="https://github.com/ryanportfolio/STK">
       <span class="badge">STK</span>
-      <span class="herorepo-text"><strong>Session Token Killer</strong> is open source: a Claude Code hook that clamps oversized file reads to a short outline.</span>
+      <span class="herorepo-text"><strong>Session Token Killer</strong> is open source: one binary that hooks Claude Code and Codex, clamping oversized file reads to a short outline.</span>
       <span class="herorepo-cta">github.com/ryanportfolio/STK &#8594;</span>
     </a>
     <h1>Token-saving techniques for AI coding agents</h1>
@@ -816,7 +801,7 @@
     <h2>The measurements</h2>
     <div class="prose">
       <!-- LIVE:numbers-intro -->
-      <p>Every percentage below is measured in production: raw output tokens versus filtered output tokens, logged per command, snapshot <span class="num">2026-09-18</span>.</p>
+      <p>Every percentage below is measured in production.</p>
 <!-- END:numbers-intro -->
     </div>
     <div class="tablewrap">
@@ -964,6 +949,7 @@
         <li>the shape of the change, with the parts that need review</li>
         <li>failing tests and error lines, quoted exactly</li>
       </ul>
+      <p>Compressing text before it reaches the model saves tokens without losing meaning: <a href="https://arxiv.org/abs/2310.05736">Jiang et al., <cite>LLMLingua</cite></a> compress prompts by up to 20x with little loss in performance. RTK applies the same principle to command output instead of prompts.</p>
     </div>
 
     <a class="repocard" href="https://github.com/rtk-ai/rtk">
@@ -986,7 +972,6 @@
       </div>
       <div class="prose">
         <p>A full git diff of a large change can send millions of characters to the model, most of which the agent never reads line by line. Filtered, the same diff came back 99.2 percent smaller: 5.6 million tokens the agent never had to read.</p>
-        <p>That figure pools three runs dominated by one huge diff, so read it as a strong signal, not a guaranteed rate. The habit it argues for: route any diff you would scroll past through the filter.</p>
       </div>
 <!-- END:feature -->
     </div>
@@ -1097,33 +1082,6 @@
           <p>Yes. Every technique on this site applies to both <a href="https://code.claude.com/docs/en/overview">Claude Code</a> and Codex. The filter sits between the agent and the shell, so it works the same regardless of which agent runs the command.</p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- ===================== SOURCES ===================== -->
-  <section class="section sources" id="sources">
-    <h2>What sources support these numbers?</h2>
-    <div class="prose">
-      <p>The percentages and command counts on this page come only from the dated <code>rtk gain</code> snapshot described above. The sources below establish how RTK works and the agents it serves; they do not replace or inflate the local measurements.</p>
-    </div>
-
-    <blockquote cite="https://github.com/rtk-ai/rtk">
-      <p>&#8220;rtk filters and compresses command outputs before they reach your LLM context.&#8221;</p>
-      <footer><a href="https://github.com/rtk-ai/rtk">RTK project README</a>, mechanism summary.</footer>
-    </blockquote>
-
-    <blockquote cite="https://code.claude.com/docs/en/overview">
-      <p>&#8220;Claude Code is an agentic coding tool that reads your codebase, edits files, runs commands, and integrates with your development tools.&#8221;</p>
-      <footer><a href="https://code.claude.com/docs/en/overview">Anthropic, Claude Code overview</a>.</footer>
-    </blockquote>
-
-    <blockquote cite="https://openai.com/codex/">
-      <p>&#8220;Use Codex across ChatGPT, your editor, and the terminal, all connected by your ChatGPT account.&#8221;</p>
-      <footer><a href="https://openai.com/codex/">OpenAI, Codex product page</a>.</footer>
-    </blockquote>
-
-    <div class="prose">
-      <p>Compressing text before it reaches the model saves tokens without losing meaning, a result established in the research: <a href="https://arxiv.org/abs/2310.05736">Jiang et al., <cite>LLMLingua</cite></a> compress prompts by up to 20x with little loss in performance. RTK applies the same principle to command output instead of prompts.</p>
     </div>
   </section>
 

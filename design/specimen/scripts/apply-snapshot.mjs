@@ -135,11 +135,11 @@ index = replaceBlock(
   "index.html"
 );
 
-// Numbers section intro (carries the dated snapshot label).
+// Numbers section intro.
 index = replaceBlock(
   index,
   "numbers-intro",
-  `      <p>Every percentage below is measured in production: raw output tokens versus filtered output tokens, logged per command, snapshot <span class="num">${DATE}</span>.</p>`,
+  `      <p>Every percentage below is measured in production.</p>`,
   "index.html"
 );
 
@@ -236,10 +236,6 @@ index = replaceBlock(
 );
 
 // How-it-works feature: top git diff group.
-const diffPools =
-  diff.n === 1
-    ? "That figure comes from a single run"
-    : `That figure pools ${diff.n === 2 ? "two" : diff.n === 3 ? "three" : diff.n} runs dominated by one huge diff`;
 index = replaceBlock(
   index,
   "feature",
@@ -252,7 +248,6 @@ index = replaceBlock(
       </div>
       <div class="prose">
         <p>A full git diff of a large change can send millions of characters to the model, most of which the agent never reads line by line. Filtered, the same diff came back ${pct1(diff.typPct)} percent smaller: ${tokProse(diff.savedTokens)} tokens the agent never had to read.</p>
-        <p>${diffPools}, so read it as a strong signal, not a guaranteed rate. The habit it argues for: route any diff you would scroll past through the filter.</p>
       </div>`,
   "index.html"
 );
