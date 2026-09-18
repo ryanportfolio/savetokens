@@ -135,11 +135,11 @@ index = replaceBlock(
   "index.html"
 );
 
-// Numbers section intro (carries the dated snapshot label).
+// Numbers section intro.
 index = replaceBlock(
   index,
   "numbers-intro",
-  `      <p>Every percentage below is measured in production: raw output tokens versus filtered output tokens, logged per command, snapshot <span class="num">${DATE}</span>.</p>`,
+  `      <p>Every percentage below is measured in production.</p>`,
   "index.html"
 );
 
