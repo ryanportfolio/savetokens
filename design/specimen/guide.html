@@ -998,7 +998,7 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
         </div>
         <div class="tactic-a">
           <p>Shell output is one flood. Whole-file reads are the other: one oversized read can dump thousands of lines into context when the agent needed a dozen.</p>
-          <p><a href="/stk">STK</a> is a Claude Code hook that intercepts big reads and hands the agent a short line-numbered outline instead, with instructions to fetch just the ranges it needs. Small files, scoped reads, and anything it cannot analyze pass through untouched.</p>
+          <p><a href="/stk">STK</a> is one binary that hooks both Claude Code and Codex: it intercepts big reads and hands the agent a short line-numbered outline instead, with instructions to fetch just the ranges it needs. It clamps native <code>Read</code> calls under Claude Code and plain <code>cat</code>, <code>rtk read</code>, and <code>Get-Content</code> calls under Codex. Small files, scoped reads, and anything it cannot analyze pass through untouched.</p>
           <p>Live clamp counters and the measurement that motivated it are at <a href="/stk">savetokens.tips/stk</a>.</p>
         </div>
       </div>
@@ -1103,7 +1103,7 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
         <li><a href="https://corewise.academy/guides/stop-hitting-your-token-limit/">Stop Hitting Your Token Limit</a> (CoreWise Academy): the same problem worked from the budget side. Audit your usage, cut consumption, downshift models for routine work, and weigh the riskier tactics honestly. Covers caveman mode and output filtering too.</li>
         <li><a href="https://code.claude.com/docs/en/best-practices">Claude Code best practices</a> (Anthropic): the vendor's own guidance on context management, instruction files, and workflow.</li>
         <li><a href="https://github.com/rtk-ai/rtk">RTK on GitHub</a>: the open-source output filter behind the measured figures on this site.</li>
-        <li><a href="/stk">STK</a>: a Claude Code hook that clamps oversized file reads to a short outline, with live counters and methodology.</li>
+        <li><a href="/stk">STK</a>: a hook for Claude Code and Codex that clamps oversized file reads to a short outline, with live counters and methodology.</li>
         <li><a href="https://axi.md">AXI</a>: design rules for agent-facing command-line tools, with drop-in replacements for GitHub and browser work that return less output to begin with.</li>
       </ul>
     </div>
