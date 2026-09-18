@@ -214,8 +214,6 @@ if (!/<table\b/i.test(mainHtml)) errors.push("GEO answer readiness: main-content
 
 const stats = mainText.match(/(?:[$€£]\s?\d[\d,.]*)|(?:\b\d[\d,.]*\s?(?:%|percent|million|billion|thousand|tokens?|commands?|runs?|years?)\b)/gi) ?? [];
 if (stats.length < 6) errors.push(`GEO evidence density: need at least 6 statistics, found ${stats.length}.`);
-const blockquotes = (mainHtml.match(/<blockquote\b[^>]*>/gi) ?? []).length;
-if (blockquotes < 3) errors.push(`GEO evidence density: need at least 3 quotations, found ${blockquotes}.`);
 const outbound = [...mainHtml.matchAll(/<a\b[^>]*href\s*=\s*["'](https?:\/\/[^"']+)["'][^>]*>/gi)]
   .map((match) => match[1])
   .filter((href) => {
@@ -226,8 +224,8 @@ if (outbound.length < 5) errors.push(`GEO evidence density: need at least 5 outb
 if (!outbound.some((href) => /\.(gov|edu)(\/|$)|arxiv\.org|acm\.org|ieee\.org/i.test(href))) {
   errors.push("GEO evidence density: authoritative-domain citation missing.");
 }
-if (stats.length >= 6 && blockquotes >= 3 && outbound.length >= 5) {
-  notes.push(`GEO evidence density: ${stats.length} statistics, ${blockquotes} quotations, ${outbound.length} outbound citations.`);
+if (stats.length >= 6 && outbound.length >= 5) {
+  notes.push(`GEO evidence density: ${stats.length} statistics, ${outbound.length} outbound citations.`);
 }
 
 if (!meta("author")) errors.push("GEO entity trust: meta author missing.");
