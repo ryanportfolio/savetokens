@@ -1,12 +1,12 @@
 {
-  "snapshotDate": "2026-09-20",
+  "snapshotDate": "2026-09-21",
   "source": "rtk gain history.db",
   "scope": "global",
   "summary": {
-    "commands": 180391,
-    "inputTokens": 379181511,
-    "outputTokens": 159314005,
-    "savedTokens": 219902994,
+    "commands": 180501,
+    "inputTokens": 379216668,
+    "outputTokens": 159335887,
+    "savedTokens": 219916278,
     "savedPct": 57.99
   },
   "rows": [
@@ -14,8 +14,8 @@
       "family": "read",
       "display": "rtk read",
       "shortLabel": "read",
-      "n": 10519,
-      "savedTokens": 94790535,
+      "n": 10525,
+      "savedTokens": 94797453,
       "typPct": 15.6
     },
     {
@@ -38,17 +38,17 @@
       "family": "grep",
       "display": "rtk grep",
       "shortLabel": "grep",
-      "n": 23189,
-      "savedTokens": 28127426,
+      "n": 23234,
+      "savedTokens": 28128556,
       "typPct": 23.7
     },
     {
       "family": "diff",
       "display": "rtk diff",
       "shortLabel": "diff",
-      "n": 76,
-      "savedTokens": 5840395,
-      "typPct": 67.6
+      "n": 78,
+      "savedTokens": 5842094,
+      "typPct": 67.1
     },
     {
       "family": "git diff",
@@ -66,21 +66,13 @@
     "typPct": 99.2
   },
   "caveman": {
-    "sessions": 1806,
-    "replies": 141594,
-    "outputTokens": 141919195,
+    "sessions": 1810,
+    "replies": 141687,
+    "outputTokens": 141985427,
     "assumedReduction": 0.5,
-    "estSavedTokens": 141919195
+    "estSavedTokens": 141985427
   },
   "daily": [
-    {
-      "date": "2026-08-21",
-      "commands": 2512,
-      "inputTokens": 23996352,
-      "outputTokens": 18997592,
-      "savedTokens": 4999239,
-      "savedPct": 20.83
-    },
     {
       "date": "2026-08-22",
       "commands": 3455,
@@ -312,6 +304,14 @@
       "outputTokens": 78426,
       "savedTokens": 46021,
       "savedPct": 36.98
+    },
+    {
+      "date": "2026-09-21",
+      "commands": 110,
+      "inputTokens": 35157,
+      "outputTokens": 21882,
+      "savedTokens": 13284,
+      "savedPct": 37.78
     }
   ]
 }
