@@ -1,38 +1,38 @@
 {
-  "snapshotDate": "2026-09-25",
+  "snapshotDate": "2026-09-26",
   "source": "rtk gain history.db",
   "scope": "global",
   "summary": {
-    "commands": 217024,
-    "inputTokens": 461949442,
-    "outputTokens": 207180897,
-    "savedTokens": 254804581,
-    "savedPct": 55.16
+    "commands": 227902,
+    "inputTokens": 507957172,
+    "outputTokens": 246080122,
+    "savedTokens": 261913221,
+    "savedPct": 51.56
   },
   "rows": [
     {
       "family": "read",
       "display": "rtk read",
       "shortLabel": "read",
-      "n": 18655,
-      "savedTokens": 114544633,
-      "typPct": 13.5
-    },
-    {
-      "family": "rg",
-      "display": "rtk rg",
-      "shortLabel": "rg",
-      "n": 2557,
-      "savedTokens": 37804148,
-      "typPct": 23.7
+      "n": 21501,
+      "savedTokens": 116180776,
+      "typPct": 13.3
     },
     {
       "family": "grep",
       "display": "rtk grep",
       "shortLabel": "grep",
-      "n": 30550,
-      "savedTokens": 36594349,
-      "typPct": 22.8
+      "n": 33351,
+      "savedTokens": 38527688,
+      "typPct": 22.6
+    },
+    {
+      "family": "rg",
+      "display": "rtk rg",
+      "shortLabel": "rg",
+      "n": 2568,
+      "savedTokens": 37820912,
+      "typPct": 23.7
     },
     {
       "family": "lint",
@@ -46,9 +46,9 @@
       "family": "diff",
       "display": "rtk diff",
       "shortLabel": "diff",
-      "n": 220,
-      "savedTokens": 6761159,
-      "typPct": 69
+      "n": 233,
+      "savedTokens": 6927340,
+      "typPct": 68.7
     },
     {
       "family": "git diff",
@@ -66,21 +66,13 @@
     "typPct": 99.2
   },
   "caveman": {
-    "sessions": 1843,
-    "replies": 149746,
-    "outputTokens": 148251777,
+    "sessions": 1850,
+    "replies": 152058,
+    "outputTokens": 149673406,
     "assumedReduction": 0.5,
-    "estSavedTokens": 148251777
+    "estSavedTokens": 149673406
   },
   "daily": [
-    {
-      "date": "2026-08-26",
-      "commands": 1204,
-      "inputTokens": 6188737,
-      "outputTokens": 1478651,
-      "savedTokens": 4710472,
-      "savedPct": 76.11
-    },
     {
       "date": "2026-08-27",
       "commands": 1171,
@@ -307,11 +299,19 @@
     },
     {
       "date": "2026-09-25",
-      "commands": 7893,
-      "inputTokens": 9123535,
-      "outputTokens": 6387083,
-      "savedTokens": 2736516,
-      "savedPct": 29.99
+      "commands": 8843,
+      "inputTokens": 10430365,
+      "outputTokens": 7330312,
+      "savedTokens": 3100120,
+      "savedPct": 29.72
+    },
+    {
+      "date": "2026-09-26",
+      "commands": 9928,
+      "inputTokens": 44700900,
+      "outputTokens": 37955996,
+      "savedTokens": 6745036,
+      "savedPct": 15.09
     }
   ]
 }
