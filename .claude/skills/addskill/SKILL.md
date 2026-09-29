@@ -49,7 +49,3 @@ the target client before claiming the current session has loaded a new version.
 Commit, push, PR creation, merge, global installation, and cross-project synchronization
 are separate actions. Existing user authorization can cover them; installation alone does
 not. Never activate persistent auto-merge as an installation side effect.
-
-Keep `.agents/skill-capabilities.json` aligned with intended runtime coverage, ownership,
-required resources and retired routes. Run `node .claude/scripts/check-skill-capabilities.mjs`
-after registration changes; regenerate its catalog with `--write` when intended coverage changes.

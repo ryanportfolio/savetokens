@@ -1,5 +1,6 @@
 ---
 description: Use only when the user explicitly invokes /why to challenge the assistant's immediately prior recommendation; never trigger from ordinary why questions or paraphrases.
+disable-model-invocation: true
 ---
 
 # Why

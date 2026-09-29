@@ -1,6 +1,7 @@
 ---
 name: compact-review
 description: "Use on /compact-review or right before /compact: review the session and return copy-ready custom instructions for /compact that keep what matters. Does not run /compact."
+disable-model-invocation: true
 ---
 
 # Compact review

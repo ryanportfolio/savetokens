@@ -6,7 +6,7 @@ Record dataset size + shape, operation mix, arrival rate or client concurrency, 
 
 Measure together: latency distributions w/ enough samples, completed useful ops per unit time, errors/timeouts. Count failed work in result. Lower latency from rejecting work or serving incomplete results = regression.
 
-Check load generator not saturated. Record whether it sends at fixed arrival rate or waits for responses; waiting client lowers offered load during stalls → hides queuing delay. Include queues + timed-out requests in interpretation. Compare at equal load before exploring capacity limits.
+Check load generator not saturated. Record whether it sends at fixed arrival rate or waits for responses; waiting client lowers offered load during stalls → hides queuing delay (coordinated omission). Include queues + timed-out requests in interpretation. Compare at equal load before exploring capacity limits.
 
 ## Locate constraint
 

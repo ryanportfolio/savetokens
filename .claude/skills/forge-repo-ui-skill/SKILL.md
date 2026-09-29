@@ -1,6 +1,7 @@
 ---
 name: forge-repo-ui-skill
 description: Use when the user wants a repository-specific UI or design skill synthesized from current agent skills; not for ordinary UI implementation or backend-only work.
+disable-model-invocation: true
 ---
 
 # Forge Repo UI Skill

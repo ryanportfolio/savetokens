@@ -1,5 +1,6 @@
 ---
 description: 'Long-horizon rounds run through the Workflow tool: fresh executor, inspector, and judges per round with schema verdicts and a run journal. Use on /long-horizon-workflows or to run a big task in Workflow-audited rounds. Claude Code only.'
+disable-model-invocation: true
 ---
 
 # long-horizon-workflows: audited rounds on the Workflow engine
@@ -79,7 +80,7 @@ or report.
 The leak that matters is not the executor's file list, which the auditor recovers from the
 workspace anyway; it is the executor's narrative ("works, checked X, Y was out of scope"),
 which the Manager has read by the time it would write the auditor brief and can paraphrase
-without noticing. So the auditor brief is not written then. It is written at Plan, before the
+without noticing. So the auditor brief is not written then. It is pre-registered: written at Plan, before the
 executor exists, from the current contract version's acceptance checks, the Current round
 block and the workspace root, saved to the path recorded in the block, and dispatched
 unchanged. A Manager that wants to add something after Execute has found a defect in the Plan,

@@ -69,7 +69,7 @@ or report.
 The leak that matters is not the executor's file list, which the auditor recovers from the
 workspace anyway; it is the executor's narrative ("works, checked X, Y was out of scope"),
 which the Manager has read by the time it would write the auditor brief and can paraphrase
-without noticing. So the auditor brief is not written then. It is written at Plan, before the
+without noticing. So the auditor brief is not written then. It is pre-registered: written at Plan, before the
 executor exists, from the current contract version's acceptance checks, the Current round
 block and the workspace root, saved to the path recorded in the block, and dispatched unchanged. A Manager
 that wants to add something after Execute has found a defect in the Plan, not in the brief;

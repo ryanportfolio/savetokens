@@ -16,7 +16,7 @@ Both uses follow these rules:
 
 Target: your previous reply, or the term or passage the user names. "Make that shorter" or "more to the point" about your own reply also lands here.
 
-1. Open with what it means for the user in practice and what they need to do or decide. If nothing, say so.
+1. Bottom line up front: open with what it means for the user in practice and what they need to do or decide. If nothing, say so.
 2. Then give the reason in a few sentences.
 
 Do not redo the task, start a review, or change the standing style.

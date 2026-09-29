@@ -61,7 +61,7 @@ Each check gets a stable ID and records: requirement; gating or advisory; module
 
 ## 3. State
 
-`.tmp/wow-loop/<slug>/` holds `state.json`, `spec.md`, `bar.md`, `check.sh`, `captures/<round>/<module>/`, `reports/<round>/<role>.json`. Gitignored, worktree-local: resume in the same worktree and keep that worktree until the loop passes; record its absolute path. The orchestrator alone writes `state.json`; agents write to assigned paths. Write to a temp file and rename so an interrupted save keeps the last checkpoint.
+`.tmp/wow-loop/<slug>/` holds `state.json`, `spec.md`, `bar.md`, `check.sh`, `captures/<round>/<module>/`, `reports/<round>/<role>.json`. Gitignored, worktree-local: resume in the same worktree and keep that worktree until the loop passes; record its absolute path. The orchestrator alone writes `state.json`; agents write to assigned paths. Write to a temp file and rename (an atomic write) so an interrupted save keeps the last checkpoint.
 
 ```json
 {
