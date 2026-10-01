@@ -783,9 +783,9 @@
       </div>
       <a class="stat stat-link" href="/stk/">
         <span class="badge">STK</span>
-        <span class="fig fig-m" data-figure data-kind="measured" id="stk-live"><span class="tag">measured</span><span class="val num">LIVE</span></span>
+        <span class="fig fig-e" data-figure data-kind="estimated" id="stk-live"><span class="tag">estimate</span><span class="val num">~24M</span></span>
         <p class="what">tokens kept out of context by STK, a hook that clamps oversized file reads.</p>
-        <p class="src">as of <span id="stk-asof">October 2026</span></p>
+        <p class="src">stk gain upper bound (bytes avoided / 4, net unmeasured), as of <span id="stk-asof">October 2026</span></p>
         <p class="src"><strong>STK &middot; Session Token Killer &#8594;</strong></p>
       </a>
 <!-- END:hero-stats -->
@@ -1153,9 +1153,10 @@
     });
   })();
 
-  // STK showpiece: swap the static LIVE label for the current meter reading and
-  // stamp the reading's own date. Same-origin fetch through the /stk proxy; on
-  // any failure the static fallback text and snapshot date stand.
+  // STK showpiece: refresh the server-rendered estimate with the current meter
+  // reading and stamp the reading's own date. Same-origin fetch through the /stk
+  // proxy; on any failure the figure written by apply-snapshot.mjs stands.
+  // Same coarse format as apply-snapshot's estTok: tilde, whole millions.
   (function () {
     var fig = document.getElementById('stk-live');
     var el = fig && fig.querySelector('.val');
@@ -1165,7 +1166,10 @@
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(function (d) {
         var n = d && d.stk && d.stk.est_tokens;
-        if (typeof n === 'number' && n > 0) el.textContent = n.toLocaleString('en-US');
+        if (typeof n === 'number' && n > 0) {
+          el.textContent = '~' + (n >= 1e6 ? Math.round(n / 1e6) + 'M'
+            : n >= 1e3 ? Math.round(n / 1e3) + 'K' : String(n));
+        }
         var at = d && d.generated_at;
         var m = typeof at === 'string' && at.match(/^(\d{4})-(\d{2})-\d{2}/);
         if (asof && m) {

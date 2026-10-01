@@ -1,0 +1,7 @@
+# savetokens.tips is written to be read and cited, so every crawler is
+# allowed, AI crawlers included (GPTBot, ClaudeBot, PerplexityBot,
+# Google-Extended and the rest). The figure feed /data/snapshot.json is public.
+User-agent: *
+Allow: /
+
+Sitemap: https://savetokens.tips/sitemap.xml
