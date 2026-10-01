@@ -68,3 +68,11 @@ poll/monitor loop built on plain curl will spin forever silently.
 The Vercel project has no git integration; production deploys are manual CLI
 runs (see `deployment.md`). After merging a PR, run the publish flow or the
 live site silently stays on the previous deploy.
+
+## Tall full-page screenshots repeat content (2026-10-01)
+
+A Playwright `fullPage` capture taller than 16384 device pixels (Chrome's
+capture surface limit) comes back the right size but with the top of the page
+repeated part way down. `mobile-390.png` (12056 CSS px at DPR 2) hit it. Capture
+in clips under the limit (`clip` + `fullPage`, 4000 CSS px each) and stitch, then
+inspect the seams.

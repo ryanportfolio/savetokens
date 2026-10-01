@@ -23,6 +23,7 @@ $Generated = @(
   'design/specimen/index.html',
   'design/specimen/guide.html',
   'design/specimen/llms.txt',
+  'design/specimen/sitemap.xml',
   'design/specimen/data/snapshot.json',
   'README.md'
 )

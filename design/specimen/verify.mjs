@@ -3,6 +3,7 @@
 // on any contract violation it can check statically. Prints PASS details on success.
 
 import { existsSync, readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -15,7 +16,7 @@ const OG_IMAGE_FILE = join(HERE, "renders", "desktop-1440.png");
 
 // ---- Expected counts, encoded as constants (contract-derived) ----
 const EXPECTED_TIP_ENTRIES = 1; // one complete how-it-works entry
-const EXPECTED_FIG_SLOTS = 13; // hero 3 (2 measured + 1 STK showpiece, measured) + table 8 (7 measured incl totals + 1 estimate) + feature 2 measured
+const EXPECTED_FIG_SLOTS = 13; // hero 3 (2 measured + 1 STK showpiece, estimate) + table 8 (7 measured incl totals + 1 estimate) + feature 2 measured
 const EXPECTED_DATA_FIGURES = 13; // every figure slot declares data-figure + data-kind
 // The dated label is bound to the committed snapshot, so a stale apply run
 // (HTML not regenerated after a new export) fails this gate.
@@ -297,6 +298,104 @@ if (!existsSync(GUIDE_FILE)) {
     notes.push(`guide.html: number slots: ${guideSlotCount} (expected ${EXPECTED_GUIDE_FIG_SLOTS}), each tag agrees with its class and tilde rule.`);
   }
 }
+
+// ---------- 9. STK figure is in the served HTML ----------
+// apply-snapshot.mjs writes the reading at snapshot time so crawlers and no-JS
+// readers see a number; the page script only refreshes it. STK's est_tokens is
+// gross bytes avoided / 4 with net savings unmeasured (no logged
+// counterfactual), so it must carry the estimate kind, tag, and tilde.
+const stkSlot = html.match(
+  /<span class="fig (fig-[mes])" data-figure data-kind="([a-z]+)" id="stk-live"><span class="tag">([a-z ]+)<\/span><span class="val num">([^<]*)<\/span>/
+);
+if (!stkSlot) {
+  errors.push('STK figure: #stk-live slot not found in index.html.');
+} else {
+  const [, kindClass, dataKind, tagWord, val] = stkSlot;
+  if (kindClass !== "fig-e" || dataKind !== "estimated" || tagWord !== "estimate") {
+    errors.push(`STK figure: must be an estimate (fig-e, data-kind="estimated", tag "estimate"), found ${kindClass}/${dataKind}/${tagWord}.`);
+  }
+  if (!/^~\d+(?:[KM])?$/.test(val)) {
+    errors.push(`STK figure: expected a server-rendered coarse estimate like "~24M", found "${val}". Run apply-snapshot.mjs.`);
+  } else {
+    notes.push(`STK figure server-rendered as estimate: ${val}.`);
+  }
+}
+
+// ---------- 10. robots.txt and sitemap.xml ----------
+// Both deploy from this folder; check content, that no vercel.json rule
+// captures them, and that sitemap lastmod is not older than git history.
+const SITE = "https://savetokens.tips";
+const ROBOTS_FILE = join(HERE, "robots.txt");
+const SITEMAP_FILE = join(HERE, "sitemap.xml");
+const SITEMAP_PAGES = [
+  [`${SITE}/`, "index.html"],
+  [`${SITE}/guide`, "guide.html"],
+  [`${SITE}/about`, "about.html"],
+  [`${SITE}/stk/`, null], // proxied STK Pages site
+];
+if (!existsSync(ROBOTS_FILE)) {
+  errors.push("robots.txt missing.");
+} else {
+  const robots = readFileSync(ROBOTS_FILE, "utf8").replace(/\r\n/g, "\n");
+  if (!/^User-agent:\s*\*\s*$/m.test(robots) || !/^Allow:\s*\/\s*$/m.test(robots)) {
+    errors.push('robots.txt: must allow all crawlers ("User-agent: *" with "Allow: /").');
+  }
+  if (/^Disallow:\s*\/\s*$/m.test(robots)) errors.push("robots.txt: blanket Disallow found.");
+  if (!robots.includes(`Sitemap: ${SITE}/sitemap.xml`)) errors.push("robots.txt: Sitemap line missing.");
+  if (!errors.some((e) => e.startsWith("robots.txt"))) notes.push("robots.txt allows all crawlers and points at the sitemap.");
+}
+if (!existsSync(SITEMAP_FILE)) {
+  errors.push("sitemap.xml missing. Run apply-snapshot.mjs.");
+} else {
+  const sitemap = readFileSync(SITEMAP_FILE, "utf8");
+  if (!sitemap.startsWith('<?xml version="1.0" encoding="UTF-8"?>') || !sitemap.includes('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')) {
+    errors.push("sitemap.xml: missing XML declaration or sitemaps.org urlset.");
+  }
+  const entries = new Map(
+    [...sitemap.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>\s*<\/url>/g)].map((m) => [m[1], m[2]])
+  );
+  const today = new Date(Date.now() + 864e5).toISOString().slice(0, 10); // one day of slack for time zones
+  const gitDate = (file) => {
+    try {
+      return execFileSync("git", ["-C", HERE, "log", "-1", "--format=%cs", "--", file], { encoding: "utf8" }).trim();
+    } catch {
+      return "";
+    }
+  };
+  for (const [loc, file] of SITEMAP_PAGES) {
+    const lastmod = entries.get(loc);
+    if (!lastmod) {
+      errors.push(`sitemap.xml: ${loc} missing or lacks lastmod.`);
+      continue;
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(lastmod) || lastmod > today) {
+      errors.push(`sitemap.xml: ${loc} has invalid lastmod "${lastmod}".`);
+    }
+    if (file) {
+      const page = readFileSync(join(HERE, file), "utf8");
+      if (!page.includes(`<link rel="canonical" href="${loc}">`)) {
+        errors.push(`sitemap.xml: ${loc} does not match the canonical link in ${file}.`);
+      }
+      const committed = gitDate(file);
+      if (committed && lastmod < committed) {
+        errors.push(`sitemap.xml: ${loc} lastmod ${lastmod} is older than ${file}'s last commit ${committed}. Run apply-snapshot.mjs.`);
+      }
+    }
+  }
+  for (const loc of entries.keys()) {
+    if (!SITEMAP_PAGES.some(([known]) => known === loc)) errors.push(`sitemap.xml: unexpected URL ${loc}.`);
+  }
+  if (!errors.some((e) => e.startsWith("sitemap.xml"))) notes.push(`sitemap.xml lists ${entries.size} pages with lastmod dates.`);
+}
+const vercel = JSON.parse(readFileSync(join(HERE, "vercel.json"), "utf8"));
+for (const rule of [...(vercel.rewrites ?? []), ...(vercel.redirects ?? [])]) {
+  const source = String(rule.source ?? "");
+  // A root-level catch-all (/:path*, /(.*)) or an exact match would swallow them.
+  if (/^\/(?:robots\.txt|sitemap\.xml)$/.test(source) || /^\/[:(]/.test(source)) {
+    errors.push(`vercel.json: rule "${source}" can capture /robots.txt or /sitemap.xml.`);
+  }
+}
+if (/^(?:robots\.txt|sitemap\.xml)$/m.test(deployIgnore)) errors.push(".vercelignore excludes robots.txt or sitemap.xml.");
 
 // ---------- Report ----------
 if (errors.length) {

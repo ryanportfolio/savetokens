@@ -2,10 +2,13 @@
 // Rewrites every measured figure on index.html, guide.html, llms.txt, and the
 // repo-root README.md from the snapshot, using <!-- LIVE:key --> ... <!-- END:key --> region markers for
 // HTML blocks, JSON parsing for the JSON-LD graphs, and attribute rewrites for
-// meta tags. Idempotent: running twice produces identical output. verify.mjs
+// meta tags. It also writes the STK hero figure (fetched from STK's gain.json)
+// and regenerates sitemap.xml with git-history lastmod dates. Idempotent:
+// running twice produces identical output for unchanged inputs. verify.mjs
 // remains the release gate and must pass after this script runs.
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
@@ -14,11 +17,10 @@ const ROOT = join(HERE, "..");
 const snap = JSON.parse(readFileSync(join(ROOT, "data", "snapshot.json"), "utf8"));
 
 const DATE = snap.snapshotDate;
-// Coarse "July 2026" label for the STK card; the live fetch overwrites it with
-// the month of the meter reading's own generated_at.
+// Coarse "July 2026" label for the STK card, from the meter reading's own
+// generated_at (the page script re-stamps it on each live fetch).
 const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"];
-const MONTH_YEAR = `${MONTH_NAMES[Number(DATE.slice(5, 7)) - 1]} ${DATE.slice(0, 4)}`;
 const S = snap.summary;
 const rows = snap.rows;
 const diff = snap.gitDiffTop;
@@ -107,9 +109,34 @@ index = index.replace(
   }
 );
 
-// Hero stats: two measured + the STK showpiece card. The STK figure is
-// fetched client-side from /stk/data/gain.json (same origin via the /stk
-// proxy); the static "LIVE" text is the no-JS / failed-fetch fallback.
+// STK showpiece figure, written into the HTML at apply time so crawlers and
+// no-JS readers see a number; the page script still refreshes it live from
+// /stk/data/gain.json. STK's own caveat: est_tokens is gross bytes avoided / 4
+// with follow-up reads excluded, so net savings are unmeasured. No logged
+// counterfactual means it is an estimate under the site's rules: tilde, coarse.
+// A failed fetch keeps the figure already in the page rather than failing the
+// daily run.
+const STK_GAIN_URL = process.env.STK_GAIN_URL || "https://ryanportfolio.github.io/STK/data/gain.json";
+async function stkReading() {
+  try {
+    const res = await fetch(STK_GAIN_URL, { signal: AbortSignal.timeout(15000) });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const d = JSON.parse((await res.text()).trimStart()); // trimStart drops the feed's BOM
+    const n = d?.stk?.est_tokens;
+    const at = typeof d?.generated_at === "string" && d.generated_at.match(/^(\d{4})-(\d{2})-\d{2}/);
+    if (typeof n !== "number" || !(n > 0) || !at) throw new Error("unexpected gain.json shape");
+    return { fig: estTok(n), asof: `${MONTH_NAMES[Number(at[2]) - 1]} ${at[1]}` };
+  } catch (err) {
+    const fig = index.match(/id="stk-live"><span class="tag">[a-z ]+<\/span><span class="val num">(~[^<]+)<\/span>/)?.[1];
+    const asof = index.match(/<span id="stk-asof">([^<]+)<\/span>/)?.[1];
+    if (!fig || !asof) throw new Error(`STK gain.json fetch failed (${err.message}) and index.html has no prior STK figure`);
+    console.warn(`warning: STK gain.json fetch failed (${err.message}); keeping ${fig} (${asof})`);
+    return { fig, asof };
+  }
+}
+const stk = await stkReading();
+
+// Hero stats: two measured + the STK showpiece card (estimate, see above).
 index = replaceBlock(
   index,
   "hero-stats",
@@ -127,9 +154,9 @@ index = replaceBlock(
       </div>
       <a class="stat stat-link" href="/stk/">
         <span class="badge">STK</span>
-        <span class="fig fig-m" data-figure data-kind="measured" id="stk-live"><span class="tag">measured</span><span class="val num">LIVE</span></span>
+        <span class="fig fig-e" data-figure data-kind="estimated" id="stk-live"><span class="tag">estimate</span><span class="val num">${stk.fig}</span></span>
         <p class="what">tokens kept out of context by STK, a hook that clamps oversized file reads.</p>
-        <p class="src">as of <span id="stk-asof">${MONTH_YEAR}</span></p>
+        <p class="src">stk gain upper bound (bytes avoided / 4, net unmeasured), as of <span id="stk-asof">${stk.asof}</span></p>
         <p class="src"><strong>STK &middot; Session Token Killer &#8594;</strong></p>
       </a>`,
   "index.html"
@@ -373,5 +400,62 @@ readme = replaceBlock(
   "README.md"
 );
 writeFileSync(readmePath, lf(readme));
+
+// ---------- sitemap.xml ----------
+// lastmod comes from git history: the file's last commit date, or today when
+// the file has uncommitted changes (this run just rewrote its figures, so the
+// commit about to be made carries today's date). /stk/ is the proxied STK
+// Pages site, so its date is the last commit under docs/ in the STK repo; if
+// the GitHub API is unreachable the previous sitemap's date for it stands.
+const git = (...args) => execFileSync("git", ["-C", ROOT, ...args], { encoding: "utf8" }).trim();
+const localToday = () => {
+  const d = new Date();
+  return [d.getFullYear(), String(d.getMonth() + 1).padStart(2, "0"), String(d.getDate()).padStart(2, "0")].join("-");
+};
+// git diff, not git status: this script writes LF, so under core.autocrlf
+// status flags every rewritten file even when its content is unchanged.
+const changed = (file) => {
+  try {
+    git("diff", "--quiet", "HEAD", "--", file);
+    return false;
+  } catch (err) {
+    if (err.status === 1) return true;
+    throw err;
+  }
+};
+const fileLastmod = (file) => (changed(file) ? localToday() : git("log", "-1", "--format=%cs", "--", file));
+const sitemapPath = join(ROOT, "sitemap.xml");
+const prevSitemap = existsSync(sitemapPath) ? readFileSync(sitemapPath, "utf8") : "";
+async function stkLastmod() {
+  try {
+    const res = await fetch("https://api.github.com/repos/ryanportfolio/STK/commits?sha=main&path=docs&per_page=1", {
+      headers: { "User-Agent": "savetokens-apply-snapshot", Accept: "application/vnd.github+json" },
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const date = (await res.json())?.[0]?.commit?.committer?.date;
+    if (typeof date !== "string" || !/^\d{4}-\d{2}-\d{2}/.test(date)) throw new Error("unexpected commits shape");
+    return date.slice(0, 10);
+  } catch (err) {
+    const prev = prevSitemap.match(/<loc>https:\/\/savetokens\.tips\/stk\/<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/)?.[1];
+    if (!prev) throw new Error(`STK commit date lookup failed (${err.message}) and sitemap.xml has no prior /stk/ date`);
+    console.warn(`warning: STK commit date lookup failed (${err.message}); keeping ${prev}`);
+    return prev;
+  }
+}
+const pages = [
+  ["https://savetokens.tips/", fileLastmod("index.html")],
+  ["https://savetokens.tips/guide", fileLastmod("guide.html")],
+  ["https://savetokens.tips/about", fileLastmod("about.html")],
+  ["https://savetokens.tips/stk/", await stkLastmod()],
+];
+writeFileSync(
+  sitemapPath,
+  `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${pages.map(([loc, lastmod]) => `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </url>`).join("\n")}
+</urlset>
+`
+);
 
 console.log(`applied snapshot ${DATE}: total ${pct1(S.savedPct)}%, ${rows.length} command rows, caveman est ${estTok(cave.estSavedTokens)}`);
