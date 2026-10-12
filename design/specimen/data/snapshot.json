@@ -1,37 +1,37 @@
 {
-  "snapshotDate": "2026-10-11",
+  "snapshotDate": "2026-10-12",
   "source": "rtk gain history.db",
   "scope": "global",
   "summary": {
-    "commands": 308641,
-    "inputTokens": 966985758,
-    "outputTokens": 522352359,
-    "savedTokens": 444675316,
-    "savedPct": 45.99
+    "commands": 316064,
+    "inputTokens": 979762282,
+    "outputTokens": 531253693,
+    "savedTokens": 448550924,
+    "savedPct": 45.78
   },
   "rows": [
     {
       "family": "read",
       "display": "rtk read",
       "shortLabel": "read",
-      "n": 57426,
-      "savedTokens": 150395242,
+      "n": 58781,
+      "savedTokens": 152398854,
       "typPct": 13.8
     },
     {
       "family": "rg",
       "display": "rtk rg",
       "shortLabel": "rg",
-      "n": 5382,
-      "savedTokens": 112675619,
-      "typPct": 21.1
+      "n": 5436,
+      "savedTokens": 112705963,
+      "typPct": 21
     },
     {
       "family": "grep",
       "display": "rtk grep",
       "shortLabel": "grep",
-      "n": 72792,
-      "savedTokens": 74540880,
+      "n": 75415,
+      "savedTokens": 75539301,
       "typPct": 20.7
     },
     {
@@ -46,9 +46,9 @@
       "family": "diff",
       "display": "rtk diff",
       "shortLabel": "diff",
-      "n": 619,
-      "savedTokens": 10555158,
-      "typPct": 61.5
+      "n": 642,
+      "savedTokens": 10774104,
+      "typPct": 60.8
     },
     {
       "family": "git diff",
@@ -66,21 +66,13 @@
     "typPct": 99.2
   },
   "caveman": {
-    "sessions": 2024,
-    "replies": 194119,
-    "outputTokens": 181335591,
+    "sessions": 2040,
+    "replies": 197968,
+    "outputTokens": 184204110,
     "assumedReduction": 0.5,
-    "estSavedTokens": 181335591
+    "estSavedTokens": 184204110
   },
   "daily": [
-    {
-      "date": "2026-09-11",
-      "commands": 196,
-      "inputTokens": 114317,
-      "outputTokens": 92119,
-      "savedTokens": 22214,
-      "savedPct": 19.43
-    },
     {
       "date": "2026-09-12",
       "commands": 2206,
@@ -307,11 +299,19 @@
     },
     {
       "date": "2026-10-11",
-      "commands": 8399,
-      "inputTokens": 14922974,
-      "outputTokens": 10398663,
-      "savedTokens": 4524889,
-      "savedPct": 30.32
+      "commands": 10749,
+      "inputTokens": 20704957,
+      "outputTokens": 13967195,
+      "savedTokens": 6738498,
+      "savedPct": 32.55
+    },
+    {
+      "date": "2026-10-12",
+      "commands": 5345,
+      "inputTokens": 7464656,
+      "outputTokens": 5388616,
+      "savedTokens": 2076465,
+      "savedPct": 27.82
     }
   ]
 }
