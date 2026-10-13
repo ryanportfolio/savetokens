@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Token-saving techniques for AI coding agents | savetokens.tips</title>
-<meta name="description" content="Token-saving techniques for AI coding agents: 45.8% token reduction measured across 316,064 real commands. Measured numbers in green, estimates marked with a tilde.">
+<meta name="description" content="Token-saving techniques for AI coding agents: 44.9% token reduction measured across 324,519 real commands. Measured numbers in green, estimates marked with a tilde.">
 <meta name="author" content="Ryan">
 <link rel="canonical" href="https://savetokens.tips/">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23F6F4EE'/%3E%3Ctext x='8' y='12' font-family='monospace' font-size='9' font-weight='600' text-anchor='middle' fill='%2316171A'%3EST%3C/text%3E%3C/svg%3E">
 <meta property="og:title" content="Token-saving techniques for AI coding agents | savetokens.tips">
-<meta property="og:description" content="Token-saving techniques for AI coding agents: 45.8% token reduction measured across 316,064 real commands. Measured numbers in green, estimates marked with a tilde.">
+<meta property="og:description" content="Token-saving techniques for AI coding agents: 44.9% token reduction measured across 324,519 real commands. Measured numbers in green, estimates marked with a tilde.">
 <meta property="og:image" content="https://savetokens.tips/renders/desktop-1440.png">
 <meta property="og:image:width" content="1440">
 <meta property="og:image:height" content="900">
@@ -42,10 +42,10 @@
       "@type": "TechArticle",
       "@id": "https://savetokens.tips/#article",
       "headline": "Token-saving techniques for AI coding agents",
-      "description": "Token-saving techniques for AI coding agents, with measured figures from logged raw-versus-filtered token deltas: 45.8% typical reduction across 316,064 real commands, snapshot 2026-10-12. Estimates carry no before-and-after log and are marked with a tilde.",
+      "description": "Token-saving techniques for AI coding agents, with measured figures from logged raw-versus-filtered token deltas: 44.9% typical reduction across 324,519 real commands, snapshot 2026-10-13. Estimates carry no before-and-after log and are marked with a tilde.",
       "url": "https://savetokens.tips/",
       "datePublished": "2026-07-18",
-      "dateModified": "2026-10-12",
+      "dateModified": "2026-10-13",
       "author": {
         "@id": "https://savetokens.tips/#author"
       },
@@ -74,7 +74,7 @@
           "name": "How much does filtering command output reduce token usage?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Measured across 316,064 real commands in the snapshot dated 2026-10-12: routing shell output through the RTK filter reduced output tokens by 45.8 percent overall, 448.6 million tokens saved. Per-command savings range from 13.8 percent for file reads to 99.2 percent for one large git diff. Every number's sample count and source is in the table on this page."
+            "text": "Measured across 324,519 real commands in the snapshot dated 2026-10-13: routing shell output through the RTK filter reduced output tokens by 44.9 percent overall, 451.9 million tokens saved. Per-command savings range from 13.7 percent for file reads to 97.0 percent for one large lint eslint. Every number's sample count and source is in the table on this page."
           }
         },
         {
@@ -90,7 +90,7 @@
           "name": "Which commands save the most tokens?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Commands with large raw output filter best: git diff saved 99.2 percent (n=3), lint eslint saved 97.3 percent (n=246), diff saved 60.8 percent (n=642). Figures with n at or below 3 are single observations, not distributions. High-frequency commands save a lower percentage but large absolute totals: file reads saved 13.8 percent, 152.4 million tokens, across 58,781 runs."
+            "text": "Commands with large raw output filter best: lint eslint saved 97.0 percent (n=249), ls -la saved 66.8 percent (n=41), diff saved 60.4 percent (n=673). High-frequency commands save a lower percentage but large absolute totals: file reads saved 13.7 percent, 153.5 million tokens, across 60,539 runs."
           }
         },
         {
@@ -771,15 +771,15 @@
       <!-- LIVE:hero-stats -->
       <div class="stat">
         <span class="badge">RTK</span>
-        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">45.8</span><span class="unit">%</span></span>
+        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">44.9</span><span class="unit">%</span></span>
         <p class="what">of output tokens removed across every command routed through the filter.</p>
-        <p class="src">rtk gain, snapshot 2026-10-12, 316,064 commands</p>
+        <p class="src">rtk gain, snapshot 2026-10-13, 324,519 commands</p>
       </div>
       <div class="stat">
         <span class="badge">RTK</span>
-        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">448.6M</span></span>
+        <span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">451.9M</span></span>
         <p class="what">tokens saved in total by filtering command output before the agent reads it.</p>
-        <p class="src">rtk gain, snapshot 2026-10-12, global scope</p>
+        <p class="src">rtk gain, snapshot 2026-10-13, global scope</p>
       </div>
       <a class="stat stat-link" href="/stk/">
         <span class="badge">STK</span>
@@ -813,58 +813,58 @@
           <!-- LIVE:table-rows -->
           <tr class="row-m">
             <td class="cmd" data-label="Command">rtk read</td>
-            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">13.8</span></span>%</td>
-            <td class="n" data-label="Total saved">152.4M</td>
-            <td class="n" data-label="Sample">n=58,781</td>
+            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">13.7</span></span>%</td>
+            <td class="n" data-label="Total saved">153.5M</td>
+            <td class="n" data-label="Sample">n=60,539</td>
             <td class="note" data-label="Notes">Biggest total saver in the log</td>
           </tr>
           <tr class="row-m">
             <td class="cmd" data-label="Command">rtk rg</td>
-            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">21.0</span></span>%</td>
+            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">20.8</span></span>%</td>
             <td class="n" data-label="Total saved">112.7M</td>
-            <td class="n" data-label="Sample">n=5,436</td>
+            <td class="n" data-label="Sample">n=5,520</td>
             <td class="note" data-label="Notes">&nbsp;</td>
           </tr>
           <tr class="row-m">
             <td class="cmd" data-label="Command">rtk grep</td>
             <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">20.7</span></span>%</td>
-            <td class="n" data-label="Total saved">75.5M</td>
-            <td class="n" data-label="Sample">n=75,415</td>
+            <td class="n" data-label="Total saved">75.9M</td>
+            <td class="n" data-label="Sample">n=77,347</td>
             <td class="note" data-label="Notes">The most frequent command in the log</td>
           </tr>
           <tr class="row-m">
             <td class="cmd" data-label="Command">rtk lint eslint</td>
-            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">97.3</span></span>%</td>
+            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">97.0</span></span>%</td>
             <td class="n" data-label="Total saved">34.4M</td>
-            <td class="n" data-label="Sample">n=246</td>
+            <td class="n" data-label="Sample">n=249</td>
             <td class="note" data-label="Notes">&nbsp;</td>
           </tr>
           <tr class="row-m">
             <td class="cmd" data-label="Command">rtk diff</td>
-            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">60.8</span></span>%</td>
-            <td class="n" data-label="Total saved">10.8M</td>
-            <td class="n" data-label="Sample">n=642</td>
+            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">60.4</span></span>%</td>
+            <td class="n" data-label="Total saved">10.9M</td>
+            <td class="n" data-label="Sample">n=673</td>
             <td class="note" data-label="Notes">&nbsp;</td>
           </tr>
           <tr class="row-m">
-            <td class="cmd" data-label="Command">rtk git diff</td>
-            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">99.2</span></span>%</td>
-            <td class="n" data-label="Total saved">5.6M</td>
-            <td class="n" data-label="Sample">n=3</td>
-            <td class="note" data-label="Notes">Small sample dominated by one run; read as a single sample, not an average</td>
+            <td class="cmd" data-label="Command">rtk ls -la</td>
+            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">66.8</span></span>%</td>
+            <td class="n" data-label="Total saved">7.9M</td>
+            <td class="n" data-label="Sample">n=41</td>
+            <td class="note" data-label="Notes">&nbsp;</td>
           </tr>
           <tr>
             <td class="cmd" data-label="Command">caveman replies (terse prompting)</td>
             <td class="n" data-label="Output tokens saved"><span class="fig fig-e" data-figure data-kind="estimated"><span class="tag">estimate</span><span class="val num">~50</span></span>%</td>
-            <td class="n" data-label="Total saved">~184M</td>
-            <td class="n" data-label="Sample">2,040 sessions</td>
+            <td class="n" data-label="Total saved">~189M</td>
+            <td class="n" data-label="Sample">2,058 sessions</td>
             <td class="note" data-label="Notes">Estimate: assumed 2x prose baseline, no before-and-after log. See <a href="/guide#caveman">caveman mode</a></td>
           </tr>
           <tr class="row-m totals">
             <td class="cmd" data-label="Command">All commands</td>
-            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">45.8</span></span>%</td>
-            <td class="n" data-label="Total saved">448.6M</td>
-            <td class="n" data-label="Sample">n=316,064</td>
+            <td class="n" data-label="Output tokens saved"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">44.9</span></span>%</td>
+            <td class="n" data-label="Total saved">451.9M</td>
+            <td class="n" data-label="Sample">n=324,519</td>
             <td class="note" data-label="Notes">Everything routed through the filter</td>
           </tr>
 <!-- END:table-rows -->
@@ -903,19 +903,19 @@
         <!-- LIVE:chart-points -->
         <!-- measured points: x = 110 + 172 * log10(n), y = 250 - 2.3 * pct.
              Marker area encodes sample confidence: r = 2.5 + 1.5 * log10(n).
-             Generated from data/snapshot.json, snapshot 2026-10-12. -->
-        <circle class="pt-m" cx="690" cy="218" r="9.7"/><!-- read 13.8% n=58781 -->
-        <text class="ptlbl" x="682" y="222" text-anchor="end">read, n=58,781</text>
-        <circle class="pt-m" cx="690" cy="202" r="8.1"/><!-- rg 21.0% n=5436 -->
-        <text class="ptlbl" x="682" y="194" text-anchor="end">rg, n=5,436</text>
-        <circle class="pt-m" cx="690" cy="202" r="9.8"/><!-- grep 20.7% n=75415 -->
-        <text class="ptlbl" x="682" y="208" text-anchor="end">grep, n=75,415</text>
-        <circle class="pt-m" cx="521" cy="26" r="6.1"/><!-- lint 97.3% n=246 -->
-        <text class="ptlbl" x="529" y="40" text-anchor="start">lint, n=246</text>
-        <circle class="pt-m" cx="593" cy="110" r="6.7"/><!-- diff 60.8% n=642 -->
-        <text class="ptlbl" x="585" y="102" text-anchor="end">diff, n=642</text>
-        <circle class="pt-m" cx="192" cy="22" r="3.2"/><!-- diff 99.2% n=3 -->
-        <text class="ptlbl" x="200" y="36" text-anchor="start">diff, n=3</text>
+             Generated from data/snapshot.json, snapshot 2026-10-13. -->
+        <circle class="pt-m" cx="690" cy="218" r="9.7"/><!-- read 13.7% n=60539 -->
+        <text class="ptlbl" x="682" y="222" text-anchor="end">read, n=60,539</text>
+        <circle class="pt-m" cx="690" cy="202" r="8.1"/><!-- rg 20.8% n=5520 -->
+        <text class="ptlbl" x="682" y="194" text-anchor="end">rg, n=5,520</text>
+        <circle class="pt-m" cx="690" cy="202" r="9.8"/><!-- grep 20.7% n=77347 -->
+        <text class="ptlbl" x="682" y="208" text-anchor="end">grep, n=77,347</text>
+        <circle class="pt-m" cx="522" cy="27" r="6.1"/><!-- lint 97.0% n=249 -->
+        <text class="ptlbl" x="530" y="41" text-anchor="start">lint, n=249</text>
+        <circle class="pt-m" cx="596" cy="111" r="6.7"/><!-- diff 60.4% n=673 -->
+        <text class="ptlbl" x="588" y="103" text-anchor="end">diff, n=673</text>
+        <circle class="pt-m" cx="387" cy="96" r="4.9"/><!-- ls 66.8% n=41 -->
+        <text class="ptlbl" x="395" y="88" text-anchor="start">ls, n=41</text>
 <!-- END:chart-points -->
         <!-- LIVE:chart-refline -->
         <!-- estimate: caveman replies ~50%, no measured frequency, so a horizontal
@@ -964,14 +964,14 @@
     <div class="feature">
       <!-- LIVE:feature -->
       <div>
-        <div class="big fig-m"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">99.2</span></span>%</div>
+        <div class="big fig-m"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">6.9</span></span>%</div>
         <div class="biglabel">Tokens saved on one large diff</div>
-        <div class="big fig-m" style="font-size:1.5rem;margin-top:10px"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">5.6M</span></span></div>
+        <div class="big fig-m" style="font-size:1.5rem;margin-top:10px"><span class="fig fig-m" data-figure data-kind="measured"><span class="tag">measured</span><span class="val num">1.8M</span></span></div>
         <div class="biglabel">Absolute tokens saved</div>
-        <p class="src">rtk gain, snapshot 2026-10-12, n=3</p>
+        <p class="src">rtk gain, snapshot 2026-10-13, n=66</p>
       </div>
       <div class="prose">
-        <p>A full git diff of a large change can send millions of characters to the model, most of which the agent never reads line by line. Filtered, the same diff came back 99.2 percent smaller: 5.6 million tokens the agent never had to read.</p>
+        <p>A full git diff of a large change can send millions of characters to the model, most of which the agent never reads line by line. Filtered, the same diff came back 6.9 percent smaller: 1.8 million tokens the agent never had to read.</p>
       </div>
 <!-- END:feature -->
     </div>
@@ -1048,7 +1048,7 @@
         </div>
         <div class="qa-a">
           <!-- LIVE:faq-q1 -->
-      <p>Measured across 316,064 real commands in the snapshot dated <span class="num">2026-10-12</span>: routing shell output through the RTK filter reduced output tokens by 45.8 percent overall, 448.6 million tokens saved. Per-command savings range from 13.8 percent for file reads to 99.2 percent for one large git diff. Every number's sample count and source is in the table above.</p>
+      <p>Measured across 324,519 real commands in the snapshot dated <span class="num">2026-10-13</span>: routing shell output through the RTK filter reduced output tokens by 44.9 percent overall, 451.9 million tokens saved. Per-command savings range from 13.7 percent for file reads to 97.0 percent for one large lint eslint. Every number's sample count and source is in the table above.</p>
 <!-- END:faq-q1 -->
         </div>
       </div>
@@ -1069,7 +1069,7 @@
         </div>
         <div class="qa-a">
           <!-- LIVE:faq-q3 -->
-      <p>Commands with large raw output filter best: git diff saved 99.2 percent (n=3), lint eslint saved 97.3 percent (n=246), diff saved 60.8 percent (n=642). Figures with n at or below 3 are single observations, not distributions. High-frequency commands save a lower percentage but large absolute totals: file reads saved 13.8 percent, 152.4 million tokens, across 58,781 runs.</p>
+      <p>Commands with large raw output filter best: lint eslint saved 97.0 percent (n=249), ls -la saved 66.8 percent (n=41), diff saved 60.4 percent (n=673). High-frequency commands save a lower percentage but large absolute totals: file reads saved 13.7 percent, 153.5 million tokens, across 60,539 runs.</p>
 <!-- END:faq-q3 -->
         </div>
       </div>
@@ -1087,7 +1087,7 @@
 
   <footer class="footer">
     <!-- LIVE:footer-note -->
-    <p>Updated 2026-10-12. All measured figures are a dated sample: snapshot 2026-10-12 from rtk gain logs, global scope, values revise as samples grow. Estimates are labeled and printed with a tilde. No number here is invented.</p>
+    <p>Updated 2026-10-13. All measured figures are a dated sample: snapshot 2026-10-13 from rtk gain logs, global scope, values revise as samples grow. Estimates are labeled and printed with a tilde. No number here is invented.</p>
 <!-- END:footer-note -->
     <p><a href="/guide">Practical token-saving guide</a> · <a href="/about">About this site</a> · <a href="https://fullbuild.ai"><strong>fullbuild.ai</strong></a></p>
   </footer>
