@@ -725,7 +725,7 @@
       <p>Remember:</p>
       <ul>
         <li><strong>Never paste whole files.</strong> Name the path and let the agent read the ranges it needs. The agent reads once; a pasted file gets reread every turn.</li>
-        <li><strong><code>/compact</code> costs extra up front.</strong> Writing the summary rereads the whole conversation and bills the summary as output, which costs about five times as much as input. The next turn then writes the shorter conversation to the cache at the cache-write price. In return, every later turn rereads less, but a cached reread already costs a tenth of the input price or less, so each turn saves only a little. Compact when a lot of the task is still ahead, or before a break longer than the <a href="#cache">cache lifetime</a>. Right before you finish, it costs more than it saves.</li>
+        <li><strong><code>/compact</code> costs extra up front.</strong> Writing the summary rereads the whole conversation (from the cache while it is still warm) and bills the summary as output, which costs about five times as much as input. The next turn then writes the shorter conversation to the cache at the cache-write price. In return, every later turn rereads less, but a cached reread already costs a tenth of the input price or less, so each turn saves only a little. Compact when a lot of the task is still ahead, or before a break longer than the <a href="#cache">cache lifetime</a>. Right before you finish, it costs more than it saves.</li>
       </ul>
     </div>
   </section>
@@ -734,10 +734,11 @@
   <section class="section" id="cache">
     <h2>The cache window</h2>
     <div class="prose">
-      <p>Prompt caching cuts the price of rereading the conversation: a cached reread costs a tenth of the normal input price or less.</p>
-      <p>The catch is timing. A cache entry lives for <strong>five minutes</strong> by default, or <strong>one hour</strong> on the longer setting, and every read restarts the clock. Writing an entry costs extra: 1.25 times the input price for five minutes, twice the input price for an hour. In our Claude Code logs (desktop app, the 14 days to 2026-10-31), main sessions wrote every entry with the one-hour lifetime and subagents with the five-minute one.</p>
+      <p>Prompt caching cuts the price of rereading the conversation: on current Claude and OpenAI models a cached reread costs a tenth of the normal input price or less.</p>
+      <p>The catch is timing. A Claude cache entry lives for <strong>five minutes</strong> or <strong>one hour</strong>, and every read restarts the clock. Writing an entry costs extra: 1.25 times the input price for five minutes, twice the input price for an hour. Claude Code picks the lifetime per request. On a Claude subscription, within the plan's included usage, the main conversation gets one hour; with an API key, a cloud provider, or usage credits past the plan limit, it gets five minutes. Subagents get five minutes either way. The <code>promptCacheTtl</code> setting overrides the main conversation's default. Our own desktop-app logs (subscription, the 14 days to 2026-10-31) match: one hour for main sessions, five minutes for subagents.</p>
+      <p>OpenAI's API, which serves Codex models, has its own clock: on GPT-5.6 and later an entry lives 30 minutes by default, with writes at 1.25 times input, or 12 hours on request at 2.5 times. Reads cost a tenth of input, a twentieth on GPT-6.1 Sol and Terra. The advice below holds with whichever clock your setup uses.</p>
       <ul>
-        <li><strong>Work in bursts.</strong> Reply while the cache is warm and the whole conversation rereads at the cheap rate. In a main Claude Code session that means within the hour; a subagent's cache is gone five minutes after its last call.</li>
+        <li><strong>Work in bursts.</strong> Reply while the cache is warm and the whole conversation rereads at the cheap rate. On a Claude subscription that means within the hour in the main conversation; with an API key, or in a subagent, within five minutes.</li>
         <li><strong>A break longer than the cache lifetime is a decision point.</strong> When you come back, the agent writes the whole conversation to the cache again. Before you step away, run <code>/clear</code> if nothing needs to carry over, or <code>/compact</code> if the conclusions do: the summary is written while the transcript is still cached, and the rewrite later covers the summary instead of the full transcript.</li>
         <li><strong>Short transcripts make cold starts cheap.</strong> The <a href="#caveman">caveman skill</a> shrinks the penalty when the cache does expire.</li>
       </ul>
