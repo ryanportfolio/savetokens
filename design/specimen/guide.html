@@ -71,7 +71,7 @@
           "name": "When should I use /clear, /compact, or a new session?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Use /clear when the next task shares nothing with the current conversation: it wipes context and costs the least. Use /compact at a checkpoint, such as after a fix lands, when a lot of the task is still ahead and you need the conclusions but not the transcript. The summary and the cache write that follows it cost extra up front and pay back only over later turns, so compacting right before you finish costs more than it saves. Start a new session when the task changes entirely; carrying an old transcript into new work makes every future turn pay for it."
+            "text": "Use /clear when the next task shares nothing with the current conversation: it wipes context and costs the least. Use /compact at a checkpoint, such as after a fix lands, when a lot of the task is still ahead and you need the conclusions but not the transcript. The summary and the cache write that follows it cost extra up front and pay back only over later turns, so compacting right before you finish costs more than it saves. Say what the summary must keep, or let /smart-compact write that list for you. Start a new session when the task changes entirely; carrying an old transcript into new work makes every future turn pay for it."
           }
         },
         {
@@ -726,6 +726,7 @@
       <ul>
         <li><strong>Never paste whole files.</strong> Name the path and let the agent read the ranges it needs. The agent reads once; a pasted file gets reread every turn.</li>
         <li><strong><code>/compact</code> costs extra up front.</strong> Writing the summary rereads the whole conversation (from the cache while it is still warm) and bills the summary as output, which costs about five times as much as input. The next turn then writes the shorter conversation to the cache at the cache-write price. In return, every later turn rereads less, but a cached reread already costs a tenth of the input price or less, so each turn saves only a little. Compact when a lot of the task is still ahead, or before a break longer than the <a href="#cache">cache lifetime</a>. Right before you finish, it costs more than it saves.</li>
+        <li><strong>Tell the summary what to keep.</strong> <code>/compact</code> takes instructions, such as <code>/compact keep the branch, the open PR and the approaches that failed</code>. A summary that drops the current state sends the agent back to re-read files and re-run commands, which spends the tokens compacting was meant to save. <a href="https://github.com/ryanportfolio/Harness-Firmware/tree/main/.claude/skills/smart-compact"><code>/smart-compact</code></a>, a Claude Code mod I built for Harness Firmware, writes those instructions for you. A copy of the session reads the transcript and lists what to keep in about 300 words: your goal and standing instructions, branch and PR, decisions and why, what is verified, the next step, approaches that failed, and exact paths and errors. Then it runs <code>/compact</code> with that list. The copy reads the session from the cache, so run it while the cache is warm. It works in the terminal and in the desktop app's Code tab. Install it with <code>claude plugin marketplace add ryanportfolio/Harness-Firmware</code>, then <code>claude plugin install smart-compact@claude-starter</code>.</li>
       </ul>
     </div>
   </section>
@@ -1042,7 +1043,7 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
           <p>Match the move to how much of the conversation still matters:</p>
           <ul>
             <li><code>/clear</code> when the next task shares nothing with the current conversation. It wipes context and costs the least.</li>
-            <li><code>/compact</code> at a checkpoint, such as after a fix lands, when a lot of the task is still ahead and you need the conclusions but not the transcript. The summary and the cache write that follows it cost extra up front and pay back only over later turns, so compacting right before you finish costs more than it saves.</li>
+            <li><code>/compact</code> at a checkpoint, such as after a fix lands, when a lot of the task is still ahead and you need the conclusions but not the transcript. The summary and the cache write that follows it cost extra up front and pay back only over later turns, so compacting right before you finish costs more than it saves. Say what the summary must keep, or let <code>/smart-compact</code> write that list for you.</li>
             <li>A new session when the task changes entirely. Carrying an old transcript into new work makes every future turn pay for it.</li>
           </ul>
         </div>
@@ -1104,6 +1105,7 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
         <li><a href="https://corewise.academy/guides/stop-hitting-your-token-limit/">Stop Hitting Your Token Limit</a> (CoreWise Academy): the same problem worked from the budget side. Audit your usage, cut consumption, downshift models for routine work, and weigh the riskier tactics honestly. Covers caveman mode and output filtering too.</li>
         <li><a href="https://code.claude.com/docs/en/best-practices">Claude Code best practices</a> (Anthropic): the vendor's own guidance on context management, instruction files, and workflow.</li>
         <li><a href="https://github.com/rtk-ai/rtk">RTK on GitHub</a>: the open-source output filter behind the measured figures on this site.</li>
+        <li><a href="https://github.com/ryanportfolio/Harness-Firmware/tree/main/.claude/skills/smart-compact">/smart-compact</a>: a Claude Code mod that writes custom <code>/compact</code> instructions from the session, then compacts with them.</li>
         <li><a href="/stk">STK</a>: a hook for Claude Code and Codex that clamps oversized file reads to a short outline, with live counters and methodology.</li>
         <li><a href="https://axi.md">AXI</a>: design rules for agent-facing command-line tools, with drop-in replacements for GitHub and browser work that return less output to begin with.</li>
       </ul>
