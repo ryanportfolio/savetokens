@@ -71,7 +71,7 @@
           "name": "When should I use /clear, /compact, or a new session?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Use /clear when the next task shares nothing with the current conversation: it wipes context and costs the least. Use /compact at a checkpoint, such as after a fix lands, when a lot of the task is still ahead and you need the conclusions but not the transcript. The summary and the cache write that follows it cost extra up front and pay back only over later turns, so compacting right before you finish costs more than it saves. Say what the summary must keep, or let /smart-compact write that list for you. Start a new session when the task changes entirely; carrying an old transcript into new work makes every future turn pay for it."
+            "text": "Use /clear when the next task shares nothing with the current conversation: it wipes context and costs the least. Use /compact at a checkpoint with plenty of the task left, when you need the conclusions but not the transcript. It costs extra up front, so skip it right before you finish. Tell it what to keep, or use /smart-compact. Start a new session when the task changes entirely; carrying an old transcript into new work makes every future turn pay for it."
           }
         },
         {
@@ -682,7 +682,7 @@
     <div class="quickstart">
       <h2>If you only do three things</h2>
       <ol>
-        <li><strong>Compact early, then cut over to a fresh session.</strong> Run <code>/compact</code> once the context window is about 40% full and a lot of the task is still ahead; it costs extra up front and pays back over the turns that follow (<a href="#basics">what <code>/compact</code> costs</a>). If you find yourself compacting a 3rd time, start a new session instead and hand the work over with a <a href="#copy">handoff-audit prompt</a> so the fresh session can verify it independently.</li>
+        <li><strong>Compact early, then cut over to a fresh session.</strong> Run <code>/compact</code> once the context window is about 40% full, while plenty of the task is left. If you find yourself compacting a 3rd time, start a new session instead and hand the work over with a <a href="#copy">handoff-audit prompt</a> so the fresh session can verify it independently.</li>
         <li><strong>Run <code>/clear</code> between unrelated tasks.</strong> Anything left over keeps being reread.</li>
         <li><strong>Keep <a href="#caveman">caveman mode</a> turned on.</strong></li>
       </ol>
@@ -695,7 +695,7 @@
     <div class="prose">
       <p>Every time you send a message, the whole conversation goes with it: your prompts, the agent's replies, and every line of tool output.</p>
       <p>So the cost of a session compounds as it grows. Prompt caching cuts price but the tokens still fill the context window.</p>
-      <p><code>/compact</code> replaces the conversation with a summary, so later turns resend less. Writing that summary has a price of its own, covered below.</p>
+      <p><code>/compact</code> swaps the conversation for a summary. The summary costs tokens too.</p>
     </div>
   </section>
 
@@ -725,8 +725,8 @@
       <p>Remember:</p>
       <ul>
         <li><strong>Never paste whole files.</strong> Name the path and let the agent read the ranges it needs. The agent reads once; a pasted file gets reread every turn.</li>
-        <li><strong><code>/compact</code> costs extra up front.</strong> Writing the summary rereads the whole conversation (from the cache while it is still warm) and bills the summary as output, which costs about five times as much as input. The next turn then writes the shorter conversation to the cache at the cache-write price. In return, every later turn rereads less, but a cached reread already costs a tenth of the input price or less, so each turn saves only a little. Compact when a lot of the task is still ahead, or before a break longer than the <a href="#cache">cache lifetime</a>. Right before you finish, it costs more than it saves.</li>
-        <li><strong>Tell the summary what to keep.</strong> <code>/compact</code> takes instructions, such as <code>/compact keep the branch, the open PR and the approaches that failed</code>. A summary that drops the current state sends the agent back to re-read files and re-run commands, which spends the tokens compacting was meant to save. <a href="https://github.com/ryanportfolio/Harness-Firmware/tree/main/.claude/skills/smart-compact"><code>/smart-compact</code></a>, a Claude Code mod I built for Harness Firmware, writes those instructions for you. A copy of the session reads the transcript and lists what to keep in about 300 words: your goal and standing instructions, branch and PR, decisions and why, what is verified, the next step, approaches that failed, and exact paths and errors. Then it runs <code>/compact</code> with that list. The copy reads the session from the cache, so run it while the cache is warm. It works in the terminal and in the desktop app's Code tab. Install it with <code>claude plugin marketplace add ryanportfolio/Harness-Firmware</code>, then <code>claude plugin install smart-compact@claude-starter</code>.</li>
+        <li><strong><code>/compact</code> isn't free.</strong> You pay for the summary, and the next turn re-caches the shorter chat. Cached rereads are already cheap, so it only pays off with plenty of the task left. Skip it right before you finish.</li>
+        <li><strong>Tell it what to keep.</strong> <code>/compact keep the branch, open PR and failed approaches</code>. Or let <a href="https://github.com/ryanportfolio/Harness-Firmware/tree/main/.claude/skills/smart-compact"><code>/smart-compact</code></a>, my Claude Code mod, write that list from the session and compact with it. Install: <code>claude plugin marketplace add ryanportfolio/Harness-Firmware</code>, then <code>claude plugin install smart-compact@claude-starter</code>.</li>
       </ul>
     </div>
   </section>
@@ -735,12 +735,16 @@
   <section class="section" id="cache">
     <h2>The cache window</h2>
     <div class="prose">
-      <p>Prompt caching cuts the price of rereading the conversation: on current Claude and OpenAI models a cached reread costs a tenth of the normal input price or less.</p>
-      <p>The catch is timing. A Claude cache entry lives for <strong>five minutes</strong> or <strong>one hour</strong>, and every read restarts the clock. Writing an entry costs extra: 1.25 times the input price for five minutes, twice the input price for an hour. Claude Code picks the lifetime per request. On a Claude subscription, within the plan's included usage, the main conversation gets one hour; with an API key, a cloud provider, or usage credits past the plan limit, it gets five minutes. Subagents get five minutes either way. The <code>promptCacheTtl</code> setting overrides the main conversation's default. Our own desktop-app logs (subscription, the 14 days to 2026-10-31) match: one hour for main sessions, five minutes for subagents.</p>
-      <p>OpenAI's API, which serves Codex models, has its own clock: on GPT-5.6 and later an entry lives 30 minutes by default, with writes at 1.25 times input, or 12 hours on request at 2.5 times. Reads cost a tenth of input, a twentieth on GPT-6.1 Sol and Terra. The advice below holds with whichever clock your setup uses.</p>
+      <p>Cached rereads cost a tenth of the input price or less. Every read restarts the clock.</p>
+      <p>How long the cache lasts:</p>
       <ul>
-        <li><strong>Work in bursts.</strong> Reply while the cache is warm and the whole conversation rereads at the cheap rate. On a Claude subscription that means within the hour in the main conversation; with an API key, or in a subagent, within five minutes.</li>
-        <li><strong>A break longer than the cache lifetime is a decision point.</strong> When you come back, the agent writes the whole conversation to the cache again. Before you step away, run <code>/clear</code> if nothing needs to carry over, or <code>/compact</code> if the conclusions do: the summary is written while the transcript is still cached, and the rewrite later covers the summary instead of the full transcript.</li>
+        <li><strong>Claude Code, main chat:</strong> one hour on a subscription, five minutes otherwise.</li>
+        <li><strong>Claude Code subagents:</strong> five minutes.</li>
+        <li><strong>Codex (GPT-5.6 and later):</strong> 30 minutes.</li>
+      </ul>
+      <ul>
+        <li><strong>Work in bursts.</strong> Reply before the cache expires.</li>
+        <li><strong>Before a longer break, <code>/clear</code> or <code>/compact</code>.</strong> Otherwise the whole chat gets re-cached when you come back.</li>
         <li><strong>Short transcripts make cold starts cheap.</strong> The <a href="#caveman">caveman skill</a> shrinks the penalty when the cache does expire.</li>
       </ul>
     </div>
@@ -1043,7 +1047,7 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
           <p>Match the move to how much of the conversation still matters:</p>
           <ul>
             <li><code>/clear</code> when the next task shares nothing with the current conversation. It wipes context and costs the least.</li>
-            <li><code>/compact</code> at a checkpoint, such as after a fix lands, when a lot of the task is still ahead and you need the conclusions but not the transcript. The summary and the cache write that follows it cost extra up front and pay back only over later turns, so compacting right before you finish costs more than it saves. Say what the summary must keep, or let <code>/smart-compact</code> write that list for you.</li>
+            <li><code>/compact</code> at a checkpoint with plenty of the task left, when you need the conclusions but not the transcript. It costs extra up front, so skip it right before you finish. Tell it what to keep, or use <code>/smart-compact</code>.</li>
             <li>A new session when the task changes entirely. Carrying an old transcript into new work makes every future turn pay for it.</li>
           </ul>
         </div>
