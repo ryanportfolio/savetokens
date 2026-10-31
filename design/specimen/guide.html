@@ -71,7 +71,7 @@
           "name": "When should I use /clear, /compact, or a new session?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Use /clear when the next task shares nothing with the current conversation: it wipes context and costs the least. Use /compact at a natural checkpoint, after a fix lands and before a new area, when you need the conclusions but not the transcript. Start a new session when the task changes entirely; carrying an old transcript into new work makes every future turn pay for it."
+            "text": "Use /clear when the next task shares nothing with the current conversation: it wipes context and costs the least. Use /compact at a checkpoint with plenty of the task left, when you need the conclusions but not the transcript. It costs extra up front, so skip it right before you finish. Tell it what to keep, or use /smart-compact. Start a new session when the task changes entirely; carrying an old transcript into new work makes every future turn pay for it."
           }
         },
         {
@@ -682,7 +682,7 @@
     <div class="quickstart">
       <h2>If you only do three things</h2>
       <ol>
-        <li><strong>Compact early, then cut over to a fresh session.</strong> Run <code>/compact</code> once the context window is about 40% full. If you find yourself compacting a 3rd time, start a new session instead and hand the work over with a <a href="#copy">handoff-audit prompt</a> so the fresh session can verify it independently.</li>
+        <li><strong>Compact early, then cut over to a fresh session.</strong> Run <code>/compact</code> once the context window is about 40% full, while plenty of the task is left. If you find yourself compacting a 3rd time, start a new session instead and hand the work over with a <a href="#copy">handoff-audit prompt</a> so the fresh session can verify it independently.</li>
         <li><strong>Run <code>/clear</code> between unrelated tasks.</strong> Anything left over keeps being reread.</li>
         <li><strong>Keep <a href="#caveman">caveman mode</a> turned on.</strong></li>
       </ol>
@@ -695,7 +695,7 @@
     <div class="prose">
       <p>Every time you send a message, the whole conversation goes with it: your prompts, the agent's replies, and every line of tool output.</p>
       <p>So the cost of a session compounds as it grows. Prompt caching cuts price but the tokens still fill the context window.</p>
-      <p><code>/compact</code> to summarize the session.</p>
+      <p><code>/compact</code> swaps the conversation for a summary. The summary costs tokens too.</p>
     </div>
   </section>
 
@@ -711,8 +711,8 @@
       </div>
       <div class="move">
         <span class="cmd">/compact</span>
-        <span class="when">At a checkpoint</span>
-        <p>Avoid it mid-investigation, because summaries drop detail you still need.</p>
+        <span class="when">At a checkpoint, with work left</span>
+        <p>Pays back over the turns that follow. Avoid it mid-investigation, because summaries drop detail you still need.</p>
       </div>
       <div class="move">
         <span class="cmd">new session</span>
@@ -725,22 +725,28 @@
       <p>Remember:</p>
       <ul>
         <li><strong>Never paste whole files.</strong> Name the path and let the agent read the ranges it needs. The agent reads once; a pasted file gets reread every turn.</li>
+        <li><strong><code>/compact</code> isn't free.</strong> You pay for the summary, and the next turn re-caches the shorter chat. Cached rereads are already cheap, so it only pays off with plenty of the task left. Skip it right before you finish.</li>
+        <li><strong>Tell it what to keep.</strong> <code>/compact keep the branch, open PR and failed approaches</code>. Or let <a href="https://github.com/ryanportfolio/Harness-Firmware/tree/main/.claude/skills/smart-compact"><code>/smart-compact</code></a>, my Claude Code mod, write that list from the session and compact with it. Install: <code>claude plugin marketplace add ryanportfolio/Harness-Firmware</code>, then <code>claude plugin install smart-compact@claude-starter</code>.</li>
       </ul>
     </div>
   </section>
 
   <!-- ===================== CACHE WINDOW ===================== -->
   <section class="section" id="cache">
-    <h2>The five-minute cache window</h2>
+    <h2>The cache window</h2>
     <div class="prose">
-      <p>Prompt caching reduces your price bill.</p>
-      <p>The catch is timing. The cache lives for about <strong>five minutes</strong>, and the clock resets every time it is used. Reply within the window and you get the cheap rate.</p>
+      <p>Cached rereads cost a tenth of the input price or less. Every read restarts the clock.</p>
+      <p>How long the cache lasts:</p>
       <ul>
-        <li><strong>Work in bursts.</strong> Reply within the 5 minute window and that saves money. Replies within 5 mins of the last only pay a tenth of the price.</li>
-        <li><strong>A long break is a decision point.</strong> That is the natural moment to <code>/compact</code> or <code>/clear</code>.</li>
+        <li><strong>Claude Code, main chat:</strong> one hour within a subscription's included usage, five minutes otherwise.</li>
+        <li><strong>Claude Code subagents:</strong> five minutes.</li>
+        <li><strong>Codex (GPT-5.6 and later):</strong> at least 30 minutes by default.</li>
+      </ul>
+      <ul>
+        <li><strong>Work in bursts.</strong> Reply before the cache expires.</li>
+        <li><strong>Before a longer break, <code>/clear</code> or <code>/compact</code>.</strong> Otherwise the whole chat gets re-cached when you come back.</li>
         <li><strong>Short transcripts make cold starts cheap.</strong> The <a href="#caveman">caveman skill</a> shrinks the penalty when the cache does expire.</li>
       </ul>
-      <p>Some setups use a one-hour cache at a higher write price, and the same logic applies with a longer clock.</p>
     </div>
   </section>
 
@@ -1041,7 +1047,7 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
           <p>Match the move to how much of the conversation still matters:</p>
           <ul>
             <li><code>/clear</code> when the next task shares nothing with the current conversation. It wipes context and costs the least.</li>
-            <li><code>/compact</code> at a natural checkpoint, after a fix lands and before a new area, when you need the conclusions but not the transcript.</li>
+            <li><code>/compact</code> at a checkpoint with plenty of the task left, when you need the conclusions but not the transcript. It costs extra up front, so skip it right before you finish. Tell it what to keep, or use <code>/smart-compact</code>.</li>
             <li>A new session when the task changes entirely. Carrying an old transcript into new work makes every future turn pay for it.</li>
           </ul>
         </div>
@@ -1103,6 +1109,7 @@ Wrap each part in its own tag: &lt;audit_target&gt;, &lt;claims&gt;,
         <li><a href="https://corewise.academy/guides/stop-hitting-your-token-limit/">Stop Hitting Your Token Limit</a> (CoreWise Academy): the same problem worked from the budget side. Audit your usage, cut consumption, downshift models for routine work, and weigh the riskier tactics honestly. Covers caveman mode and output filtering too.</li>
         <li><a href="https://code.claude.com/docs/en/best-practices">Claude Code best practices</a> (Anthropic): the vendor's own guidance on context management, instruction files, and workflow.</li>
         <li><a href="https://github.com/rtk-ai/rtk">RTK on GitHub</a>: the open-source output filter behind the measured figures on this site.</li>
+        <li><a href="https://github.com/ryanportfolio/Harness-Firmware/tree/main/.claude/skills/smart-compact">/smart-compact</a>: a Claude Code mod that writes custom <code>/compact</code> instructions from the session, then compacts with them.</li>
         <li><a href="/stk">STK</a>: a hook for Claude Code and Codex that clamps oversized file reads to a short outline, with live counters and methodology.</li>
         <li><a href="https://axi.md">AXI</a>: design rules for agent-facing command-line tools, with drop-in replacements for GitHub and browser work that return less output to begin with.</li>
       </ul>

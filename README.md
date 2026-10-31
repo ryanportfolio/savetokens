@@ -33,9 +33,9 @@ Audit before you optimize: `/context` shows what fills the window at session sta
 |---|---|---|
 | One task per session | Every leftover token is reread on every later turn | Start fresh when the task changes |
 | `/clear` between unrelated tasks | Wipes context at zero loss when nothing carries over | Cheapest move there is; use it often |
-| `/compact` at checkpoints | Keeps conclusions, drops the transcript; summaries lose detail | After a fix lands, never mid-investigation |
+| `/compact` with work left | Keeps conclusions, drops the transcript; the summary costs extra up front | With plenty of the task left; not mid-investigation or right before you finish. Say what to keep, or use [`/smart-compact`](https://github.com/ryanportfolio/Harness-Firmware/tree/main/.claude/skills/smart-compact) |
 | Name paths, do not paste files | A pasted file is reread every turn; an agent read happens once | "Fix the expiry check in auth middleware" beats "look at auth" |
-| Work in bursts | Cached rereads bill about a tenth of the normal input price, and the cache expires after about five minutes | Reply while the session is hot; before a long break, `/compact` or `/clear` |
+| Work in bursts | Cached rereads cost a tenth of input or less until the cache expires: 1 hour for Claude Code's main chat within a subscription's included usage, 5 minutes otherwise; at least 30 minutes by default for Codex on GPT-5.6 and later | Reply before it expires; before a longer break, `/clear` or `/compact` |
 | Caveman mode | Reply prose is billed output; terse style cuts it roughly in half without dropping facts | Paste the [copy block](https://savetokens.tips/guide#copy) into your instruction file |
 | Thin instruction file | `CLAUDE.md` / `AGENTS.md` reloads every session, so every line is a recurring cost | Cross-cutting rules only; topical detail in files loaded on demand |
 | Prune connectors | Every MCP server ships its tool definitions into context at session start, used or not | `/context` shows each one's cost; disconnect the idle ones |
