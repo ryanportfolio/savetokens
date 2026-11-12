@@ -1,6 +1,6 @@
 # savetokens.tips
 
-> Token-saving techniques for AI coding agents (Claude Code, Codex). Measured figures come from per-command raw-versus-filtered token deltas logged by the RTK proxy: 45.3% typical reduction across 540,409 real commands, snapshot 2026-11-11. Estimates carry no before-and-after log and are marked with a tilde.
+> Token-saving techniques for AI coding agents (Claude Code, Codex). Measured figures come from per-command raw-versus-filtered token deltas logged by the RTK proxy: 44.9% typical reduction across 549,243 real commands, snapshot 2026-11-12. Estimates carry no before-and-after log and are marked with a tilde.
 
 ## Pages
 
