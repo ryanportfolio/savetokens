@@ -56,6 +56,7 @@
     "ui-quality": "native",
     "wow-animation": "native",
     "climb-loop": "native",
-    "untangle": "native"
+    "untangle": "native",
+    "user-walk": "native"
   }
 }
