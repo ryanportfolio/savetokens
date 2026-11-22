@@ -1,86 +1,78 @@
 {
-  "snapshotDate": "2026-11-21",
+  "snapshotDate": "2026-11-22",
   "source": "rtk gain history.db",
   "scope": "global",
   "summary": {
-    "commands": 617972,
-    "inputTokens": 1704006208,
-    "outputTokens": 930423740,
-    "savedTokens": 773626433,
-    "savedPct": 45.4
+    "commands": 637864,
+    "inputTokens": 1987181119,
+    "outputTokens": 959564191,
+    "savedTokens": 1027661539,
+    "savedPct": 51.71
   },
   "rows": [
     {
       "family": "read",
       "display": "rtk read",
       "shortLabel": "read",
-      "n": 111021,
-      "savedTokens": 270885815,
-      "typPct": 13.2
+      "n": 114000,
+      "savedTokens": 519625439,
+      "typPct": 13.3
     },
     {
       "family": "grep",
       "display": "rtk grep",
       "shortLabel": "grep",
-      "n": 155699,
-      "savedTokens": 203306848,
-      "typPct": 20.4
+      "n": 162161,
+      "savedTokens": 221229941,
+      "typPct": 20.5
     },
     {
       "family": "rg",
       "display": "rtk rg",
       "shortLabel": "rg",
-      "n": 7652,
-      "savedTokens": 115423313,
-      "typPct": 19.6
+      "n": 7210,
+      "savedTokens": 114512007,
+      "typPct": 19.4
     },
     {
       "family": "ls",
       "display": "rtk ls -la",
       "shortLabel": "ls",
-      "n": 133,
-      "savedTokens": 33603579,
-      "typPct": 67.5
-    },
-    {
-      "family": "lint",
-      "display": "rtk lint eslint",
-      "shortLabel": "lint",
-      "n": 96,
-      "savedTokens": 21596273,
-      "typPct": 98.4
+      "n": 139,
+      "savedTokens": 34588294,
+      "typPct": 67.6
     },
     {
       "family": "diff",
       "display": "rtk diff",
       "shortLabel": "diff",
-      "n": 1285,
-      "savedTokens": 14874624,
-      "typPct": 63.5
+      "n": 1352,
+      "savedTokens": 16157420,
+      "typPct": 64.1
+    },
+    {
+      "family": "git show",
+      "display": "rtk git show",
+      "shortLabel": "show",
+      "n": 2,
+      "savedTokens": 3720028,
+      "typPct": 99.2
     }
   ],
   "gitDiffTop": {
     "display": "rtk git diff -U0",
-    "n": 85,
+    "n": 87,
     "savedTokens": 1890379,
-    "typPct": 7
+    "typPct": 6.9
   },
   "caveman": {
-    "sessions": 679,
-    "replies": 98163,
-    "outputTokens": 85340781,
+    "sessions": 720,
+    "replies": 104368,
+    "outputTokens": 89862621,
     "assumedReduction": 0.5,
-    "estSavedTokens": 85340781
+    "estSavedTokens": 89862621
   },
   "daily": [
-    {
-      "date": "2026-10-23",
-      "commands": 9011,
-      "inputTokens": 20628020,
-      "outputTokens": 10526809,
-      "savedTokens": 10101953,
-      "savedPct": 48.97
-    },
     {
       "date": "2026-10-24",
       "commands": 6868,
@@ -307,11 +299,19 @@
     },
     {
       "date": "2026-11-21",
-      "commands": 8302,
-      "inputTokens": 24064962,
-      "outputTokens": 16561937,
-      "savedTokens": 7503464,
-      "savedPct": 31.18
+      "commands": 10512,
+      "inputTokens": 44405544,
+      "outputTokens": 23690983,
+      "savedTokens": 20715273,
+      "savedPct": 46.65
+    },
+    {
+      "date": "2026-11-22",
+      "commands": 20071,
+      "inputTokens": 286142662,
+      "outputTokens": 24819508,
+      "savedTokens": 261324078,
+      "savedPct": 91.33
     }
   ]
 }
